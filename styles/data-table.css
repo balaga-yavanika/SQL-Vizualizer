@@ -1,0 +1,320 @@
+/* ============================================= */
+/* TABLES — VARIABLES                            */
+/* ============================================= */
+:root {
+  --table-gap: 4px;
+  --table-cell-padding: 8px;
+  --table-row-padding: 4px;
+  --table-transition: 0.15s ease-in-out;
+}
+
+/* ============================================= */
+/* LAYOUT                                        */
+/* ============================================= */
+.tables-area {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 10px;
+  margin-block-end: var(--space-xl);
+  user-select: none;
+}
+
+.tbl-wrap {
+  flex: 1;
+  min-width: 130px;
+  border: 0.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: visible;
+}
+
+/* ============================================= */
+/* HEADER                                        */
+/* ============================================= */
+.tbl-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px var(--table-cell-padding);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.tbl-head button {
+  padding: 2px 6px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-size: 14px;
+  line-height: 1;
+  color: inherit;
+  opacity: 0.6;
+  cursor: pointer;
+  transition: opacity var(--table-transition);
+}
+
+.tbl-head button:hover {
+  opacity: 1;
+}
+.tbl-head button:focus-visible {
+  outline: 1px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ============================================= */
+/* COLUMN HEADER ROW                             */
+/* ============================================= */
+.col-hr {
+  display: grid;
+  gap: var(--table-gap);
+  padding: 3px var(--table-cell-padding);
+  border-top: 0.5px solid var(--color-border);
+  background: var(--color-bg-subtle);
+  font-size: 10px;
+  color: var(--color-text-muted);
+}
+
+.col-header-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--table-gap);
+  overflow: hidden;
+}
+
+.col-header-name {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.key-badge {
+  flex-shrink: 0;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.col-remove-btn {
+  flex-shrink: 0;
+  padding: 0 2px;
+  border: none;
+  background: transparent;
+  font-size: 11px;
+  line-height: 1;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: color var(--table-transition);
+}
+
+.col-remove-btn:hover {
+  color: var(--color-danger);
+}
+
+/* ============================================= */
+/* DATA ROWS                                     */
+/* ============================================= */
+.tbl-row {
+  display: grid;
+  align-items: center;
+  gap: var(--table-gap);
+  padding: var(--table-row-padding) var(--table-cell-padding);
+  border-top: 0.5px solid var(--color-border);
+  transition: background-color var(--table-transition);
+}
+
+.tbl-row:hover {
+  background-color: var(--color-bg-subtle);
+}
+.tbl-row.matched {
+  outline: 1.5px solid;
+  outline-offset: -1px;
+}
+
+.row-num {
+  font-size: 10px;
+  color: var(--color-text-muted);
+}
+
+/* ============================================= */
+/* INPUTS                                        */
+/* ============================================= */
+.id-input,
+.col-input {
+  width: 100%;
+  padding: 3px 6px;
+  border: 0.5px solid var(--color-bg-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-elevated);
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  color: var(--color-text);
+  transition: border-color var(--table-transition);
+}
+
+.id-input:hover,
+.col-input:hover {
+  border-color: var(--color-border);
+}
+
+.id-input:focus,
+.col-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.id-input::placeholder,
+.col-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.bool-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  cursor: pointer;
+}
+
+.bool-input input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+}
+
+.bool-input input[type="checkbox"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ============================================= */
+/* BUTTONS — SHARED RESET                        */
+/* ============================================= */
+.del-btn,
+.add-row-btn,
+.add-col-btn,
+.add-tbl-btn {
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
+  transition:
+    background var(--table-transition),
+    color var(--table-transition),
+    border-color var(--table-transition);
+}
+
+/* ── Delete ── */
+.del-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0.5px solid var(--color-bg-subtle);
+  border-radius: 50%;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--color-text-muted);
+}
+
+.del-btn:hover {
+  background: var(--color-danger);
+  border-color: var(--color-danger);
+  color: var(--color-text-inverse);
+}
+
+.del-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ── Add row / col ── */
+.add-row-btn,
+.add-col-btn {
+  width: 100%;
+  padding: 5px;
+  border: none;
+  border-top: 0.5px dashed var(--color-border);
+  border-radius: 0;
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.add-row-btn:hover {
+  background: var(--color-bg-subtle);
+  color: var(--color-text);
+}
+.add-col-btn:hover {
+  background: var(--color-bg-subtle);
+  color: var(--color-accent);
+}
+
+.add-col-btn:focus-visible {
+  outline: 1px dashed var(--color-accent);
+  outline-offset: -1px;
+}
+
+/* ── Add table ── */
+.add-tbl-btn {
+  align-self: center;
+  padding: 8px 14px;
+  border: 0.5px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.add-tbl-btn:hover {
+  background: var(--color-bg-subtle);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.add-tbl-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ============================================= */
+/* PAIR SELECTOR                                 */
+/* ============================================= */
+.pair-selector {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 0.75rem;
+}
+
+.pair-selector label {
+  font-size: var(--text-h4);
+  color: var(--color-text);
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.pair-selector select {
+  padding: 5px 8px;
+  border: 0.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-elevated);
+  font-family: inherit;
+  font-size: 12px;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: border-color var(--table-transition);
+}
+
+.pair-selector select:hover {
+  border-color: var(--color-accent);
+}
+
+.pair-selector select:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}

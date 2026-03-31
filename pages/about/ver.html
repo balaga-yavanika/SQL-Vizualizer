@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ─── SEO & Social ─────────────────────────────────────────── -->
+    <meta name="description" content="Version history and changelog for Y-SQLVIZ SQL Visualizer." />
+    <meta name="keywords" content="SQL visualizer updates, changelog, version history, release notes" />
+    <meta name="author" content="Y-SQLVIZ" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#121212" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://YOUR_URL/pages/about/ver.html" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="SQL Visualizer — Version History" />
+    <meta property="og:description" content="Updates and changelog for Y-SQLVIZ." />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Y-SQLVIZ" />
+    <meta property="og:image" content="https://YOUR_URL/Assets/preview.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="SQL Visualizer Version History" />
+    <meta property="og:url" content="https://YOUR_URL/pages/about/ver.html" />
+    <meta property="og:locale" content="en_IN" />
+
+    <!-- Twitter/X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@Y_SQLVIZ" />
+    <meta name="twitter:creator" content="@Y_SQLVIZ" />
+    <meta name="twitter:title" content="SQL Visualizer Version History" />
+    <meta name="twitter:description" content="Latest updates and releases for Y-SQLVIZ." />
+    <meta name="twitter:image" content="https://YOUR_URL/Assets/preview.jpg" />
+    <meta name="twitter:image:alt" content="Version History" />
+
+    <!-- Profile -->
+    
+
+    <!-- Structured Data (JSON-LD) -->
+    
+
+    <title>SQL Visualizer — Version History</title>
+
+    <!-- ─── Favicon ───────────────────────────────── -->
+    <link rel="icon" href="/Assets/Favicon/favicon_io/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/Assets/Favicon/favicon_io/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/Assets/Favicon/favicon_io/favicon-16x16.png" />
+    <link rel="manifest" href="/Assets/Favicon/favicon_io/site.webmanifest" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/Assets/Favicon/favicon_io/apple-touch-icon.png" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/Assets/fonts/css/all.min.css" />
+
+    <!-- ─── Google Fonts ─────────────────────────────── -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" media="print" onload="this.media = 'all'" />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" />
+    </noscript>
+
+    <!-- ─── Page-specific CSS ─────────────────────────── -->
+    <link rel="stylesheet" href="/pages/about/ver.css" />
+
+    <!-- ==== Scripts ==== -->
+    <script src="/Assets/Favicon/icon-ani.js" defer></script>
+    <script src="/global/nav-footer-loader.js" defer></script>
+    <script src="/Assets/fx/menu-toggle.js" defer></script>
+    
+  </head>
+  <body>
+    
+    <section>
+      <div class="outer-wrapper">
+        <article>
+        <nav class="breadcrumb" aria-label="Breadcrumb" style="font-size: 0.7rem;">
+        <a><i class="fa-solid fa-angles-left"></i></a>
+        <a href="#" onclick="history.back()" style="font-weight: 600;font-size: 0.8rem;">
+        Go Back&nbsp;</a>
+        <a href="/main.html" rel="prev"
+          ><i class="fa-solid fa-angles-left"></i>&nbsp;<i class="fa-solid fa-house"></i
+        ></a>
+      </nav>
+    <div class="doc">
+  <h6 class="doc-eyebrow">Version History</h6>
+  <h1>Changelog</h1>
+  <p class="doc-lead">
+    A record of every release of SQL Visualizer — what changed, what was added,
+    and what was fixed. Versions are listed most recent first.
+  </p>
+  <hr />
+  <div class="version-list">
+    <!-- v1.3 -->
+    <div class="version">
+      <div class="version-header">
+        <div>
+          <h4>v1.3</h4>
+          <h5 class="version-date">March 2026</h5>
+          <h6 class="version-tag latest">Latest</h6>
+        </div>
+        <div><small>Major - Late March</small></div>
+      </div>
+      <p>
+        A major overhaul focusing on the live Generated Sql and a full visual
+        refresh. The page structure was simplified and the SQL engine was
+        rewritten to handle joins and operators reliably.
+        <br />Introduced the Execution Order page and improved the sidebar
+        navigation with grouped sections and active-state highlighting.
+      </p>
+      <ul>
+        <li>
+          Introduced the <code>Generated Sql</code> tab with a live SQL
+          generation code block based on selected data. Copy button added to
+          code blocks.
+        </li>
+        <li>
+          Rewrote the SQL engine to support <code>JOINS</code> and
+          <code>SET OPERATORS</code>
+        </li>
+        <li>
+          Added two pre-loaded sample datasets in pages
+          <span
+            ><a
+              href="/pages/joins/joins.html"
+              target="_top"
+              data-tooltip="Joins Visualizer"
+              >[01]</a
+            ></span
+          >
+          covering common patterns.
+        </li>
+        <li>New Execution Order page with an 12-step expandable timeline</li>
+        <li>Sidebar groups now labelled and separated by section</li>
+        <li>Refreshed typography and theme overall.</li>
+      </ul>
+    </div>
+    <hr />
+
+    <!-- v1.2 -->
+    <div class="version">
+      <div class="version-header">
+        <h4>v1.2</h4>
+        <h5 class="version-date">March 2026</h5>
+      </div>
+      <p>
+        Fleshed out the Joins section with live Venn diagrams and a result
+        preview table generated from sample data.
+      </p>
+      <ul>
+        <li>Interactive SVG Venn diagram updates per join type selection</li>
+        <li>
+          Result preview renders up to seven rows from the in-memory dataset
+        </li>
+        <li>
+          Added <code>CROSS JOIN</code> and <code>SELF JOIN</code> coverage
+        </li>
+        <li>SQL syntax highlighting applied across all code blocks</li>
+      </ul>
+    </div>
+    <hr />
+
+    <!-- v1.0 -->
+    <div class="version">
+      <div class="version-header">
+        <h4>v1.0</h4>
+        <h5 class="version-date">February 2025</h5>
+        <h6 class="version-tag">Initial release</h6>
+      </div>
+      <p>
+        First public release. A single HTML file covering the four core join
+        types with static diagrams and annotated SQL examples.
+      </p>
+      <ul>
+        <li>
+          Static diagrams for <code>INNER</code>, <code>LEFT</code>,
+          <code>RIGHT</code>, and <code>FULL OUTER</code> joins
+        </li>
+        <li>Annotated SQL syntax with keyword highlighting</li>
+        <li>Fixed top navigation and left sidebar with anchor links</li>
+        <li>Dark mode default with no theme switching</li>
+      </ul>
+    </div>
+    <hr />
+    <p class="about-role">
+      SQL VISUALIZER ©️&nbsp;Copyright © 2026 Yavanika Balaga. All rights
+      reserved.
+    </p>
+  </div>
+</div>
+
+      </article>
+      </div>
+    </section>
+  </body>
+</html>

@@ -1,0 +1,40 @@
+/* ============================================= */
+/* IMPORTS & CONFIGURATION                      */
+/* ============================================= */
+@import url("/global/variables.css");
+@import url("/global/navbars.css");
+@import url("/global/style-guide.css");
+@import url("/Assets/fx/menu-toogle.css");
+@import url("/styles/base.css");
+@import url("/styles/buttons.css");
+@import url("/styles/typo.css");
+@import url("/styles/docs.css");
+
+/* ============================================= */
+/* CUSTOM PROPERTIES (VARIABLES)                */
+/* ============================================= */
+:root {
+  /* Colors */
+  --color-category-planner: #378add;
+  --color-category-source: #d85a30;
+  --color-category-filter: #1d9e75;
+  --color-category-shape: #ba7517;
+  --color-category-output: #7f77dd;
+  --color-category-dedup: #d4537e;
+
+  /* Component sizing */
+  --size-circle: 28px;
+  --size-circle-border: 2px;
+  --size-line-thickness: 2px;
+  --size-line-connector: 14px;
+  --size-step-height: 45px;
+
+  /* Spacing & positioning */
+  --space-circle-offset: 24px;
+  --space-sidenote-offset: 25px;
+  --space-gap: 2px;
+
+  /* Transitions */
+  --transition-default: all 0.15s ease;
+  --transition-opacity: opacity 0.15s ease;
+}

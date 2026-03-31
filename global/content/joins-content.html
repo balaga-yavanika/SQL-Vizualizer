@@ -1,0 +1,293 @@
+<!--  -->
+<!--  -->
+<div class="heading-wrapper">
+  <div>
+    <div class="button-label for-page">[01]</div>
+    <h3 class="heading-text">Joins Visualizer</h3>
+  </div>
+  <div class="how-to-container">
+    <button
+      class="btn-secondary"
+      id="how-to-toggle"
+      aria-label="How to use guide"
+    >
+      <i class="fa-solid fa-circle-question"></i>
+      <!-- 📌 How to use? -->
+    </button>
+    <div class="how-to-popover" id="how-to-popover" style="display: none">
+      <div class="popover-content">
+        <button
+          class="popover-close"
+          id="popover-close"
+          aria-label="Close guide"
+        >
+          ×
+        </button>
+        <h5 class="popover-title">How to Use</h5>
+        <div class="popover-text">
+          <p>
+            <strong>Start with preset sample data</strong> or add tables
+            dynamically using the <strong>+ add table</strong> button. Create
+            columns and sample data in each table.
+            <strong><br />Choose a join type:</strong> INNER (matching rows
+            only), LEFT (all left + matches), RIGHT (all right + matches), FULL
+            (all rows) + 6 more.<br />
+            <strong>Try set operators:</strong> UNION (combine), INTERSECT
+            (common rows), EXCEPT (difference).<br />
+            <strong>Set join conditions</strong> to connect tables using keys.
+            Watch the <strong>SVG diagram</strong> update. See results in the
+            result table.<br />
+            <strong>View the generated SQL.</strong><br />
+            Click <strong>Reset All</strong> to start over. <br /><br /><i
+              class="fa-solid fa-wand-magic-sparkles"
+            ></i>
+            See results instantly!
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--  -->
+<!-- ── Preset Datasets ── -->
+<div class="preset-section">
+  <div>
+    <label class="section-label-large"
+      >Quick Start
+      <span
+        class="tooltip-wrapper"
+        data-tooltip="It includes two sample datasets you can use to understand joins."
+      >
+        <i class="fa-solid fa-circle-info"></i>
+      </span>
+    </label>
+  </div>
+  <div class="preset-controls">
+    <div class="custom-dropdown" id="preset-dropdown-wrapper">
+      <button
+        class="dropdown-toggle"
+        id="preset-toggle"
+        aria-haspopup="listbox"
+      >
+        <span id="preset-display">Select a dataset...</span>
+        <span class="dropdown-arrow">▼</span>
+      </button>
+      <div class="dropdown-menu" id="preset-menu" style="display: none">
+        <button class="dropdown-item" data-value="users_orders">
+          <i class="fa-solid fa-table-list"></i>&nbsp;Users + Orders
+        </button>
+        <button class="dropdown-item" data-value="students_courses">
+          <i class="fa-solid fa-table-list"></i>&nbsp;Students + Courses
+        </button>
+      </div>
+    </div>
+    <button class="preset-btn reset-btn" onclick="app.resetAllAndRender()">
+      <i class="fa-solid fa-arrow-rotate-left"></i>&nbsp;&nbsp;Reset All
+    </button>
+  </div>
+</div>
+
+<!-- ── Join Type & Set Operators (Side by Side) ── -->
+<div class="operations-container">
+  <div class="operation-section">
+    <label class="section-label-large">Join type</label>
+    <div class="custom-dropdown" id="join-type-dropdown-wrapper">
+      <button
+        class="dropdown-toggle"
+        id="join-type-toggle"
+        aria-haspopup="listbox"
+      >
+        <span id="join-type-display">Select a join type...</span>
+        <span class="dropdown-arrow">▼</span>
+      </button>
+      <div class="dropdown-menu" id="join-type-menu" style="display: none">
+        <!-- Populated by JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <div class="operation-section">
+    <label class="section-label-large">Set operators</label>
+    <div class="custom-dropdown" id="set-op-dropdown-wrapper">
+      <button
+        class="dropdown-toggle"
+        id="set-op-toggle"
+        aria-haspopup="listbox"
+      >
+        <span id="set-op-display">Select a set operator...</span>
+        <span class="dropdown-arrow">▼</span>
+      </button>
+      <div class="dropdown-menu" id="set-op-menu" style="display: none">
+        <!-- Populated by JavaScript -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Legacy tabs (commented out for reference) ──
+          <div class="section-label-large">Join type</div>
+          <div class="tabs" id="join-tabs"></div>
+
+          <div class="section-label-large">Set operators</div>
+          <div class="tabs" id="set-tabs"></div>
+          ── End legacy tabs ── -->
+
+<blockquote class="desc" id="desc"></blockquote>
+
+<!-- ── Pair selector (3+ tables only) ── -->
+<div class="pair-selector" id="pair-row" style="display: none">
+  <label class="pair-selector-label">Which tables to join:</label>
+  <div class="custom-dropdown" id="pair-select-wrapper">
+    <button
+      class="dropdown-toggle"
+      id="pair-select-toggle"
+      aria-haspopup="listbox"
+      title="Select which two tables to join. Arrow shows left table → right table."
+    >
+      <span id="pair-select-display">Select tables</span>
+      <span class="dropdown-arrow">▼</span>
+    </button>
+    <div class="dropdown-menu" id="pair-select-menu" style="display: none">
+      <!-- Populated by JavaScript -->
+    </div>
+  </div>
+  <small
+    style="
+      display: block;
+      margin-top: 4px;
+      color: var(--color-text-muted);
+      font-size: 12px;
+    "
+  >
+    Arrow shows: left table → right table
+  </small>
+</div>
+
+<!-- ── Join Condition Panel ── -->
+<div class="join-condition-panel">
+  <!-- ── Join Condition Editor ── -->
+  <div id="join-cond-container"></div>
+
+  <!-- ── Join Condition Summary ── -->
+  <div class="join-condition-summary">
+    <span id="join-condition-summary"
+      >Current condition: No join condition set</span
+    >
+  </div>
+</div>
+
+<!-- ── Tables ── -->
+<div class="tables-scroll-wrapper">
+  <div class="tables-area" id="tables-area">
+    <button class="add-tbl-btn" onclick="app.addTableAndRender()">
+      + add table
+    </button>
+  </div>
+</div>
+
+<!-- ── Diagram Label ── -->
+<div class="diagram-label">
+  <i
+    class="fa-solid fa-circle-info"
+    title="Visual representation of the join condition connecting the selected columns between your two tables"
+  ></i>
+  <span>Diagram shows</span>
+</div>
+
+<!-- ── SVG wrapper ── -->
+<div class="diagram-scroll-wrapper">
+  <div id="conn-wrapper" class="conn-wrapper">
+    <svg class="conn" id="conn-svg" viewBox="0 0 480 10"></svg>
+  </div>
+</div>
+
+<!-- ── Result & SQL Container (Stacked) ── -->
+<div class="result-sql-container">
+  <!-- ── Result Grid ── -->
+  <div class="result-section">
+    <div class="result-label">
+      <span class="result-text section-label-medium">Result</span>
+      <span class="count-badge" id="row-count">0 rows</span>
+    </div>
+    <div class="result-scroll-wrapper">
+      <div class="result-grid">
+        <div class="rg-head-row" id="rg-heads"></div>
+        <div id="result-body"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SQL Query Generator ── -->
+  <div id="sql-panel" class="sql-section" style="display: none">
+    <div class="panel-header">
+      <span class="panel-title"
+        ><i class="fa-solid fa-code"></i> Generated SQL</span
+      >
+      <button
+        class="sql-copy-btn"
+        id="sql-copy-btn"
+        onclick="window.copySqlButtonClicked()"
+      >
+        <i class="fa-regular fa-clipboard"></i> Copy SQL
+      </button>
+    </div>
+    <div class="sql-code"></div>
+    <div class="sql-raw"></div>
+  </div>
+</div>
+
+<!-- ─── Add Column Modal ─── -->
+<div id="col-modal" class="modal-backdrop" style="display: none">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h4 class="modal-title">Add Column</h4>
+      <button
+        class="modal-close"
+        onclick="document.getElementById('col-modal').style.display = 'none'"
+      >
+        ×
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-field">
+        <label class="modal-label">Column Name</label>
+        <input
+          type="text"
+          id="col-modal-name"
+          class="modal-input"
+          placeholder="e.g., user_id"
+        />
+      </div>
+
+      <div class="modal-field">
+        <label class="modal-label">Data Type</label>
+        <div class="custom-dropdown" id="col-modal-type-dropdown">
+          <button
+            class="dropdown-toggle"
+            id="col-modal-type-toggle"
+            aria-haspopup="listbox"
+          >
+            <span id="col-modal-type-display">Integer</span>
+            <span class="dropdown-arrow">▼</span>
+          </button>
+          <div
+            class="dropdown-menu"
+            id="col-modal-type-menu"
+            style="display: none"
+          >
+            <button class="dropdown-item" data-value="int">Integer</button>
+            <button class="dropdown-item" data-value="string">String</button>
+            <button class="dropdown-item" data-value="float">Float</button>
+            <button class="dropdown-item" data-value="date">Date</button>
+          </div>
+        </div>
+        <input type="hidden" id="col-modal-type-value" value="int" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn modal-btn-cancel">Cancel</button>
+      <button class="modal-btn modal-btn-confirm">Add Column</button>
+    </div>
+  </div>
+</div>

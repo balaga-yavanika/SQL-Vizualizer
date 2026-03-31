@@ -1,0 +1,35 @@
+{
+  "title": "EXECUTION ORDER — YSQLVIZ",
+  "description": "SQL Execution Order Visualizer. Understand how SQL queries are executed with interactive diagrams.",
+  "keywords": "SQL execution order, SQL query execution, database optimization, SQL learning",
+  "author": "Y-SQLVIZ",
+  "robots": "index, follow",
+  "canonical": "/pages/execorder/eo.html",
+  "og_title": "SQL Execution Order Visualizer",
+  "og_description": "Interactive visualizer for SQL query execution order.",
+  "og_type": "website",
+  "og_image": {
+    "url": "{{BASE_URL}}/Assets/preview.jpg",
+    "width": "1200",
+    "height": "630",
+    "alt": "SQL Execution Order Visualizer"
+  },
+  "twitter_card": "summary_large_image",
+  "twitter_title": "SQL Execution Order Visualizer",
+  "twitter_description": "Interactive SQL execution order visualization.",
+  "twitter_image": {
+    "url": "{{BASE_URL}}/Assets/preview.jpg",
+    "alt": "SQL Execution Order"
+  },
+  "showBreadcrumb": true,
+  "showLoader": false,
+  "showSection": true,
+  "showOuterWrapper": true,
+  "showArticle": true,
+  "cssImports": "pages/execorder/eo-imports.css",
+  "scripts": [
+    "pages/execorder/eo.js"
+  ],
+  "content": "global/content/execorder-content.html",
+  "outputPath": "pages/execorder/eo.html"
+}

@@ -1,0 +1,43 @@
+/* ============================================= */
+/* TYPOGRAPHY                                    */
+/* ============================================= */
+
+.heading-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.heading-text {
+  margin-block-start: 0;
+  color: var(--color-accent);
+  text-transform: uppercase;
+}
+
+.heading-body {
+  line-height: 1.8;
+}
+
+/* ── Section labels ── */
+.section-label-large,
+.section-label-medium {
+  margin-block-start: var(--space-md);
+  font-size: var(--text-h4);
+  text-transform: uppercase;
+  margin-bottom: 0;
+}
+
+.section-label-medium {
+  font-size: var(--text-subtitle);
+}
+
+/* ── Alert / callout ── */
+.desc {
+  margin-block: var(--space-lg);
+  padding-inline: var(
+    --space-md
+  ); /* was missing — border-left implies padding */
+  border-left: 4px solid var(--color-sec-accent);
+  background: var(--color-sec-accent-subtle);
+  line-height: 1.5;
+  color: var(--color-sec-accent);
+}

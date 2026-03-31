@@ -1,0 +1,33 @@
+{
+  "title": "SQL Visualizer — Documentation",
+  "description": "Documentation for Y-SQLVIZ SQL Visualizer. Learn how to use the tool effectively.",
+  "keywords": "SQL documentation, SQL tutorial, SQL guide, SQL learning",
+  "author": "Y-SQLVIZ",
+  "robots": "index, follow",
+  "canonical": "/pages/about/adoc.html",
+  "og_title": "SQL Visualizer Documentation",
+  "og_description": "Complete documentation and guide for Y-SQLVIZ.",
+  "og_type": "website",
+  "og_image": {
+    "url": "{{BASE_URL}}/Assets/preview.jpg",
+    "width": "1200",
+    "height": "630",
+    "alt": "SQL Visualizer Documentation"
+  },
+  "twitter_card": "summary_large_image",
+  "twitter_title": "SQL Visualizer Documentation",
+  "twitter_description": "Documentation for Y-SQLVIZ SQL Visualizer.",
+  "twitter_image": {
+    "url": "{{BASE_URL}}/Assets/preview.jpg",
+    "alt": "Documentation"
+  },
+  "showBreadcrumb": true,
+  "showLoader": false,
+  "showSection": true,
+  "showOuterWrapper": true,
+  "showArticle": true,
+  "cssImports": "pages/about/adoc.css",
+  "scripts": [],
+  "content": "global/content/adoc-content.html",
+  "outputPath": "pages/about/adoc.html"
+}

@@ -1,0 +1,98 @@
+/* ============================================= */
+/* SQL PANEL                                     */
+/* ============================================= */
+@import url("/global/variables.css");
+
+:root {
+  --sql-font: "Space Mono", monospace;
+}
+
+#sql-panel {
+  padding: 1.5rem;
+  background: var(--color-sec-accent-subtle);
+  border: 1px solid var(--color-sec-accent-elevated);
+  border-radius: 8px;
+  font-family: var(--sql-font);
+  overflow: auto;
+}
+
+#sql-panel .panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+#sql-panel .panel-title {
+  font-size: var(--text-ui);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-sec-accent);
+}
+
+/* ── Copy button ── */
+.sql-copy-btn {
+  padding-inline: var(--space-xs);
+  padding-block: var(--space-3xs);
+  border: 1px solid var(--color-sec-accent);
+  border-radius: 4px;
+  background: var(--color-sec-accent-elevated);
+  color: var(--color-sec-accent);
+  font-family: var(--sql-font);
+  font-size: var(--text-tag);
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+@media (hover: hover) {
+  .sql-copy-btn:hover {
+    transform: translateY(-1px);
+  }
+}
+
+.sql-copy-btn:active {
+  transform: translateY(0);
+}
+.sql-copy-btn:focus-visible {
+  outline: 2px solid var(--color-sec-accent);
+  outline-offset: 2px;
+}
+
+/* ── Code block ── */
+.sql-code {
+  display: block;
+  padding: 1rem;
+  overflow-x: auto;
+  border: 1px solid var(--color-sec-accent-elevated);
+  border-radius: 4px;
+  background: rgb(0 0 0 / 0.3);
+  font-family: inherit;
+  font-size: var(--text-ui);
+  line-height: 1.6;
+  color: var(--color-text);
+  white-space: pre;
+}
+
+.sql-raw {
+  display: none;
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  #sql-panel {
+    padding: 1rem;
+    margin-block: 1.5rem;
+  }
+
+  #sql-panel .panel-header {
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .sql-code {
+    padding: 0.75rem;
+    font-size: var(--text-tag);
+  }
+}

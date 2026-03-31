@@ -1,0 +1,33 @@
+{
+  "title": "SQL Visualizer — Version History",
+  "description": "Version history and changelog for Y-SQLVIZ SQL Visualizer.",
+  "keywords": "SQL visualizer updates, changelog, version history, release notes",
+  "author": "Y-SQLVIZ",
+  "robots": "index, follow",
+  "canonical": "/pages/about/ver.html",
+  "og_title": "SQL Visualizer — Version History",
+  "og_description": "Updates and changelog for Y-SQLVIZ.",
+  "og_type": "website",
+  "og_image": {
+    "url": "{{BASE_URL}}/Assets/preview.jpg",
+    "width": "1200",
+    "height": "630",
+    "alt": "SQL Visualizer Version History"
+  },
+  "twitter_card": "summary_large_image",
+  "twitter_title": "SQL Visualizer Version History",
+  "twitter_description": "Latest updates and releases for Y-SQLVIZ.",
+  "twitter_image": {
+    "url": "{{BASE_URL}}/Assets/preview.jpg",
+    "alt": "Version History"
+  },
+  "showBreadcrumb": true,
+  "showLoader": false,
+  "showSection": true,
+  "showOuterWrapper": true,
+  "showArticle": true,
+  "cssImports": "pages/about/ver.css",
+  "scripts": [],
+  "content": "global/content/ver-content.html",
+  "outputPath": "pages/about/ver.html"
+}

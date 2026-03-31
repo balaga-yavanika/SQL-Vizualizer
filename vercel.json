@@ -1,0 +1,4 @@
+{
+  "buildCommand": "python tools/build.py",
+  "outputDirectory": "deploy"
+}

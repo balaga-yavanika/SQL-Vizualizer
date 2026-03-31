@@ -1,0 +1,33 @@
+{
+  "title": "JOINS — YSQLVIZ",
+  "description": "Interactive SQL Joins visualizer. Understand INNER, LEFT, RIGHT, FULL, CROSS joins and more through live diagrams.",
+  "keywords": "SQL joins, INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL JOIN, CROSS JOIN, join visualization, learn SQL",
+  "author": "Y-SQLVIZ",
+  "robots": "index, follow",
+  "canonical": "/pages/joins/joins.html",
+  "og_title": "SQL Joins Visualizer",
+  "og_description": "Interactive SQL Joins visualizer. Understand all join types through live diagrams.",
+  "og_type": "website",
+  "og_image": {
+    "url": "{{BASE_URL}}/Assets/preview.jpg",
+    "width": "1200",
+    "height": "630",
+    "alt": "SQL Joins Visualizer"
+  },
+  "twitter_card": "summary_large_image",
+  "twitter_title": "SQL Joins Visualizer",
+  "twitter_description": "Interactive SQL Joins visualizer with live diagrams.",
+  "twitter_image": {
+    "url": "{{BASE_URL}}/Assets/preview.jpg",
+    "alt": "SQL Joins Visualizer"
+  },
+  "showBreadcrumb": true,
+  "showLoader": false,
+  "showSection": true,
+  "showOuterWrapper": true,
+  "showArticle": true,
+  "cssImports": "pages/joins/joins.css",
+  "scripts": ["pages/joins/joins.js"],
+  "content": "global/content/joins-content.html",
+  "outputPath": "pages/joins/joins.html"
+}

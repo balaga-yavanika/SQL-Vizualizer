@@ -1,0 +1,103 @@
+/* ============================================= */
+/* NAVIGATION                                    */
+/* ============================================= */
+:root {
+  --nav-rail-offset: 50px;
+  --nav-border: 1px solid var(--color-border);
+  --nav-transition: color 0.5s ease;
+}
+
+/* span {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.82em;
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  padding: 1px 4px;
+  border-radius: 4px;
+} */
+nav span a {
+  position: relative;
+  color: var(--color-span);
+}
+nav span a[data-tooltip]:hover::after {
+  top: calc(100% - 50px);
+  left: 50px;
+}
+
+.nav,
+.outer-wrapper {
+  position: relative;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-inline: var(--space-2xl);
+  padding-block: var(--space-sm);
+  border-bottom: var(--nav-border);
+}
+
+.nav.bottom {
+  border-bottom: none;
+  border-top: var(--nav-border);
+}
+
+/* ── Rail lines ── */
+@media (min-width: 769px) {
+  .nav::before,
+  .nav::after,
+  .outer-wrapper::before,
+  .outer-wrapper::after {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    width: 1px;
+    background: var(--color-border);
+  }
+
+  .nav::before,
+  .outer-wrapper::before {
+    left: var(--nav-rail-offset);
+  }
+
+  .nav::after,
+  .outer-wrapper::after {
+    right: var(--nav-rail-offset);
+  }
+}
+
+/* ── Links ── */
+.nav a {
+  font-family: var(--font-mono);
+  font-size: var(--text-tag);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: var(--nav-transition);
+}
+
+.nav a:hover {
+  color: var(--color-accent);
+}
+
+.nav a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ── Misc ── */
+.about-role {
+  font-weight: var(--weight-light);
+  font-size: var(--text-fine);
+  letter-spacing: var(--tracking-wider);
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .nav {
+    gap: var(--space-sm);
+    padding-inline: var(--space-lg);
+  }
+}

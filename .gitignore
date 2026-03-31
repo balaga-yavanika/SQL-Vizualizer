@@ -1,0 +1,31 @@
+# Build output
+deploy/
+
+# Documentation
+STYLES.md
+addltr.txt
+OPTIMIZATION_GUIDE.md
+OPTIMIZATION_PLAN.md
+
+# Experimental/Inspiration files
+inspi.html
+
+# Node modules (if applicable)
+node_modules/
+npm-debug.log
+
+# IDE and OS files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# OS-specific
+.env.local
+.env.*.local
+
+
+This repo is for viewing and feedback only. Not open source

@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ─── SEO & Social ─────────────────────────────────────────── -->
+    <meta name="description" content="SQL Execution Order Visualizer. Understand how SQL queries are executed with interactive diagrams." />
+    <meta name="keywords" content="SQL execution order, SQL query execution, database optimization, SQL learning" />
+    <meta name="author" content="Y-SQLVIZ" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#121212" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://YOUR_URL/pages/execorder/eo.html" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="SQL Execution Order Visualizer" />
+    <meta property="og:description" content="Interactive visualizer for SQL query execution order." />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Y-SQLVIZ" />
+    <meta property="og:image" content="https://YOUR_URL/Assets/preview.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="SQL Execution Order Visualizer" />
+    <meta property="og:url" content="https://YOUR_URL/pages/execorder/eo.html" />
+    <meta property="og:locale" content="en_IN" />
+
+    <!-- Twitter/X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@Y_SQLVIZ" />
+    <meta name="twitter:creator" content="@Y_SQLVIZ" />
+    <meta name="twitter:title" content="SQL Execution Order Visualizer" />
+    <meta name="twitter:description" content="Interactive SQL execution order visualization." />
+    <meta name="twitter:image" content="https://YOUR_URL/Assets/preview.jpg" />
+    <meta name="twitter:image:alt" content="SQL Execution Order" />
+
+    <!-- Profile -->
+    
+
+    <!-- Structured Data (JSON-LD) -->
+    
+
+    <title>EXECUTION ORDER — YSQLVIZ</title>
+
+    <!-- ─── Favicon ───────────────────────────────── -->
+    <link rel="icon" href="/Assets/Favicon/favicon_io/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/Assets/Favicon/favicon_io/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/Assets/Favicon/favicon_io/favicon-16x16.png" />
+    <link rel="manifest" href="/Assets/Favicon/favicon_io/site.webmanifest" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/Assets/Favicon/favicon_io/apple-touch-icon.png" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/Assets/fonts/css/all.min.css" />
+
+    <!-- ─── Google Fonts ─────────────────────────────── -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" media="print" onload="this.media = 'all'" />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" />
+    </noscript>
+
+    <!-- ─── Page-specific CSS ─────────────────────────── -->
+    <link rel="stylesheet" href="/pages/execorder/eo-imports.css" />
+
+    <!-- ==== Scripts ==== -->
+    <script src="/Assets/Favicon/icon-ani.js" defer></script>
+    <script src="/global/nav-footer-loader.js" defer></script>
+    <script src="/Assets/fx/menu-toggle.js" defer></script>
+    <script type="module" src="/pages/execorder/eo.js" defer></script>
+  </head>
+  <body>
+    
+    <section>
+      <div class="outer-wrapper">
+        <article>
+        <nav class="breadcrumb" aria-label="Breadcrumb" style="font-size: 0.7rem;">
+        <a><i class="fa-solid fa-angles-left"></i></a>
+        <a href="#" onclick="history.back()" style="font-weight: 600;font-size: 0.8rem;">
+        Go Back&nbsp;</a>
+        <a href="/main.html" rel="prev"
+          ><i class="fa-solid fa-angles-left"></i>&nbsp;<i class="fa-solid fa-house"></i
+        ></a>
+      </nav>
+        <section>
+      <!--  -->
+      <div class="outer-wrapper">
+        <article>
+          <!-- Hero -->
+          <div class="hero">
+            <div class="heading-wrapper">
+              <div>
+                <div class="button-label for-page">[02]</div>
+                <h3 class="heading-text">EXECUTION Order<br />Visualizer</h3>
+              </div>
+            </div>
+            <p class="heading-body">
+              SQL doesn't run in the order you write it. You write
+              <code class>SELECT</code> first, but it executes almost last.
+              Understanding this order explains why you can't use a
+              <code>WHERE</code> alias, why <code>HAVING</code> exists, and how
+              the database stays fast.
+            </p>
+            <div class="legend">
+              <div class="leg">
+                <div class="leg-dot dot-planner"></div>
+                planner
+              </div>
+              <div class="leg">
+                <div class="leg-dot dot-source"></div>
+                data source
+              </div>
+              <div class="leg">
+                <div class="leg-dot dot-filter"></div>
+                filter
+              </div>
+              <div class="leg">
+                <div class="leg-dot dot-shape"></div>
+                shape
+              </div>
+              <div class="leg">
+                <div class="leg-dot dot-output"></div>
+                output
+              </div>
+              <div class="leg">
+                <div class="leg-dot dot-dedup"></div>
+                dedup
+              </div>
+            </div>
+          </div>
+
+          <div class="layout">
+            <div class="pipeline" id="pipeline"></div>
+            <div id="panel">
+              <div class="panel-empty">
+                <svg
+                  class="panel-empty-border"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect rx="10" />
+                </svg>
+                <span class="panel-hint">← click any step</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+      </article>
+      </div>
+    </section>
+  </body>
+</html>

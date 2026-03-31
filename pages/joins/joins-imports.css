@@ -1,0 +1,18 @@
+/* ============================================= */
+/* ALL CSS DEPENDENCIES FOR JOINS PAGE           */
+/* ============================================= */
+@import url("/global/variables.css");
+@import url("/global/style-guide.css");
+@import url("/global/navbars.css");
+@import url("/Assets/fx/menu-toogle.css");
+@import url("/styles/base.css");
+@import url("/styles/buttons.css");
+@import url("/styles/data-table.css");
+@import url("/styles/modal.css");
+@import url("/styles/tabs.css");
+@import url("/styles/result-grid.css");
+@import url("/styles/diagram.css");
+@import url("/styles/dropdown.css");
+@import url("/styles/pop-tip.css");
+@import url("/styles/typo.css");
+@import url("sql-generator.css");

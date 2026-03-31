@@ -1,0 +1,151 @@
+/* ============================================= */
+/* IMPORTS                                       */
+/* ============================================= */
+@import url("/global/variables.css");
+@import url("/global/style-guide.css");
+@import url("/global/navbars.css");
+@import url("/Assets/fx/menu-toogle.css");
+@import url("/Assets/fx/loader.css");
+@import url("/styles/base.css");
+@import url("/styles/buttons.css");
+
+/* ============================================= */
+/* DOCUMENT                                      */
+/* ============================================= */
+body {
+  height: 100vh;
+  user-select: none;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.outer-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+}
+
+.body-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  width: 100%;
+  user-select: none;
+  height: 100%;
+}
+
+.content-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+  flex: 1;
+}
+
+.title-section-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* ============================================= */
+/* COMPONENTS                                    */
+/* ============================================= */
+.page-title {
+  font-size: var(--text-h1-plus);
+  font-weight: var(--weight-black);
+  margin-block: 0;
+  white-space: no-wrap;
+}
+
+.page-version {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.82em;
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-subtle);
+  color: var(--color-code);
+}
+
+#type {
+  display: inline-block;
+  min-width: 200px;
+  font-family: var(--font-main);
+  padding-right: 4px;
+  white-space: nowrap;
+  color: var(--color-accent);
+}
+
+.section-label {
+  width: min(400px, 100%);
+  padding-inline: var(--space-sm);
+  padding-block: var(--space-sm);
+  border: 1.3px dashed
+    color-mix(in srgb, var(--color-sec-accent) 20%, transparent);
+  border-radius: var(--radius-md);
+  background-color: color-mix(
+    in srgb,
+    var(--color-sec-accent-elevated) 50%,
+    transparent
+  );
+  color: var(--color-sec-accent-text);
+  text-align: center;
+  flex-shrink: 0; /* stays at bottom, doesn't grow */
+  margin-block-end: var(--space-sm);
+  font-size: var(--text-caption);
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: var(--text-h1);
+  }
+  #type {
+    min-width: 150px;
+  }
+}
+
+/* ============================================= */
+/* ANIMATIONS                                    */
+/* ============================================= */
+
+/* ============================================= */
+/* RESPONSIVE                                    */
+/* ============================================= */
+@media (max-width: 768px) {
+  .footer-menu {
+    bottom: 1rem;
+    right: 1rem;
+  }
+  .footer-link {
+    font-size: 0.75rem;
+  }
+  .section-label {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    display: flex;
+    flex-wrap: wrap;
+    font-size: var(--text-h1);
+  }
+  .outer-wrapper {
+    padding: 2rem;
+  }
+  .footer-menu {
+    bottom: 0.5rem;
+    right: 0.5rem;
+  }
+  .footer-link {
+    font-size: 0.65rem;
+  }
+}

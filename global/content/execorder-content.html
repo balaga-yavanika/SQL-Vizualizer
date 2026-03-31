@@ -1,0 +1,65 @@
+    <section>
+      <!--  -->
+      <div class="outer-wrapper">
+        <article>
+          <!-- Hero -->
+          <div class="hero">
+            <div class="heading-wrapper">
+              <div>
+                <div class="button-label for-page">[02]</div>
+                <h3 class="heading-text">EXECUTION Order<br />Visualizer</h3>
+              </div>
+            </div>
+            <p class="heading-body">
+              SQL doesn't run in the order you write it. You write
+              <code class>SELECT</code> first, but it executes almost last.
+              Understanding this order explains why you can't use a
+              <code>WHERE</code> alias, why <code>HAVING</code> exists, and how
+              the database stays fast.
+            </p>
+            <div class="legend">
+              <div class="leg">
+                <div class="leg-dot dot-planner"></div>
+                planner
+              </div>
+              <div class="leg">
+                <div class="leg-dot dot-source"></div>
+                data source
+              </div>
+              <div class="leg">
+                <div class="leg-dot dot-filter"></div>
+                filter
+              </div>
+              <div class="leg">
+                <div class="leg-dot dot-shape"></div>
+                shape
+              </div>
+              <div class="leg">
+                <div class="leg-dot dot-output"></div>
+                output
+              </div>
+              <div class="leg">
+                <div class="leg-dot dot-dedup"></div>
+                dedup
+              </div>
+            </div>
+          </div>
+
+          <div class="layout">
+            <div class="pipeline" id="pipeline"></div>
+            <div id="panel">
+              <div class="panel-empty">
+                <svg
+                  class="panel-empty-border"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect rx="10" />
+                </svg>
+                <span class="panel-hint">← click any step</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>

@@ -1,0 +1,28 @@
+/* ============================================= */
+/* SHARED DOCUMENTATION PAGE STYLES             */
+/* ============================================= */
+.doc {
+  padding-block-start: var(--space-xl);
+  padding-block-end: var(--space-3xl);
+  max-width: 900px;
+  margin: 0 auto;
+}
+/* ── Header ── */
+.doc-eyebrow {
+  margin-block: 0;
+  letter-spacing: var(--tracking-wider);
+  color: var(--color-accent);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.doc-eyebrow::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
+.doc-lead {
+  line-height: 1.8;
+}

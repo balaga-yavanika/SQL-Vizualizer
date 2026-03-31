@@ -1,0 +1,152 @@
+/* ============================================= */
+/* CHANGELOG / VERSIONS                          */
+/* ============================================= */
+@import url("about-imports.css");
+
+body {
+  user-select: none;
+}
+
+li span {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.82em;
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+li span a {
+  position: relative;
+  color: var(--color-span);
+}
+
+/* ── List ── */
+.version-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.version {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: rise 0.35s ease forwards;
+}
+
+.version:first-child {
+  padding-top: 8px;
+}
+.version:last-child {
+  border-bottom: none;
+}
+
+.version:nth-child(1) {
+  animation-delay: 0.04s;
+}
+.version:nth-child(2) {
+  animation-delay: 0.09s;
+}
+.version:nth-child(3) {
+  animation-delay: 0.14s;
+}
+.version:nth-child(4) {
+  animation-delay: 0.19s;
+}
+.version:nth-child(5) {
+  animation-delay: 0.24s;
+}
+
+@keyframes rise {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .version {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Header ── */
+.version-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: var(--space-md);
+}
+
+.version-header > div:first-child {
+  display: flex;
+  gap: 20px;
+  align-items: baseline;
+}
+
+h4,
+h5,
+h6 {
+  margin-block: 0;
+}
+
+.version-date {
+  text-transform: uppercase;
+}
+
+.version-tag {
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-subtle);
+  text-transform: uppercase;
+}
+
+.version-tag.latest {
+  color: var(--color-accent);
+}
+
+/* ── Body ── */
+.version p {
+  margin-bottom: 14px;
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+}
+
+.version ul {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 0;
+  list-style: none;
+}
+
+.version ul li {
+  position: relative;
+  padding-left: 20px;
+  color: var(--color-text-muted);
+}
+
+.version ul li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  font-weight: 600;
+}
+
+/* ── Inline code ── */
+code {
+  padding: 1px 6px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.82em;
+  background: var(--color-bg-subtle);
+  color: var(--color-code);
+}
+
+/* ── Mobile ── */
+@media (max-width: 540px) {
+  h1 {
+    font-size: 1.9rem;
+  }
+}

@@ -1,0 +1,111 @@
+/* ============================================= */
+/* ABOUT DOC                                   */
+/* ============================================= */
+@import url("/pages/about/about-imports.css");
+
+body {
+  user-select: none;
+}
+
+.topics {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.topic {
+  display: grid;
+  grid-template-columns: 230px 1fr;
+  border: 1px solid var(--color-bg);
+  background: var(--color-bg-elevated);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: rise 0.35s ease forwards;
+  transition: background 0.15s;
+}
+
+/* rounded corners on first/last only */
+.topic:first-child {
+  border-radius: 8px 8px 0 0;
+}
+.topic:last-child {
+  border-radius: 0 0 8px 8px;
+}
+
+.topic:hover {
+  background: var(--color-border);
+}
+
+/* ── Stagger ── */
+.topic:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.topic:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.topic:nth-child(3) {
+  animation-delay: 0.15s;
+}
+.topic:nth-child(4) {
+  animation-delay: 0.2s;
+}
+
+@keyframes rise {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .topic {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Internals ── */
+.topic-label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-block: var(--space-sm);
+  padding-inline: var(--space-md);
+  border-right: 1px solid var(--color-bg);
+}
+
+.topic-name {
+  margin-block: 0;
+  color: var(--color-accent);
+}
+
+.topic-tag {
+  display: inline-block;
+  margin-block: 0;
+  padding: 2px 8px;
+  border-radius: 3px;
+  width: fit-content;
+  background: var(--color-bg-subtle);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.topic-body {
+  padding-block: var(--space-sm);
+  padding-inline: var(--space-md);
+  line-height: var(--leading-loose);
+}
+
+/* ── Mobile ── */
+@media (max-width: 540px) {
+  .topic {
+    grid-template-columns: 1fr;
+  }
+
+  .topic-label {
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+}

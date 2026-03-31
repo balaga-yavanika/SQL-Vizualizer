@@ -1,0 +1,75 @@
+/* ============================================= */
+/* loader */
+/* ============================================= */
+
+#loading-screen {
+  display: flex;
+  position: fixed;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  inset: 0;
+  background: var(--color-bg);
+}
+#percentage {
+  margin-top: 10px;
+  color: var(--color-text);
+  font-size: 1rem;
+  font-family: var(--font-mono);
+}
+.loader {
+  position: relative;
+  margin-top: 30px;
+  border-radius: 15% 15% 35% 35%;
+  background: var(--color-text);
+  width: 48px;
+  height: 40px;
+}
+.loader::before,
+.loader::after {
+  position: absolute;
+  box-sizing: border-box;
+  content: "";
+}
+.loader::after {
+  top: 8px;
+  left: 45px;
+  border: 4px solid var(--color-text);
+  border-radius: 0 4px 4px 0;
+  width: 16px;
+  height: 20px;
+}
+.loader::before {
+  top: -15px;
+  left: 11px;
+  animation: steam 1s ease infinite;
+  width: 1px;
+  height: 10px;
+  color: var(--color-text);
+}
+@keyframes steam {
+  0% {
+    box-shadow:
+      2px 0px color-mix(in srgb, var(--color-text) 0%, transparent),
+      12px 0px color-mix(in srgb, var(--color-text) 30%, transparent),
+      20px 0px color-mix(in srgb, var(--color-text) 0%, transparent);
+  }
+  50% {
+    box-shadow:
+      2px -5px color-mix(in srgb, var(--color-text) 50%, transparent),
+      12px -3px color-mix(in srgb, var(--color-text) 50%, transparent),
+      20px -2px color-mix(in srgb, var(--color-text) 60%, transparent);
+  }
+  100% {
+    box-shadow:
+      2px -8px color-mix(in srgb, var(--color-text) 0%, transparent),
+      12px -5px color-mix(in srgb, var(--color-text) 0%, transparent),
+      20px -5px color-mix(in srgb, var(--color-text) 0%, transparent);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .loader::before {
+    animation: none;
+  }
+}

@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ─── SEO & Social ─────────────────────────────────────────── -->
+    <meta name="description" content="Y-SQLVIZ — An interactive SQL visualizer. Understand SQL joins, clauses, and queries visually. Learn SQL through live diagrams and examples." />
+    <meta name="keywords" content="SQL visualizer, SQL joins, learn SQL, SQL clauses, visualize SQL, SQL query tool, interactive SQL, SQL tutorial, JOIN visualization, SQL SELECT, SQL WHERE, SQL GROUP BY, SQL ORDER BY, SQL HAVING, SQL subqueries, SQL for beginners, database learning tool" />
+    <meta name="author" content="Y-SQLVIZ" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#121212" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://YOUR_URL/" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Y-SQLVIZ — SQL Visualizer" />
+    <meta property="og:description" content="Visualize SQL joins, clauses, and queries interactively. A free tool to learn and understand SQL through live diagrams." />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Y-SQLVIZ" />
+    <meta property="og:image" content="https://YOUR_URL/Assets/preview.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Y-SQLVIZ — SQL Visualizer preview" />
+    <meta property="og:url" content="https://YOUR_URL/" />
+    <meta property="og:locale" content="en_IN" />
+
+    <!-- Twitter/X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@Y_SQLVIZ" />
+    <meta name="twitter:creator" content="@Y_SQLVIZ" />
+    <meta name="twitter:title" content="Y-SQLVIZ — SQL Visualizer" />
+    <meta name="twitter:description" content="Visualize SQL joins, clauses, and queries interactively. Learn SQL through live diagrams." />
+    <meta name="twitter:image" content="https://YOUR_URL/Assets/preview.jpg" />
+    <meta name="twitter:image:alt" content="Y-SQLVIZ — SQL Visualizer preview" />
+
+    <!-- Profile -->
+    <link rel="me" href="https://medium.com/@whyaweeye25" />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Y-SQLVIZ",
+        "url": "https://YOUR_URL/",
+        "description": "An interactive SQL visualizer for learning SQL joins, clauses, and queries through live diagrams.",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "author": {
+          "@type": "Person",
+          "name": "Y-SQLVIZ",
+          "url": "https://medium.com/@whyaweeye25"
+        },
+        "keywords": "SQL visualizer, SQL joins, learn SQL, SQL clauses, interactive SQL"
+      }
+    </script>
+
+    <title>Y-SQLVIZ — SQL Visualizer</title>
+
+    <!-- ─── Favicon ───────────────────────────────── -->
+    <link rel="icon" href="/Assets/Favicon/favicon_io/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/Assets/Favicon/favicon_io/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/Assets/Favicon/favicon_io/favicon-16x16.png" />
+    <link rel="manifest" href="/Assets/Favicon/favicon_io/site.webmanifest" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/Assets/Favicon/favicon_io/apple-touch-icon.png" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/Assets/fonts/css/all.min.css" />
+
+    <!-- ─── Google Fonts ─────────────────────────────── -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" media="print" onload="this.media = 'all'" />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" />
+    </noscript>
+
+    <!-- ─── Page-specific CSS ─────────────────────────── -->
+    <link rel="stylesheet" href="/style.css" />
+
+    <!-- ==== Scripts ==== -->
+    <script src="/Assets/Favicon/icon-ani.js" defer></script>
+    <script src="/global/nav-footer-loader.js" defer></script>
+    <script src="/Assets/fx/menu-toggle.js" defer></script>
+    <script type="module" src="/script.js" defer></script>
+    <script type="module" src="/Assets/fx/typer.js" defer></script>
+  </head>
+  <body>
+    <!-- ── LOADING SCREEN ── -->
+    <div id="loading-screen">
+      <span class="loader"></span>
+      <div id="percentage">[0%]</div>
+    </div>
+    <div class="outer-wrapper">
+        <div class="body-section" id="content">
+  <!-- Title Section -->
+
+  <div class="content-center">
+    <div class="title-section-wrapper">
+      <div>
+        <p class="page-version"><i class="fa-solid fa-database"></i> v1.3</p>
+      </div>
+      <div>
+        <h1 class="page-title">SQL&nbsp;<span id="type"></span></h1>
+      </div>
+      <div>
+        <p>Select a topic you'd like to visualize</p>
+      </div>
+    </div>
+    <!-- Buttons Grid -->
+    <div class="buttons-grid">
+      <!-- Row 1 -->
+      <div class="button-item">
+        <div class="button-label">[01]</div>
+        <a href="/pages/joins/joins.html" class="button-link">
+          <span>SQL<br />Joins</span>
+        </a>
+      </div>
+      <div class="button-item">
+        <div class="button-label">[02]</div>
+        <a href="/pages/execorder/eo.html" class="button-link">
+          <span>EXECUTION<br />ORDER</span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- ── Window functions (next) ── -->
+
+  <div class="section-label">
+    <i class="fa-regular fa-calendar"></i>&nbsp;&nbsp;Coming next ⇾ window
+    functions. Stay Tuned.
+  </div>
+</div>
+
+      </div>
+  </body>
+</html>

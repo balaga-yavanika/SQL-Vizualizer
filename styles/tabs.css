@@ -1,0 +1,49 @@
+/* ============================================= */
+/* TABS & CONTROLS                              */
+/* ============================================= */
+
+.tabs {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-lg);
+}
+
+.tab {
+  padding-inline: var(--space-md);
+  padding-block: var(--space-xs);
+  border: 0.5px solid var(--color-bg-subtle);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: var(--text-ui);
+  background: transparent;
+  color: var(--color-text-muted);
+  transition: all 0.15s ease-in-out;
+  font-family: inherit;
+  font-weight: 400;
+}
+
+.tab.active {
+  font-weight: 500;
+}
+
+.tab:hover:not(.active) {
+  background: var(--color-bg-elevated);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tab:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background: var(--color-bg-elevated);
+  }
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.tab:active {
+  opacity: 0.8;
+}

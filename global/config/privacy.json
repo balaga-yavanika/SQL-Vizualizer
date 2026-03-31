@@ -1,0 +1,33 @@
+{
+  "title": "Y-SQLVIZ — License & Terms",
+  "description": "License and terms for Y-SQLVIZ. Educational use only.",
+  "keywords": "license, terms, usage rights",
+  "author": "Y-SQLVIZ",
+  "robots": "index, follow",
+  "canonical": "/pages/about/privacy.html",
+  "og_title": "Y-SQLVIZ License",
+  "og_description": "License and terms for Y-SQLVIZ SQL Visualizer.",
+  "og_type": "website",
+  "og_image": {
+    "url": "{{BASE_URL}}/Assets/preview.jpg",
+    "width": "1200",
+    "height": "630",
+    "alt": "Y-SQLVIZ License"
+  },
+  "twitter_card": "summary_large_image",
+  "twitter_title": "Y-SQLVIZ License",
+  "twitter_description": "License and terms for Y-SQLVIZ.",
+  "twitter_image": {
+    "url": "{{BASE_URL}}/Assets/preview.jpg",
+    "alt": "License"
+  },
+  "showBreadcrumb": true,
+  "showLoader": false,
+  "showSection": true,
+  "showOuterWrapper": true,
+  "showArticle": true,
+  "cssImports": "pages/about/ver.css",
+  "scripts": [],
+  "content": "global/content/privacy-content.html",
+  "outputPath": "pages/about/privacy.html"
+}

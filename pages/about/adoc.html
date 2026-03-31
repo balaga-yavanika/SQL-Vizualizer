@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ─── SEO & Social ─────────────────────────────────────────── -->
+    <meta name="description" content="Documentation for Y-SQLVIZ SQL Visualizer. Learn how to use the tool effectively." />
+    <meta name="keywords" content="SQL documentation, SQL tutorial, SQL guide, SQL learning" />
+    <meta name="author" content="Y-SQLVIZ" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#121212" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://YOUR_URL/pages/about/adoc.html" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="SQL Visualizer Documentation" />
+    <meta property="og:description" content="Complete documentation and guide for Y-SQLVIZ." />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Y-SQLVIZ" />
+    <meta property="og:image" content="https://YOUR_URL/Assets/preview.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="SQL Visualizer Documentation" />
+    <meta property="og:url" content="https://YOUR_URL/pages/about/adoc.html" />
+    <meta property="og:locale" content="en_IN" />
+
+    <!-- Twitter/X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@Y_SQLVIZ" />
+    <meta name="twitter:creator" content="@Y_SQLVIZ" />
+    <meta name="twitter:title" content="SQL Visualizer Documentation" />
+    <meta name="twitter:description" content="Documentation for Y-SQLVIZ SQL Visualizer." />
+    <meta name="twitter:image" content="https://YOUR_URL/Assets/preview.jpg" />
+    <meta name="twitter:image:alt" content="Documentation" />
+
+    <!-- Profile -->
+    
+
+    <!-- Structured Data (JSON-LD) -->
+    
+
+    <title>SQL Visualizer — Documentation</title>
+
+    <!-- ─── Favicon ───────────────────────────────── -->
+    <link rel="icon" href="/Assets/Favicon/favicon_io/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/Assets/Favicon/favicon_io/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/Assets/Favicon/favicon_io/favicon-16x16.png" />
+    <link rel="manifest" href="/Assets/Favicon/favicon_io/site.webmanifest" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/Assets/Favicon/favicon_io/apple-touch-icon.png" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/Assets/fonts/css/all.min.css" />
+
+    <!-- ─── Google Fonts ─────────────────────────────── -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" media="print" onload="this.media = 'all'" />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" />
+    </noscript>
+
+    <!-- ─── Page-specific CSS ─────────────────────────── -->
+    <link rel="stylesheet" href="/pages/about/adoc.css" />
+
+    <!-- ==== Scripts ==== -->
+    <script src="/Assets/Favicon/icon-ani.js" defer></script>
+    <script src="/global/nav-footer-loader.js" defer></script>
+    <script src="/Assets/fx/menu-toggle.js" defer></script>
+    
+  </head>
+  <body>
+    
+    <section>
+      <div class="outer-wrapper">
+        <article>
+        <nav class="breadcrumb" aria-label="Breadcrumb" style="font-size: 0.7rem;">
+        <a><i class="fa-solid fa-angles-left"></i></a>
+        <a href="#" onclick="history.back()" style="font-weight: 600;font-size: 0.8rem;">
+        Go Back&nbsp;</a>
+        <a href="/main.html" rel="prev"
+          ><i class="fa-solid fa-angles-left"></i>&nbsp;<i class="fa-solid fa-house"></i
+        ></a>
+      </nav>
+    <div class="doc">
+  <h6 class="doc-eyebrow">SQL Visualizer Documentation</h6>
+
+  <h1>SQL Visualizer</h1>
+
+  <p class="doc-lead">
+    A self-contained, browser-based tool for learning and exploring SQL concepts
+    through interactive diagrams, live queries, and step-by-step visual
+    breakdowns.<br /><br />NO SERVER, NO DEPENDENCIES, NO SETUP REQUIRED. Get
+    Started.
+    <i class="fa-solid fa-thumbs-up"></i>
+  </p>
+  <hr />
+
+  <h2>What It Is</h2>
+
+  <p>
+    SQL Visualizer transforms abstract SQL concepts into clear, interactive
+    visual representations. Each topic is accompanied by practical, working
+    examples, allowing users to see how queries behave in real scenarios. Data
+    connection diagrams update dynamically as join types or relationships are
+    modified, providing immediate visual feedback on table interactions.
+    Execution phases can be expanded with a single click, revealing detailed,
+    step-by-step insights into how queries are processed. Additionally, an
+    in-memory dataset displays query results instantly, enabling users to
+    experiment freely and understand outcomes without delay.<br /><br />
+    This combination of visualization, interactivity, and real-time feedback
+    makes SQL Visualizer a powerful tool for learning, teaching, and exploring
+    SQL.
+  </p>
+
+  <h2>Why I Built It</h2>
+
+  <p>
+    Most SQL learning resources explain concepts through static text and
+    diagrams. That works up to a point, but the moment you try to write a window
+    function or debug why a <code>WHERE</code> clause can't reference a
+    <code>SELECT</code> alias, static explanations fall short. You need to
+    <em>see</em> the data moving.
+  </p>
+
+  <p>
+    I built SQL Visualizer to bridge that gap — a reference tool that lives
+    alongside your editor, answers "what does this actually return?"
+    immediately, and makes the mental models concrete rather than theoretical.
+    It's aimed at developers who already know some SQL but want a faster way to
+    reason through the trickier parts.
+  </p>
+
+  <div>
+    <blockquote>
+      <strong>Design constraint:</strong> everything had to work offline, in a
+      single file, with zero dependencies. The SQL engine, the in-memory
+      database, and all interactivity are hand-rolled in vanilla JavaScript.
+    </blockquote>
+  </div>
+
+  <hr />
+
+  <h2>Topics Covered</h2>
+
+  <div class="topics">
+    <div class="topic">
+      <div class="topic-label">
+        <h5 class="topic-name">SQL Joins</h5>
+        <h6 class="topic-tag">Interactive</h6>
+      </div>
+      <p class="topic-body">
+        Covers all six join types —
+        <strong>INNER, LEFT, RIGHT, FULL OUTER, CROSS,</strong> and
+        <strong>SELF</strong>. Each has a live Venn diagram, a result preview
+        drawn from real sample data, and annotated syntax. Common pitfalls like
+        implicit Cartesian products are called out explicitly.
+      </p>
+    </div>
+
+    <div class="topic">
+      <div class="topic-label">
+        <h5 class="topic-name">Execution Order</h5>
+        <h6 class="topic-tag">Visual</h6>
+      </div>
+      <p class="topic-body">
+        Execution order covers an
+        <strong>12-steped extended version </strong> of the basic eight-step
+        logical execution processing phases: <code>FROM</code> →
+        <code>WHERE</code> → <code>GROUP BY</code> → <code>HAVING</code> →
+        <code>SELECT</code> → <code>DISTINCT</code> → <code>ORDER BY</code> →
+        <code>LIMIT</code>. Each step explains what the engine does at that
+        phase and why it matters for writing correct queries.
+      </p>
+    </div>
+
+    <div class="topic">
+      <div class="topic-label">
+        <h5 class="topic-name">Window Functions</h5>
+        <!-- <h6 class="topic-tag">Interactive</h6> -->
+      </div>
+      <p class="topic-body">Coming Soon...</p>
+    </div>
+
+    <div class="topic">
+      <div class="topic-label">
+        <h5 class="topic-name">CTEs &amp; Subqueries</h5>
+        <!-- <h6 class="topic-tag">Reference</h6> -->
+      </div>
+      <p class="topic-body">Coming Soon...</p>
+    </div>
+    <!-- <div class="topic">
+      <div class="topic-label">
+        <h5 class="topic-name">Window Functions</h5>
+        <h6 class="topic-tag">Interactive</h6>
+      </div>
+      <p class="topic-body">
+        Breaks down the <code>OVER()</code> clause — partitioning, ordering, and
+        frame bounds. A live demo table lets you toggle between
+        <strong>ROW_NUMBER, RANK, SUM with PARTITION,</strong> and
+        <strong>LAG</strong>, highlighting the computed column per row so the
+        difference between functions is immediately visible.
+      </p>
+    </div>
+
+    <div class="topic">
+      <div class="topic-label">
+        <h5 class="topic-name">CTEs &amp; Subqueries</h5>
+        <h6 class="topic-tag">Reference</h6>
+      </div>
+      <p class="topic-body">
+        Side-by-side comparison of inline subqueries vs. named CTEs, a
+        walkthrough of how the engine processes a
+        <code>WITH</code> clause, a full <strong>recursive CTE</strong> example
+        for org-chart traversal, and a chained multi-CTE query demonstrating how
+        to build a step-by-step pipeline.
+      </p>
+    </div> -->
+    <hr />
+    <p class="about-role">
+      SQL VISUALIZER ©️&nbsp;Copyright © 2026 Yavanika Balaga. All rights
+      reserved.
+    </p>
+  </div>
+</div>
+
+      </article>
+      </div>
+    </section>
+  </body>
+</html>

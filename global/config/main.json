@@ -1,0 +1,57 @@
+{
+  "title": "Y-SQLVIZ — SQL Visualizer",
+  "description": "Y-SQLVIZ — An interactive SQL visualizer. Understand SQL joins, clauses, and queries visually. Learn SQL through live diagrams and examples.",
+  "keywords": "SQL visualizer, SQL joins, learn SQL, SQL clauses, visualize SQL, SQL query tool, interactive SQL, SQL tutorial, JOIN visualization, SQL SELECT, SQL WHERE, SQL GROUP BY, SQL ORDER BY, SQL HAVING, SQL subqueries, SQL for beginners, database learning tool",
+  "author": "Y-SQLVIZ",
+  "robots": "index, follow",
+  "canonical": "/",
+  "og_title": "Y-SQLVIZ — SQL Visualizer",
+  "og_description": "Visualize SQL joins, clauses, and queries interactively. A free tool to learn and understand SQL through live diagrams.",
+  "og_type": "website",
+  "og_image": {
+    "url": "{{BASE_URL}}/Assets/preview.jpg",
+    "width": "1200",
+    "height": "630",
+    "alt": "Y-SQLVIZ — SQL Visualizer preview"
+  },
+  "twitter_card": "summary_large_image",
+  "twitter_title": "Y-SQLVIZ — SQL Visualizer",
+  "twitter_description": "Visualize SQL joins, clauses, and queries interactively. Learn SQL through live diagrams.",
+  "twitter_image": {
+    "url": "{{BASE_URL}}/Assets/preview.jpg",
+    "alt": "Y-SQLVIZ — SQL Visualizer preview"
+  },
+  "profile_link": "https://medium.com/@whyaweeye25",
+  "jsonld": {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Y-SQLVIZ",
+    "url": "{{BASE_URL}}/",
+    "description": "An interactive SQL visualizer for learning SQL joins, clauses, and queries through live diagrams.",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Requires JavaScript",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Y-SQLVIZ",
+      "url": "https://medium.com/@whyaweeye25"
+    },
+    "keywords": "SQL visualizer, SQL joins, learn SQL, SQL clauses, interactive SQL"
+  },
+  "_comment": "bodyClass: hero",
+
+  "showBreadcrumb": false,
+  "showLoader": true,
+  "showSection": false,
+  "showOuterWrapper": true,
+  "showArticle": false,
+  "cssImports": "style.css",
+  "scripts": ["/script.js", "/Assets/fx/typer.js"],
+  "content": "global/content/main-content.html",
+  "outputPath": "main.html"
+}

@@ -1,0 +1,228 @@
+/* ============================================= */
+/* POPOVER / TOOLTIP                             */
+/* ============================================= */
+.how-to-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.fa-circle-info {
+  font-size: var(--text-tag);
+}
+
+/* ── Trigger button ── */
+.btn-secondary {
+  padding: 8px 14px;
+  border: 1px solid color-mix(in srgb, var(--color-sec-accent) 15%, transparent);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--color-sec-accent) 10%, transparent);
+  color: var(--color-sec-accent);
+  font-family: var(--font-main);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.btn-secondary:focus-visible {
+  outline: 2px solid var(--color-sec-accent);
+  outline-offset: 2px;
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+}
+
+@media (hover: hover) {
+  .btn-secondary:hover {
+    background: color-mix(in srgb, var(--color-sec-accent) 15%, transparent);
+    border-color: color-mix(in srgb, var(--color-sec-accent) 85%, transparent);
+    transform: translateY(-1px);
+  }
+}
+
+/* ── Popover panel ── */
+.how-to-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: min(400px, 90vw); /* responsive by default */
+  background: #101919;
+  border: 1px solid var(--color-sec-accent-elevated);
+  border-radius: var(--radius-md);
+  box-shadow: -18px 18px 50px #0f0f12;
+  z-index: 1000;
+  animation: popoverIn 0.15s ease;
+}
+
+@keyframes popoverIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Popover internals ── */
+.popover-content {
+  position: relative;
+  padding: 16px;
+}
+
+.popover-title {
+  margin-block: 0 10px;
+  color: var(--color-sec-accent);
+  text-transform: uppercase;
+}
+
+.popover-text p {
+  color: var(--color-sec-accent-text);
+}
+
+.popover-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm, 4px);
+  font-size: 24px;
+  color: var(--color-sec-accent-text);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.popover-close:focus-visible {
+  outline: 2px solid var(--color-sec-accent);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) {
+  .popover-close:hover {
+    background: var(--color-sec-accent-elevated);
+  }
+}
+
+/* ── Touch: larger tap targets ── */
+@media (pointer: coarse) {
+  .popover-close {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .how-to-popover {
+    animation: none;
+    right: 50%;
+    transform: translateX(50%); /* center on small screens */
+  }
+}
+
+/* ── Tooltip (responsive positioning) ── */
+.tooltip-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: help;
+}
+
+/* Default: tooltip on the right for larger screens */
+.tooltip-wrapper[data-tooltip]::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 12px);
+  transform: translateY(-50%);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-sec-accent-elevated);
+  color: var(--color-sec-accent-text);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-tag);
+  max-width: 200px;
+  word-wrap: break-word;
+  white-space: normal;
+  line-height: 1.4;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.tooltip-wrapper[data-tooltip]::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 6px);
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 4px solid var(--color-sec-accent-elevated);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+/* Medium screens: reposition above if right position would overflow */
+@media (max-width: 768px) {
+  .tooltip-wrapper[data-tooltip]::before {
+    left: 50%;
+    top: auto;
+    bottom: calc(100% + 12px);
+    transform: translateX(-50%);
+    max-width: 180px;
+  }
+
+  .tooltip-wrapper[data-tooltip]::after {
+    left: 50%;
+    top: auto;
+    bottom: calc(100% + 6px);
+    transform: translateX(-50%);
+    border-left: 0;
+    border-top: 4px solid var(--color-sec-accent-elevated);
+    border-right: 0;
+    border-bottom: 0;
+  }
+}
+
+/* Small screens: position above with less max-width */
+@media (max-width: 480px) {
+  .tooltip-wrapper[data-tooltip]::before {
+    max-width: min(150px, 90vw);
+    font-size: var(--text-fine);
+    padding: 6px 10px;
+  }
+}
+
+@media (hover: hover) {
+  .tooltip-wrapper[data-tooltip]:hover::before,
+  .tooltip-wrapper[data-tooltip]:hover::after {
+    opacity: 1;
+  }
+}
+
+/* ── Touch: show tooltip on focus ── */
+@media (pointer: coarse) {
+  .tooltip-wrapper[data-tooltip]:focus-within::before,
+  .tooltip-wrapper[data-tooltip]:focus-within::after {
+    opacity: 1;
+  }
+}
