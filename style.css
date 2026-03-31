@@ -124,9 +124,7 @@ body {
     bottom: 1rem;
     right: 1rem;
   }
-  .footer-link {
-    font-size: 0.75rem;
-  }
+
   .section-label {
     width: 100%;
   }
@@ -144,8 +142,5 @@ body {
   .footer-menu {
     bottom: 0.5rem;
     right: 0.5rem;
-  }
-  .footer-link {
-    font-size: 0.65rem;
   }
 }

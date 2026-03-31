@@ -75,8 +75,8 @@ See the [full license and terms](pages/about/privacy.html) for permitted and pro
 
 ## 🎓 Learn More
 
-- 📖 Check out the [Styles Documentation](STYLES.md) for architectural details
-- 🔧 See [About](pages/about/) page for project history and versions
+- 📖 Check out the [Site Documentation](pages/about/adoc.html) for architectural details
+- 🔧 See [Version Notes](pages/about/ver.html) page for project history and versions
 
 ## 💬 Feedback & Support
 

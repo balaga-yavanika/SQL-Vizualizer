@@ -26,10 +26,8 @@
   "showSection": true,
   "showOuterWrapper": true,
   "showArticle": true,
-  "cssImports": "pages/execorder/eo-imports.css",
-  "scripts": [
-    "pages/execorder/eo.js"
-  ],
+  "cssImports": "pages/execorder/eo.css",
+  "scripts": ["pages/execorder/eo.js"],
   "content": "global/content/execorder-content.html",
   "outputPath": "pages/execorder/eo.html"
 }

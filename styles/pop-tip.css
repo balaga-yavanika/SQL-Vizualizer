@@ -51,7 +51,10 @@
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  min-width: min(400px, 90vw); /* responsive by default */
+  width: 400px;
+  max-width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
   background: #101919;
   border: 1px solid var(--color-sec-accent-elevated);
   border-radius: var(--radius-md);
@@ -74,7 +77,6 @@
 /* ── Popover internals ── */
 .popover-content {
   position: relative;
-  padding: 16px;
 }
 
 .popover-title {
@@ -125,12 +127,43 @@
   }
 }
 
-/* ── Mobile ── */
+/* ── Tablet (768px and below) ── */
 @media (max-width: 768px) {
   .how-to-popover {
-    animation: none;
-    right: 50%;
-    transform: translateX(50%); /* center on small screens */
+    right: 16px;
+    left: 16px;
+    width: auto;
+    max-width: none;
+  }
+}
+
+/* ── Mobile (480px and below) ── */
+@media (max-width: 480px) {
+  .how-to-popover {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    max-height: 80vh;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    animation: popoverSlideUp 0.2s ease;
+  }
+
+  @keyframes popoverSlideUp {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .popover-content {
+    padding: 20px 16px 16px;
   }
 }
 
@@ -200,6 +233,10 @@
     border-top: 4px solid var(--color-sec-accent-elevated);
     border-right: 0;
     border-bottom: 0;
+  }
+  .popover-content {
+    padding-inline: var(--space-xl);
+    padding-block: var(--space-xl);
   }
 }
 

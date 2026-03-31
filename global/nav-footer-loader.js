@@ -20,38 +20,54 @@ async function loadNavFooter() {
     // Extract nav and footer elements
     const topNav = temp.querySelector(".nav.top");
     const bottomNav = temp.querySelector(".nav.bottom");
-    const footerMenu = temp.querySelector(".footer-menu");
+    const drawerOverlay = temp.querySelector(".drawer-overlay");
+    const drawerMenu = temp.querySelector(".drawer-menu");
+    const footerMenu = temp.querySelector("#footer-menu");
 
     if (topNav) {
       // Insert top nav as first child of section
       section.insertBefore(topNav.cloneNode(true), section.firstChild);
     }
 
-    if (bottomNav && footerMenu) {
-      // Append bottom nav and footer menu at the end of section
+    if (bottomNav) {
+      // Append bottom nav at the end of section
       section.appendChild(bottomNav.cloneNode(true));
-      // Append footer menu to body instead of section to ensure it stays fixed
+    }
+
+    // Append drawer and footer menu to body (for fixed positioning)
+    if (drawerOverlay) {
+      document.body.appendChild(drawerOverlay.cloneNode(true));
+    }
+
+    if (drawerMenu) {
+      document.body.appendChild(drawerMenu.cloneNode(true));
+    }
+
+    if (footerMenu) {
       document.body.appendChild(footerMenu.cloneNode(true));
     }
 
-    // Re-initialize menu toggle after injection
-    initializeMenuToggle();
+    // Re-initialize menus after injection
+    initializeMenus();
+
+    // Dispatch event to signal that nav-footer is loaded
+    document.dispatchEvent(new CustomEvent("navFooterLoaded"));
   } catch (error) {
     console.error("Failed to load nav-footer component:", error);
   }
 }
 
-function initializeMenuToggle() {
+function initializeMenus() {
   const menuToggle = document.getElementById("menu-toggle");
   const footerMenu = document.getElementById("footer-menu");
 
+  // Desktop menu toggle (for screens > 768px)
   if (menuToggle && footerMenu) {
     menuToggle.addEventListener("click", (e) => {
       e.preventDefault();
       footerMenu.classList.toggle("hidden");
     });
 
-    // Close menu when clicking outside
     document.addEventListener("click", (e) => {
       if (
         !e.target.closest(".footer-menu") &&
@@ -61,11 +77,12 @@ function initializeMenuToggle() {
       }
     });
 
-    // Hide menu when page scrolls
     window.addEventListener("scroll", () => {
       footerMenu.classList.add("hidden");
     }, { passive: true });
   }
+
+  // Mobile menu handlers are now in menu-toggle.js
 }
 
 // Load when DOM is ready

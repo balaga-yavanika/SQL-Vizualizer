@@ -63,18 +63,109 @@
     color-mix(in srgb, var(--color-text-muted) 15%, transparent);
 }
 
-/* ── Mobile ── */
-@media (max-width: 768px) {
-  .footer-menu {
-    bottom: 1rem;
-    right: 1rem;
+/* ============================================= */
+/* DRAWER MENU (Mobile Sliding Menu)             */
+/* ============================================= */
+.drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.drawer-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.drawer-menu {
+  position: fixed;
+  top: 0;
+  right: -500px;
+  width: 100%;
+  height: 100vh;
+  background: var(--color-bg-elevated);
+  border-left: 1px solid var(--color-border);
+  z-index: 1000;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-xl);
+  gap: var(--space-sm);
+  transition: right 0.3s ease;
+}
+
+.drawer-menu.active {
+  right: 0;
+}
+
+.drawer-top-wrapper {
+  display: flex;
+  margin-bottom: var(--space-4xl);
+  font-size: var(--text-h4);
+  justify-content: space-between;
+  padding-inline-start: var(--space-md);
+  align-items: center;
+}
+
+.drawer-close {
+  /* align-self: flex-end; */
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: var(--text-h4);
+  transition: color 0.2s ease;
+}
+
+.drawer-close:hover {
+  color: var(--color-accent);
+}
+
+.drawer-close:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.drawer-menu .footer-link {
+  padding: var(--space-sm);
+  border-radius: 4px;
+  white-space: normal;
+  transition: background 0.2s ease;
+  font-size: var(--text-h3);
+  gap: 30px;
+}
+
+.drawer-menu .footer-link:hover {
+  background: var(--color-bg-subtle);
+}
+
+.rm-p {
+  padding-inline-start: var(--space-md);
+  margin-top: auto;
+}
+
+/* ── Desktop: Hide drawer menu ── */
+@media (min-width: 769px) {
+  .drawer-menu,
+  .drawer-overlay {
+    display: none !important;
   }
 }
 
-@media (max-width: 480px) {
+/* ── Tablet & Mobile ── */
+@media (max-width: 768px) {
   .footer-menu {
-    bottom: 0.5rem;
-    right: 0.5rem;
-    font-size: 0.65rem;
+    display: none !important;
   }
 }

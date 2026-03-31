@@ -110,6 +110,9 @@ code {
   border-radius: 4px;
   color: var(--color-code);
 }
+code:hover {
+  color: oklch(90% 0.1 181); /* just L +10, same hue */
+}
 
 strong {
   color: var(--color-text);
@@ -138,7 +141,7 @@ a {
 }
 
 a:hover {
-  color: var(--color-sec-accent);
+  color: oklch(from var(--color-accent) l c h / 0.08);
 }
 
 a:focus {
