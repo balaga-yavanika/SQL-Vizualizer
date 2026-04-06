@@ -2,6 +2,7 @@
 /* GLOBAL RESET & BASE STYLES                   */
 /* ============================================= */
 
+/* Box model reset */
 *,
 *::before,
 *::after {
@@ -10,12 +11,19 @@
   padding: 0;
 }
 
+/* HTML & Body baseline */
 html {
   scroll-behavior: smooth;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE & Edge */
+  accent-color: var(--color-primary);
 }
 
+/* Hide scrollbars (Chrome, Safari, Opera) */
 html::-webkit-scrollbar {
   display: none;
+}
+
+body {
+  position: relative;
 }

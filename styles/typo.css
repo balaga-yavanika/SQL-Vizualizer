@@ -1,15 +1,21 @@
 /* ============================================= */
 /* TYPOGRAPHY                                    */
 /* ============================================= */
-
 .heading-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.heading-part-top {
   display: flex;
   justify-content: space-between;
 }
 
 .heading-text {
-  margin-block-start: 0;
-  color: var(--color-accent);
+  margin-block: 0;
+  color: var(--color-primary);
   text-transform: uppercase;
 }
 
@@ -17,13 +23,22 @@
   line-height: 1.8;
 }
 
+.heading-label-per-page {
+  text-align: left;
+  height: var(--button-label-height);
+  margin-block-start: var(--space-md);
+  font-family: var(--font-mono);
+  font-size: var(--text-fine);
+  color: var(--button-accent-muted);
+  text-transform: uppercase;
+}
+
 /* ── Section labels ── */
 .section-label-large,
 .section-label-medium {
-  margin-block-start: var(--space-md);
+  margin-block: var(--space-md) 0;
   font-size: var(--text-h4);
   text-transform: uppercase;
-  margin-bottom: 0;
 }
 
 .section-label-medium {
@@ -33,11 +48,9 @@
 /* ── Alert / callout ── */
 .desc {
   margin-block: var(--space-lg);
-  padding-inline: var(
-    --space-md
-  ); /* was missing — border-left implies padding */
-  border-left: 4px solid var(--color-sec-accent);
-  background: var(--color-sec-accent-subtle);
+  padding-inline: var(--space-md);
+  border-left: 4px solid var(--color-secondary);
+  background: oklch(from var(--color-secondary) l c h / 0.07);
   line-height: 1.5;
-  color: var(--color-sec-accent);
+  color: var(--color-secondary);
 }

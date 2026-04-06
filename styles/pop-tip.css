@@ -14,23 +14,14 @@
 /* ── Trigger button ── */
 .btn-secondary {
   padding: 8px 14px;
-  border: 1px solid color-mix(in srgb, var(--color-sec-accent) 15%, transparent);
-  border-radius: 6px;
-  background: color-mix(in srgb, var(--color-sec-accent) 10%, transparent);
-  color: var(--color-sec-accent);
-  font-family: var(--font-main);
-  font-size: 13px;
-  font-weight: 500;
-  white-space: nowrap;
-  cursor: pointer;
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease;
+  border: 1px solid oklch(from var(--color-secondary) l c h / 0.15);
+  border-radius: var(--radius-md);
+  background: oklch(from var(--color-secondary) l c h / 0.1);
+  color: var(--color-secondary);
 }
 
 .btn-secondary:focus-visible {
-  outline: 2px solid var(--color-sec-accent);
+  outline: 2px solid var(--color-secondary);
   outline-offset: 2px;
 }
 
@@ -40,23 +31,22 @@
 
 @media (hover: hover) {
   .btn-secondary:hover {
-    background: color-mix(in srgb, var(--color-sec-accent) 15%, transparent);
-    border-color: color-mix(in srgb, var(--color-sec-accent) 85%, transparent);
-    transform: translateY(-1px);
+    background: oklch(from var(--color-secondary) l c h / 0.15);
+    border-color: oklch(from var(--color-secondary) l c h / 0.85);
   }
 }
 
 /* ── Popover panel ── */
 .how-to-popover {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% - 30px);
   right: 0;
-  width: 400px;
+  width: 450px;
   max-width: 90vw;
   max-height: 80vh;
   overflow-y: auto;
   background: #101919;
-  border: 1px solid var(--color-sec-accent-elevated);
+  border: 1px solid oklch(from var(--color-secondary) l c h / 0.2);
   border-radius: var(--radius-md);
   box-shadow: -18px 18px 50px #0f0f12;
   z-index: 1000;
@@ -77,16 +67,18 @@
 /* ── Popover internals ── */
 .popover-content {
   position: relative;
+  padding: var(--space-md);
 }
 
 .popover-title {
   margin-block: 0 10px;
-  color: var(--color-sec-accent);
+  color: var(--color-secondary);
   text-transform: uppercase;
 }
 
 .popover-text p {
-  color: var(--color-sec-accent-text);
+  color: oklch(from var(--color-secondary) calc(l - 0.1) calc(c - 0.04) h);
+  font-size: var(--text-body-sm);
 }
 
 .popover-close {
@@ -103,13 +95,13 @@
   border: none;
   border-radius: var(--radius-sm, 4px);
   font-size: 24px;
-  color: var(--color-sec-accent-text);
+  color: oklch(from var(--color-secondary) calc(l - 0.1) calc(c - 0.04) h);
   cursor: pointer;
   transition: background 0.2s ease;
 }
 
 .popover-close:focus-visible {
-  outline: 2px solid var(--color-sec-accent);
+  outline: 2px solid var(--color-secondary);
   outline-offset: 2px;
 }
 
@@ -182,9 +174,9 @@
   top: 50%;
   left: calc(100% + 12px);
   transform: translateY(-50%);
-  background: var(--color-bg-elevated);
+  background: var(--color-bg-vdb);
   border: 1px solid var(--color-sec-accent-elevated);
-  color: var(--color-sec-accent-text);
+  color: oklch(from var(--color-secondary) calc(l - 0.1) calc(c - 0.04) h);
   padding: 8px 12px;
   border-radius: var(--radius-sm);
   font-size: var(--text-tag);

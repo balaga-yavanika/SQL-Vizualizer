@@ -3,52 +3,61 @@
 /* ============================================= */
 @import url("/pages/about/about-imports.css");
 
-body {
-  user-select: none;
+/* ============================================= */
+/* DESIGN TOKENS                                */
+/* ============================================= */
+:root {
+  --topic-label-width: 240px;
+  --topic-gap: 2px;
+  --topic-hover-accent: oklch(from var(--color-primary) l c h / 0.05);
+  --animation-offset: 0.05s;
+  --animation-duration: 0.35s;
+  --animation-distance: 8px;
 }
 
 .topics {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--topic-gap);
 }
 
 .topic {
   display: grid;
-  grid-template-columns: 230px 1fr;
-  border: 1px solid var(--color-bg);
-  background: var(--color-bg-elevated);
+  grid-template-columns: var(--topic-label-width) 1fr;
+  border: 1px solid var(--color-bg-vdb);
+  background: var(--color-bg-shade-2);
   overflow: hidden;
   opacity: 0;
-  transform: translateY(8px);
-  animation: rise 0.35s ease forwards;
-  transition: background 0.15s;
+  transform: translateY(var(--animation-distance));
+  animation: rise var(--animation-duration) ease forwards;
+  transition: background 0.15s ease;
 }
 
-/* rounded corners on first/last only */
+/* ── Rounded corners ── */
 .topic:first-child {
-  border-radius: 8px 8px 0 0;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
+
 .topic:last-child {
-  border-radius: 0 0 8px 8px;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
 }
 
 .topic:hover {
-  background: var(--color-border);
+  background: var(--topic-hover-accent);
 }
 
-/* ── Stagger ── */
+/* ── Stagger animation ── */
 .topic:nth-child(1) {
-  animation-delay: 0.05s;
+  animation-delay: calc(var(--animation-offset) * 1);
 }
 .topic:nth-child(2) {
-  animation-delay: 0.1s;
+  animation-delay: calc(var(--animation-offset) * 2);
 }
 .topic:nth-child(3) {
-  animation-delay: 0.15s;
+  animation-delay: calc(var(--animation-offset) * 3);
 }
 .topic:nth-child(4) {
-  animation-delay: 0.2s;
+  animation-delay: calc(var(--animation-offset) * 4);
 }
 
 @keyframes rise {
@@ -66,29 +75,30 @@ body {
   }
 }
 
-/* ── Internals ── */
+/* ── Topic Layout ── */
 .topic-label {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--space-2xs);
   padding-block: var(--space-sm);
   padding-inline: var(--space-md);
-  border-right: 1px solid var(--color-bg);
+  border-right: 1px solid var(--color-bg-vdb);
 }
 
 .topic-name {
-  margin-block: 0;
-  color: var(--color-accent);
+  margin: 0;
+  color: var(--color-primary);
 }
 
 .topic-tag {
   display: inline-block;
-  margin-block: 0;
-  padding: 2px 8px;
-  border-radius: 3px;
+  margin: 0;
+  padding: var(--space-3xs) var(--space-xs);
+  border-radius: var(--radius-sm);
   width: fit-content;
-  background: var(--color-bg-subtle);
-  color: var(--color-text-muted);
+  background: var(--color-bg-shade-3);
+  color: oklch(from var(--color-primary) calc(l + 0.6) c h);
+  font-size: var(--text-fine);
   text-transform: uppercase;
 }
 

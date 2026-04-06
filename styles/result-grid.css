@@ -21,12 +21,12 @@
 .count-badge {
   padding-inline: var(--space-xs);
   padding-block: var(--space-3xs);
-  border: 0.5px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  background: var(--color-bg-subtle);
+  border: 0.5px solid var(--color-bg-vdb-shade-2);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-vdb-shade-1);
   font-size: var(--text-tag);
   font-weight: 500;
-  color: var(--color-accent);
+  color: var(--color-primary);
   white-space: nowrap;
 }
 
@@ -34,8 +34,8 @@
 .result-scroll-wrapper {
   overflow: auto;
   max-height: 50vh;
-  border: 0.5px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  border: 0.5px solid var(--color-bg-vdb-shade-3);
+  border-radius: var(--radius-md);
   scrollbar-gutter: stable;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -63,8 +63,8 @@
   top: 0;
   z-index: 20;
   flex-shrink: 0;
-  background: var(--color-bg-subtle);
-  border-bottom: 0.5px solid var(--color-border);
+  background: var(--color-bg-vdb-shade-1);
+  border-bottom: 0.5px solid var(--color-bg-vdb-shade-3);
 }
 
 .rg-data-row {
@@ -87,7 +87,7 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  border-right: 0.5px solid var(--color-border);
+  border-right: 0.5px solid var(--color-bg-vdb-shade-3);
   font-size: var(--text-ui);
 }
 
@@ -98,11 +98,11 @@
 
 .rg-head {
   font-weight: 500;
-  color: var(--color-text);
+  color: var(--color-pr-bold);
 }
 
 .rg-cell {
-  border-top: 0.5px solid var(--color-border);
+  border-top: 0.5px solid var(--color-bg-vdb-shade-3);
   font-family: var(--font-mono), monospace;
   word-break: break-word;
 }
@@ -113,12 +113,12 @@
   padding-inline: var(--space-xs);
   padding-block: var(--space-3xs);
   border-radius: var(--radius-sm);
-  background: var(--color-border);
+  background: var(--color-bg-vdb-shade-3);
   font-family: var(--font-main), sans-serif;
   font-size: var(--text-tag);
   font-weight: var(--weight-black);
   letter-spacing: var(--tracking-wider);
-  color: var(--color-text-muted);
+  color: oklch(from var(--color-primary) calc(l + 0.6) c h);
   white-space: nowrap;
 }
 

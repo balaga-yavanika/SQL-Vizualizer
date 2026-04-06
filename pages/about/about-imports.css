@@ -1,10 +1,29 @@
 /* ============================================= */
-/* IMPORTS & CONFIGURATION                      */
+/* ABOUT PAGE — CSS LAYER IMPORTS               */
 /* ============================================= */
-@import url("/global/variables.css");
-@import url("/global/navbars.css");
-@import url("/Assets/fx/menu-toogle.css");
-@import url("/styles/base.css");
+
+/* Layer 1: Tokens */
+@import url("/global/tokens.css");
+
+/* Layer 2: Reset + Base */
+@import url("/global/reset.css");
+@import url("/global/base.css");
+
+/* Layer 3: Navigation */
+@import url("/global/nav.css");
+@import url("/Assets/fx/menu-toggle.css");
+
+/* Layer 4: Components */
+@import url("/styles/banner.css");
+@import url("/styles/code-block.css");
+@import url("/styles/data-table.css");
+@import url("/styles/diagram.css");
+@import url("/styles/dropdown.css");
+@import url("/styles/modal.css");
+@import url("/styles/result-grid.css");
+@import url("/styles/tabs.css");
+
+/* Layer 5: Patterns */
+@import url("/styles/pop-tip.css");
 @import url("/styles/typo.css");
 @import url("/styles/docs.css");
-@import url("/global/style-guide.css");

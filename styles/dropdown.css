@@ -1,7 +1,7 @@
 /* ============================================= */
 /* CUSTOM DROPDOWN                               */
 /* ============================================= */
-@import url("/global/variables.css");
+@import url("/global/tokens.css");
 
 .custom-dropdown {
   position: relative;
@@ -15,14 +15,8 @@
   justify-content: space-between;
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
-  background: var(--color-bg-subtle);
-  font-family: var(--font-main);
-  font-size: 13px;
-  color: var(--color-text);
-  text-align: left;
-  cursor: pointer;
+  border: 1px solid oklch(from var(--color-primary) l c h / 0.15);
+  background: var(--color-bg-vdb-shade-1);
   transition:
     background 0.15s ease,
     border-color 0.15s ease;
@@ -30,19 +24,14 @@
 
 @media (hover: hover) {
   .dropdown-toggle:hover {
-    border-color: var(--color-accent);
-    background: color-mix(
-      in srgb,
-      var(--color-accent) 5%,
-      var(--color-bg-subtle)
-    );
+    background: oklch(from var(--color-bg-vdb-shade-1) l c h / 0.2);
   }
 }
 
 .dropdown-toggle:focus-visible {
   outline: none;
-  border-color: var(--color-accent);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-accent) 25%, transparent);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px oklch(from var(--color-bg-vdb-shade-1) l c h / 0.2);
 }
 
 .dropdown-arrow {
@@ -64,7 +53,7 @@
   z-index: 100;
   max-height: 300px;
   overflow-y: auto;
-  background: var(--color-bg);
+  background: var(--color-bg-vdb-shade-2);
   border: 1px solid var(--color-border);
   border-radius: 6px;
   box-shadow: 0 4px 12px rgb(0 0 0 / 0.15);
@@ -124,12 +113,12 @@
 }
 
 .dropdown-item:hover {
-  background: color-mix(in srgb, var(--color-accent) 10%, var(--color-bg));
+  background: color-mix(in srgb, var(--color-primary) 10%, var(--color-bg-vdb));
 }
 
 .dropdown-item.selected {
-  background: color-mix(in srgb, var(--color-accent) 20%, var(--color-bg));
-  color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-primary) 20%, var(--color-bg-vdb));
+  color: var(--color-primary);
   font-weight: 500;
 }
 

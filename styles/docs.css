@@ -11,7 +11,7 @@
 .doc-eyebrow {
   margin-block: 0;
   letter-spacing: var(--tracking-wider);
-  color: var(--color-accent);
+  color: var(--color-primary);
   text-transform: uppercase;
   display: flex;
   align-items: center;

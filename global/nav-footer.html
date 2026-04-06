@@ -1,8 +1,23 @@
 <!-- Top Navigation -->
 <nav class="nav top">
-  <a href="/main.html" rel="noopener noreferrer">[Y-SQLVIZ]</a>
-  <a href="/pages/about/adoc.html" rel="noopener noreferrer" class="nav-about"
-    >[ABOUT]</a
+  <span
+    ><a
+      href="/main.html"
+      rel="noopener noreferrer"
+      class="tt-top-left"
+      data-tooltip="Homepage ☀️"
+      >[Y-SQLVIZ]</a
+    ></span
+  >
+  <span
+    ><a
+      href="https://github.com/balaga-yavanika/SQL-Vizualizer/"
+      rel="noopener noreferrer"
+      target="_blank"
+      class="nav-github tt-top-right"
+      data-tooltip="GitHub Repo 😸"
+      >[ <i class="fa-brands fa-github"></i> ]</a
+    ></span
   >
   <button
     id="hamburger-menu"
@@ -18,9 +33,19 @@
 
 <!-- Bottom Navigation & Footer Menu -->
 <nav class="nav bottom">
-  <span><a href="#" data-tooltip="Share with 💛">[made with 🩶]</a></span>
-  <a href="#" id="menu-toggle" class="menu-toggle-btn" rel="noopener noreferrer"
-    >[ <i class="fa-solid fa-question"></i> ]</a
+  <span
+    ><a href="#" class="tt-bottom-left" data-tooltip="Share with 💛"
+      >[made with 🩶]</a
+    ></span
+  >
+  <span>
+    <a
+      href="#"
+      id="menu-toggle"
+      class="menu-toggle-btn"
+      rel="noopener noreferrer"
+      >[ <i class="fa-solid fa-question"></i> ]</a
+    ></span
   >
 </nav>
 
@@ -33,6 +58,14 @@
       <i class="fa-solid fa-xmark"></i>
     </button>
   </div>
+  <a
+    href="https://github.com/balaga-yavanika/SQL-Vizualizer/"
+    rel="noopener noreferrer"
+    target="_blank"
+    class="footer-link"
+  >
+    <i class="fa-brands fa-github"></i> GitHub
+  </a>
   <a href="#" class="footer-link">
     <i class="fa-solid fa-hand-holding-heart"></i> Support Here
   </a>
@@ -66,7 +99,9 @@
   </p>
 </div>
 
-<!-- Desktop Footer Menu (Hidden on mobile) -->
+<!-- ============================================  -->
+<!-- Desktop Footer Menu  -->
+<!-- ============================================  -->
 <div class="footer-menu hidden" id="footer-menu">
   <a href="#" class="footer-link line">
     <i class="fa-solid fa-hand-holding-heart"></i> Support Here

@@ -1,0 +1,89 @@
+/* ============================================= */
+/* CODE BLOCKS                                    */
+/* ============================================= */
+
+/* ── Code block container ── */
+.code-block {
+  border-radius: var(--radius-md);
+  background: var(--color-bg-vdb-shade-1);
+  border: 0.5px solid var(--color-bg-vdb-shade-3);
+}
+
+.code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+
+  padding-inline: var(--space-sm);
+  padding-block: var(--space-sm);
+}
+
+.code-lang {
+  font-family: var(--font-mono);
+  font-size: var(--text-fine);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--color-pr-para);
+  text-transform: uppercase;
+}
+
+.copy-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-fine);
+}
+
+.copy-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-bg-vdb-shade-2);
+}
+
+.copy-btn:focus-visible {
+  outline: 1px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.copy-btn i {
+  font-size: 10.2px;
+}
+
+/* ── SQL Keyword Highlighting ── */
+.sql-keyword {
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+/* ── Code display ── */
+pre {
+  padding: var(--space-md);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-vdb-shade-2);
+  border: 1px solid var(--color-bg-vdb-shade-3);
+  overflow-x: auto;
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: var(--text-code);
+  line-height: 1.5;
+  border: none;
+  pointer-events: none;
+}
+
+pre code {
+  color: var(--color-pr-bold);
+}
+
+/* Inline code */
+:not(pre) > code {
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+  background: var(--color-bg-vdb-shade-2);
+  color: var(--color-secondary);
+  font-size: var(--text-fine);
+}

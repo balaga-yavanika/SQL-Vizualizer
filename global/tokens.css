@@ -12,34 +12,52 @@
   /* COLORS                                        */
   /* ============================================= */
   /* ── BACKGROUNDS ── */
-  --color-bg: #0f0f12;
-  --color-bg-elevated: #17171c;
-  --color-bg-subtle: #1e1e26;
-  /* ── TEXT ── */
-  --color-text: #cacaca;
-  --color-text-muted: #a9a6bb;
-  --color-text-inverse: #fff;
+  /* #0f0f12 Very dark (mostly black) blue */
+  --color-bg-vdb: oklch(17% 0.006 285);
+  --color-bg-vdb-shade-1: #18181d;
+  --color-bg-vdb-shade-2: #212127;
+  --color-bg-vdb-shade-3: #33333d;
+  --color-bg-vdb-shade-4: #3c3c47;
 
-  /* ── BORDERS ── */
-  --color-border: #2a2a35;
-  --color-hover: #181624;
+  /* #12110f Very dark (mostly black) orange [Brown tone] */
+  --color-bg-vdo: oklch(17.801% 0.00433 84.569);
+  --color-bg-vdo-shade-1: #1d1b18;
+  --color-bg-vdo-shade-1: #272521;
+  --color-bg-vdo-shade-1: #3d3933;
 
-  /* ── ACCENTS ── */
-  --color-accent: #7c6af7;
-  --color-sec-accent: #5dcaa5;
-  --color-sec-accent-elevated: #1d9e7533;
-  --color-sec-accent-subtle: #1d9e7511;
-  --color-sec-accent-text: #86a198;
+  /* ── BASE COLORS ── */
+  /* Primary */
+  --color-purple: oklch(60% 0.2 284);
+  /* Secondary */
+  --color-cyan: oklch(80% 0.1 181);
+  /* Tertiary */
+  --color-yellow: oklch(80% 0.2 88);
+  /* Quaternary */
+  --color-red: oklch(60% 0.2 26);
+  --color-moderate-pink: oklch(55% 0.2 350);
 
-  /* --color-accent: #cb9434; */
-  /* --color-accent: #50946e; */
   --color-code: oklch(80% 0.1 181);
-  /* --color-code: oklch(80.296% 0.12125 181.722); */
-  --color-span: oklch(79.867% 0.15569 87.918);
+  --color-full-white: oklch(100% 0 0);
+  --color-full-black: oklch(0% 0 0);
 
-  --color-danger: oklch(66.161% 0.22493 25.863);
+  /* PER PROJECT COLORS */
+  --color-primary: var(--color-purple);
+  --color-secondary: var(--color-cyan);
+  --color-tertiary: var(--color-yellow);
+  --color-danger: var(--color-red);
+  --color-reset: var(--color-moderate-pink);
 
-  --color-whitesmoke: #f5f5f5;
+  --color-pr-bold: oklch(
+    from var(--color-primary) calc(l + 0.3) calc(c - 0.16) h
+  );
+  --color-pr-para: oklch(
+    from var(--color-primary) calc(l + 0.1) calc(c - 0.16) h
+  );
+
+  --color-pr-border: oklch(from var(--color-primary) l c h / 0.2);
+  --color-bg-border: var(--color-bg-vdb-shade-4);
+  --color-text: oklch(from var(--color-primary) calc(l + 0.6) c h);
+  --color-text-muted: oklch(from var(--color-primary) calc(l + 0.15) calc(c - 0.05) h);
 
   /* ============================================= */
   /* TYPOGRAPHY — FONTS                            */
@@ -140,7 +158,6 @@
 
   /* Nav                                          */
   --nav-height: clamp(3.5rem, 6vw, 4.5rem); /* desktop ≈  72px */
-  --bottom-nav-height: 59px; /* fixed px — matches actual nav */
 
   /* Sections                                     */
   --section-padding-x: clamp(1rem, 4vw, 4rem); /* desktop ≈  64px */
@@ -154,10 +171,23 @@
   /* Buttons                                      */
   --button-padding-x: clamp(1rem, 2vw, 1.75rem); /* desktop ≈  28px */
   --button-padding-y: clamp(0.5rem, 1vw, 0.75rem); /* desktop ≈  12px */
+  --button-accent-muted: oklch(
+    from var(--color-primary) calc(l + 0.1) calc(c - 0.16) h
+  );
+  --button-border: oklch(
+    from var(--color-primary) calc(l - 0.3) calc(c - 0.16) h
+  );
+  --button-min-height: 80px;
+  --button-label-height: 1.2rem;
 
-  /* Tags / Badges                                */
-  --tag-padding-x: clamp(0.5rem, 1vw, 0.75rem); /* desktop ≈  12px */
-  --tag-padding-y: clamp(0.2rem, 0.5vw, 0.35rem); /* desktop ≈   6px */
+  /* Tables                                       */
+  --table-gap: 4px;
+  --table-cell-padding: 8px;
+  --table-row-padding: 4px;
+  --table-transition: 0.15s ease-in-out;
+
+  /* Touch targets (responsive)                    */
+  --touch-target: 44px;
 
   /* ============================================= */
   /* BORDER RADIUS SCALE                           */
@@ -167,4 +197,29 @@
   --radius-lg: 16px; /* modals, large cards   */
   --radius-xl: 24px; /* hero blocks           */
   --radius-full: 9999px; /* pills, round badges   */
+
+  /* Menu & Drawer                                 */
+  --menu-accent-dark: oklch(
+    from var(--color-primary) calc(l - 0.35) calc(c - 0.17) h
+  );
+  --menu-accent-lighter: oklch(
+    from var(--color-primary) calc(l + 0.3) calc(c - 0.17) h
+  );
+  --overlay-bg: rgb(0 0 0 / 0.5);
+  --drawer-width: 500px;
+
+  /* ============================================= */
+  /* Z-INDEX SCALE (STACKING CONTEXT)             */
+  /* ============================================= */
+  /* Use these for layering — never hardcode z-index */
+  --z-base: 1; /* default layer */
+  --z-footer-menu: 100; /* footer menu */
+  --z-dropdown: 100; /* dropdowns, popovers */
+  --z-sticky: 200; /* sticky headers, navigation */
+  --z-modal-overlay: 500; /* modal backdrop */
+  --z-modal: 1000; /* modal dialogs */
+  --z-drawer-overlay: 999; /* drawer backdrop */
+  --z-drawer-menu: 1000; /* drawer menu panel */
+  --z-tooltip: 1100; /* tooltips (above modals) */
+  --z-notification: 1200; /* notifications, alerts (top layer) */
 }

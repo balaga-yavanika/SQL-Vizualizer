@@ -30,14 +30,14 @@ export function buildSvgColSelector(ti) {
         `<button class="dropdown-item${c.id === t.svgColId ? " selected" : ""}" data-value="${c.id}">${c.name}</button>`,
     )
     .join("");
-  return `<div class="svg-col-selector">
-    <span class="svg-col-label" style="color:${pal.text}">diagram shows:</span>
-    <div class="custom-dropdown svg-col-dropdown" id="svg-col-dropdown-${ti}">
-      <button class="dropdown-toggle" id="svg-col-toggle-${ti}" aria-haspopup="listbox" style="border-color:${pal.stroke};color:${pal.text}">
-        <span id="svg-col-display-${ti}">${currentColName}</span>
+  return `<div class="diagram-col-picker">
+    <span class="diagram-col-label" style="color:${pal.text}">diagram shows:</span>
+    <div class="custom-dropdown diagram-col-dropdown" id="diagram-col-dropdown-${ti}">
+      <button class="dropdown-toggle" id="diagram-col-toggle-${ti}" aria-haspopup="listbox" style="border-color:${pal.stroke};color:${pal.text}">
+        <span id="diagram-col-display-${ti}">${currentColName}</span>
         <span class="dropdown-arrow">▼</span>
       </button>
-      <div class="dropdown-menu" id="svg-col-menu-${ti}" style="display: none">
+      <div class="dropdown-menu" id="diagram-col-menu-${ti}" style="display: none">
         ${items}
       </div>
     </div>

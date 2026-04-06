@@ -50,7 +50,7 @@
   "showSection": false,
   "showOuterWrapper": true,
   "showArticle": false,
-  "cssImports": "style.css",
+  "cssImports": "/pages/home/home.css",
   "scripts": ["/script.js", "/Assets/fx/typer.js"],
   "content": "global/content/main-content.html",
   "outputPath": "main.html"

@@ -3,27 +3,19 @@
 /* ============================================= */
 :root {
   --nav-rail-offset: 50px;
-  --nav-border: 1px solid var(--color-border);
+  --nav-border: 1px solid var(--color-bg-vdb-shade-2);
   --nav-transition: color 0.5s ease;
 }
 
-/* span {
-  font-family: var(--font-mono), monospace;
-  font-size: 0.82em;
-  background: var(--color-bg-subtle);
-  border: 1px solid var(--color-border);
-  padding: 1px 4px;
-  border-radius: 4px;
-} */
-nav span a {
-  position: relative;
-  color: var(--color-span);
-}
-nav span a[data-tooltip]:hover::after {
-  top: calc(100% - 50px);
-  left: 50px;
+.breadcrumb > a {
+  color: var(--color-pr-para);
 }
 
+.breadcrumb > a:hover {
+  color: var(--color-primary);
+}
+
+/* ── Layout ── */
 .nav,
 .outer-wrapper {
   position: relative;
@@ -33,14 +25,14 @@ nav span a[data-tooltip]:hover::after {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-inline: var(--space-2xl);
-  padding-block: var(--space-sm);
-  border-bottom: var(--nav-border);
+  padding: var(--space-sm) var(--space-2xl);
+  border-bottom: 1px solid var(--color-bg-border);
 }
 
 .nav.bottom {
+  border-block: var(--color-bg-border) none; /* top border only */
+  border-top: 1px solid var(--color-bg-border);
   border-bottom: none;
-  border-top: var(--nav-border);
 }
 
 /* ── Rail lines ── */
@@ -53,7 +45,7 @@ nav span a[data-tooltip]:hover::after {
     position: absolute;
     inset-block: 0;
     width: 1px;
-    background: var(--color-border);
+    background: var(--color-bg-border);
   }
 
   .nav::before,
@@ -71,20 +63,46 @@ nav span a[data-tooltip]:hover::after {
 .nav a {
   font-family: var(--font-mono);
   font-size: var(--text-tag);
-  color: var(--color-text-muted);
+  color: var(--color-pr-para);
   text-decoration: none;
   text-transform: uppercase;
   transition: var(--nav-transition);
 }
 
 .nav a:hover {
-  color: var(--color-accent);
+  color: var(--color-primary);
 }
 
+/* applies when those links get keyboard focus (Tab key) */
 .nav a:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-primary);
   outline-offset: 2px;
   border-radius: 2px;
+}
+
+/* ── Tooltip anchor ── */
+nav span a {
+  position: relative;
+  color: var(--color-tertiary);
+  font-size: var(--text-ui);
+}
+
+/* ── Tooltip variants ── */
+a.tt-bottom-left[data-tooltip]:hover::after {
+  top: auto;
+  bottom: calc(100% + 10px);
+  left: 50px;
+}
+
+a.tt-top-right[data-tooltip]:hover::after {
+  top: calc(100% + 10px);
+  right: 30px;
+  left: auto;
+}
+
+a.tt-top-left[data-tooltip]:hover::after {
+  top: calc(100% + 10px);
+  left: 50px;
 }
 
 /* ── Misc ── */
@@ -94,7 +112,7 @@ nav span a[data-tooltip]:hover::after {
   letter-spacing: var(--tracking-wider);
 }
 
-/* ── Hamburger Button ── */
+/* ── Hamburger ── */
 .hamburger-btn {
   display: none;
   flex-direction: column;
@@ -105,20 +123,19 @@ nav span a[data-tooltip]:hover::after {
   padding: 0;
   background: transparent;
   border: none;
-  cursor: pointer;
   gap: 5px;
 }
 
 .hamburger-btn span {
-  width: 24px;
+  width: 16px;
   height: 2px;
-  background: var(--color-text-muted);
+  background: oklch(from var(--color-primary) calc(l + 0.1) calc(c - 0.17) h);
   border-radius: 2px;
   transition: all 0.3s ease;
 }
 
 .hamburger-btn:hover span {
-  background: var(--color-accent);
+  background: var(--color-primary);
 }
 
 .hamburger-btn[aria-expanded="true"] span:nth-child(1) {
@@ -140,19 +157,12 @@ nav span a[data-tooltip]:hover::after {
     padding-inline: var(--space-lg);
   }
 
-  .nav.top {
-    justify-content: space-between;
-  }
-
-  .nav-about {
+  .nav-github,
+  .menu-toggle-btn {
     display: none;
   }
 
   .hamburger-btn {
     display: flex;
-  }
-
-  .menu-toggle-btn {
-    display: none;
   }
 }

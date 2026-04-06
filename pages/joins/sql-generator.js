@@ -193,6 +193,14 @@ export function copySqlToClipboard(sql) {
 }
 
 /**
+ * Highlight SQL keywords in code
+ */
+function highlightSql(sql) {
+  const keywords = /\b(SELECT|FROM|WHERE|JOIN|INNER|LEFT|RIGHT|FULL|OUTER|ON|CROSS|UNION|EXCEPT|INTERSECT|AS|AND|OR|NOT|ORDER|BY|GROUP|HAVING|LIMIT|OFFSET|ALL|DISTINCT)\b/gi;
+  return sql.replace(keywords, '<span class="sql-keyword">$1</span>');
+}
+
+/**
  * Render SQL display panel
  */
 export function renderSqlPanel() {
@@ -201,14 +209,9 @@ export function renderSqlPanel() {
   const panel = document.getElementById("sql-panel");
   if (!panel) return;
 
-  const codeBlock = panel.querySelector(".sql-code");
+  const codeBlock = panel.querySelector("pre code");
   if (codeBlock) {
-    codeBlock.textContent = sql;
-  }
-
-  const rawSql = panel.querySelector(".sql-raw");
-  if (rawSql) {
-    rawSql.textContent = sql;
+    codeBlock.innerHTML = highlightSql(sql);
   }
 
   // Show panel if there are tables with data

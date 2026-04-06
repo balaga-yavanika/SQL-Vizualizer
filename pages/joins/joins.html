@@ -54,8 +54,8 @@
     <link rel="stylesheet" href="/Assets/fonts/css/all.min.css" />
 
     <!-- Global Navigation & Menu Styles -->
-    <link rel="stylesheet" href="/global/navbars.css" />
-    <link rel="stylesheet" href="/Assets/fx/menu-toogle.css" />
+    <link rel="stylesheet" href="/global/nav.css" />
+    <link rel="stylesheet" href="/Assets/fx/menu-toggle.css" />
 
     <!-- ─── Google Fonts ─────────────────────────────── -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -80,61 +80,58 @@
       <div class="outer-wrapper">
         <article>
         <nav class="breadcrumb" aria-label="Breadcrumb" style="font-size: 0.7rem;">
-        <a><i class="fa-solid fa-angles-left"></i></a>
+        <a><i class="fa-solid fa-arrow-left-long"></i></a>
         <a href="#" onclick="history.back()" style="font-weight: 600;font-size: 0.8rem;">
         Go Back&nbsp;</a>
         <a href="/main.html" rel="prev"
-          ><i class="fa-solid fa-angles-left"></i>&nbsp;<i class="fa-solid fa-house"></i
+          ><i class="fa-solid fa-arrow-left-long"></i>&nbsp;<i class="fa-solid fa-house"></i
         ></a>
       </nav>
     <!--  -->
 <!--  -->
 <div class="heading-wrapper">
-  <div>
-    <div class="button-label for-page">[01]</div>
-    <h3 class="heading-text">Joins Visualizer</h3>
+  <div class="heading-part-top">
+    <div>
+      <div class="heading-label-per-page">[01]</div>
+      <h2 class="heading-text"><strong>Joins</strong> Visualizer</h2>
+      <p class="hero-sub">
+        A visual, step-by-step breakdown of working of Joins in SQL.
+      </p>
+    </div>
   </div>
-  <div class="how-to-container">
-    <button
-      class="btn-secondary"
-      id="how-to-toggle"
-      aria-label="How to use guide"
-    >
-      <i class="fa-solid fa-circle-question"></i>
-      <!-- 📌 How to use? -->
-    </button>
-    <div class="how-to-popover" id="how-to-popover" style="display: none">
-      <div class="popover-content">
-        <button
-          class="popover-close"
-          id="popover-close"
-          aria-label="Close guide"
-        >
-          ×
-        </button>
-        <h5 class="popover-title">How to Use</h5>
-        <div class="popover-text">
-          <p>
-            <strong>Start with preset sample data</strong> or add tables
-            dynamically using the <strong>+ add table</strong> button. Create
-            columns and sample data in each table.
-            <strong><br />Choose a join type:</strong> INNER (matching rows
-            only), LEFT (all left + matches), RIGHT (all right + matches), FULL
-            (all rows) + 6 more.<br />
-            <strong>Try set operators:</strong> UNION (combine), INTERSECT
-            (common rows), EXCEPT (difference).<br />
-            <strong>Set join conditions</strong> to connect tables using keys.
-            Watch the <strong>SVG diagram</strong> update. See results in the
-            result table.<br />
-            <strong>View the generated SQL.</strong><br />
-            Click <strong>Reset All</strong> to start over. <br /><br /><i
-              class="fa-solid fa-wand-magic-sparkles"
-            ></i>
-            See results instantly!
-            <i class="fa-solid fa-wand-magic-sparkles"></i>
-          </p>
-        </div>
-      </div>
+
+  <div class="heading-part-bottom">
+    <!-- ══════════════════════════════════
+     BEFORE YOU START
+══════════════════════════════════ -->
+    <div class="before-start" id="before-start-banner">
+      <button
+        class="banner-close-btn"
+        id="banner-close-btn"
+        aria-label="Close banner"
+      >
+        <i class="fa-solid fa-times"></i>
+      </button>
+      <h6>Before you start</h6>
+      <p>
+        <strong>Start with preset sample data</strong> or add tables dynamically
+        using the <strong>+ add table</strong> button. Create columns and sample
+        data in each table. <strong><br />Choose a join type:</strong> INNER
+        (matching rows only), LEFT (all left + matches), RIGHT (all right +
+        matches), FULL (all rows) + 6 more.<br />
+        <strong>Try set operators:</strong> UNION (combine), INTERSECT (common
+        rows), EXCEPT (difference).<br />
+        <strong>Set join conditions</strong> to connect tables using keys. Watch
+        the <strong>SVG diagram</strong> update. See results in the result
+        table.<br />
+        <strong>View the generated SQL.</strong><br />
+        Click <strong>Reset All</strong> to start over.
+      </p>
+      <blockquote class="desc">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+        See results instantly!
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+      </blockquote>
     </div>
   </div>
 </div>
@@ -148,7 +145,7 @@
         class="tooltip-wrapper"
         data-tooltip="It includes two sample datasets you can use to understand joins."
       >
-        <i class="fa-solid fa-circle-info"></i>
+        <!-- <i class="fa-solid fa-circle-info"></i> -->
       </span>
     </label>
   </div>
@@ -268,7 +265,7 @@
 
 <!-- ── Tables ── -->
 <div class="tables-scroll-wrapper">
-  <div class="tables-area" id="tables-area">
+  <div class="joins-tables-grid" id="tables-area">
     <button class="add-tbl-btn" onclick="app.addTableAndRender()">
       + add table
     </button>
@@ -308,21 +305,18 @@
   </div>
 
   <!-- ── SQL Query Generator ── -->
-  <div id="sql-panel" class="sql-section" style="display: none">
-    <div class="panel-header">
-      <span class="panel-title"
-        ><i class="fa-solid fa-code"></i> Generated SQL</span
-      >
+  <div id="sql-panel" class="code-block" style="display: none">
+    <div class="code-header">
+      <span class="code-lang">SQL</span>
       <button
-        class="sql-copy-btn"
         id="sql-copy-btn"
+        class="copy-btn"
         onclick="window.copySqlButtonClicked()"
       >
-        <i class="fa-regular fa-clipboard"></i> Copy SQL
+        <i class="fa-regular fa-clipboard"></i> Copy
       </button>
     </div>
-    <div class="sql-code"></div>
-    <div class="sql-raw"></div>
+    <pre id="joinSyntax"><code></code></pre>
   </div>
 </div>
 

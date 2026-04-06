@@ -20,9 +20,9 @@
   width: min(420px, calc(100vw - 2rem));
   padding: 0;
   overflow: visible;
-  border: 0.5px solid var(--color-border);
+  border: 0.5px solid var(--color-pr-border);
   border-radius: var(--radius-lg);
-  background: var(--color-bg-elevated);
+  background: var(--color-bg-vdb-shade-2);
   box-shadow: 0 24px 64px rgb(0 0 0 / 0.5);
   animation: modal-in 0.18s
     var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
@@ -51,7 +51,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1.25rem;
-  border-bottom: 0.5px solid var(--color-border);
+  border-bottom: 0.5px solid var(--color-pr-border);
 }
 
 .modal-title {
@@ -62,13 +62,13 @@
 .modal-close {
   padding: 2px 6px;
   font-size: var(--text-body);
-  color: var(--color-text-muted);
+  color: var(--color-pr-para);
   cursor: pointer;
   transition: color 0.15s;
 }
 
 .modal-close:hover {
-  color: var(--color-text);
+  color: var(--color-pr-bold);
 }
 
 /* ── Body ── */
@@ -92,12 +92,16 @@
 
 .modal-input,
 .modal-select {
-  background: var(--color-bg);
+  background: var(--color-bg-vdb);
 }
 
 .modal-input::placeholder {
   font-family: var(--font-main), sans-serif;
-  color: var(--color-text-muted);
+  color: var(--color-pr-para);
+}
+
+.modal-input:hover {
+  background: var(--color-bg-vdb-shade-3);
 }
 
 /* ── Footer ── */
@@ -106,46 +110,36 @@
   justify-content: flex-end;
   gap: 8px;
   padding: 1rem 1.25rem;
-  border-top: 0.5px solid var(--color-border);
+  border-top: 0.5px solid var(--color-pr-border);
 }
 
 /* ── Buttons ── */
 .modal-btn {
   padding: 7px 18px;
-  border: 0.5px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  font-family: inherit;
-  font-size: var(--text-ui);
-  font-weight: 500;
-  cursor: pointer;
-  transition:
-    background 0.15s,
-    color 0.15s,
-    opacity 0.15s;
 }
 
 .modal-btn:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
 
 .modal-btn-cancel {
   background: transparent;
-  color: var(--color-text-muted);
+  color: var(--color-pr-para);
 }
 
 .modal-btn-cancel:hover {
-  background: var(--color-bg-elevated);
-  color: var(--color-text);
+  background: var(--color-bg-vdb-shade-2);
+  color: var(--color-pr-bold);
 }
 
 .modal-btn-confirm {
-  background: var(--color-accent);
-  border-color: var(--color-accent);
-  color: var(--color-bg);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-bg-vdb);
 }
 
 .modal-btn-confirm:hover {
-  opacity: 0.88;
-  color: var(--color-text);
+  background: var(--color-bg-vdb-shade-3);
+  color: var(--color-pr-bold);
 }

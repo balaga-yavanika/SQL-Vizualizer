@@ -1,21 +1,13 @@
 /* ============================================= */
-/* IMPORTS                                       */
+/* HOME PAGE — STYLES                            */
 /* ============================================= */
-@import url("/global/variables.css");
-@import url("/global/style-guide.css");
-@import url("/global/navbars.css");
-@import url("/Assets/fx/menu-toogle.css");
-@import url("/Assets/fx/loader.css");
-@import url("/styles/base.css");
-@import url("/styles/buttons.css");
-
+@import url("home-imports.css");
 /* ============================================= */
-/* DOCUMENT                                      */
+/* DOCUMENT LAYOUT                               */
 /* ============================================= */
 body {
   height: 100vh;
   user-select: none;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -70,8 +62,8 @@ body {
   font-size: 0.82em;
   padding: 1px 6px;
   border-radius: 4px;
-  border: 1px solid var(--color-border);
-  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-bg-vdb-shade-2);
+  background: var(--color-bg-vdb-shade-1);
   color: var(--color-code);
 }
 
@@ -81,44 +73,40 @@ body {
   font-family: var(--font-main);
   padding-right: 4px;
   white-space: nowrap;
-  color: var(--color-accent);
+  color: var(--color-primary);
 }
 
 .section-label {
   width: min(400px, 100%);
   padding-inline: var(--space-sm);
   padding-block: var(--space-sm);
-  border: 1.3px dashed
-    color-mix(in srgb, var(--color-sec-accent) 20%, transparent);
+  border: 1.3px dashed oklch(from var(--color-secondary) calc(l - 0.2) c h);
   border-radius: var(--radius-md);
-  background-color: color-mix(
-    in srgb,
-    var(--color-sec-accent-elevated) 50%,
-    transparent
-  );
-  color: var(--color-sec-accent-text);
+  background-color: oklch(from var(--color-secondary) l c h / 0.1);
+  color: oklch(from var(--color-secondary) calc(l - 0.1) c h);
   text-align: center;
-  flex-shrink: 0; /* stays at bottom, doesn't grow */
+  flex-shrink: 0;
   margin-block-end: var(--space-sm);
   font-size: var(--text-caption);
 }
 
+.section-label:hover {
+  border: 1.3px dashed var(--color-secondary);
+}
+
+/* ============================================= */
+/* RESPONSIVE                                    */
+/* ============================================= */
 @media (max-width: 480px) {
   .page-title {
     font-size: var(--text-h1);
   }
+
   #type {
     min-width: 150px;
   }
 }
 
-/* ============================================= */
-/* ANIMATIONS                                    */
-/* ============================================= */
-
-/* ============================================= */
-/* RESPONSIVE                                    */
-/* ============================================= */
 @media (max-width: 768px) {
   .footer-menu {
     bottom: 1rem;
@@ -136,9 +124,11 @@ body {
     flex-wrap: wrap;
     font-size: var(--text-h1);
   }
+
   .outer-wrapper {
     padding: 2rem;
   }
+
   .footer-menu {
     bottom: 0.5rem;
     right: 0.5rem;

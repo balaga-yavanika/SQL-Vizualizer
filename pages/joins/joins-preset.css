@@ -1,0 +1,51 @@
+/* ============================================= */
+/* JOINS PAGE — PRESET DATASETS                  */
+/* ============================================= */
+/* Dataset selector section and controls */
+
+/* ============================================= */
+/* PRESET SECTION                                */
+/* ============================================= */
+.preset-section {
+  margin-block-start: var(--space-lg);
+}
+
+.preset-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-block-start: var(--space-md);
+  justify-content: space-between;
+}
+
+.preset-controls .custom-dropdown {
+  flex: 0 1 50%;
+  min-width: 150px;
+}
+
+/* ============================================= */
+/* PRESET BUTTONS                                */
+/* ============================================= */
+.preset-btn:active {
+  transform: scale(0.98);
+}
+
+@media (hover: hover) {
+  .preset-btn:hover {
+    background: color-mix(in srgb, var(--color-primary) 15%, transparent);
+    border-color: var(--color-primary);
+  }
+}
+
+.preset-btn.reset-btn {
+  border-color: oklch(from var(--color-reset) l c h / 0.2);
+  background: oklch(from var(--color-reset) l c h / 0.12);
+  color: oklch(from var(--color-reset) calc(l + 0.09) c h);
+}
+
+@media (hover: hover) {
+  .preset-btn.reset-btn:hover {
+    background: oklch(from var(--color-reset) l c h / 0.2);
+    border-color: var(--color-reset);
+  }
+}

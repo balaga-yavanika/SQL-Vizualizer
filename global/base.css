@@ -1,30 +1,9 @@
 /* ============================================= */
-/* STYLE GUIDE — GLOBAL BASE STYLES             */
+/* BASE HTML ELEMENT STYLES                     */
 /* ============================================= */
 /* Foundational styles for all HTML elements   */
-/* Uses CSS variables from variables.css       */
+/* Uses CSS tokens from tokens.css             */
 /* Lightweight, modern baseline for all pages  */
-
-/* ============================================= */
-/* MINI RESET                                   */
-/* ============================================= */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-*::before,
-*::after {
-  box-sizing: inherit;
-}
-
-/* ============================================= */
-/* ROOT & BODY                                  */
-/* ============================================= */
-html {
-  scroll-behavior: smooth;
-}
 
 body {
   font-family: var(--font-main);
@@ -33,7 +12,7 @@ body {
   line-height: var(--leading-normal);
   letter-spacing: var(--tracking-normal);
   color: var(--color-text);
-  background-color: var(--color-bg);
+  background-color: var(--color-bg-vdb);
   overflow-x: hidden;
 }
 
@@ -78,7 +57,7 @@ h5 {
 }
 
 h6 {
-  font-size: var(--text-caption);
+  font-size: var(--text-ui);
   letter-spacing: var(--tracking-wide);
 }
 
@@ -86,9 +65,9 @@ h6 {
 /* PARAGRAPHS & TEXT                            */
 /* ============================================= */
 p {
-  font-size: var(--text-body);
+  font-size: var(--text-body-sm);
   margin-bottom: var(--space-sm);
-  color: var(--color-text-muted);
+  color: oklch(from var(--color-primary) calc(l + 0.1) calc(c - 0.16) h);
 }
 
 p:last-child {
@@ -98,24 +77,25 @@ p:last-child {
 small {
   font-size: var(--text-fine);
   line-height: var(--leading-loose);
-  color: var(--color-text-muted);
+  color: oklch(from var(--color-primary) calc(l + 0.13) calc(c - 0.16) h);
 }
 
 code {
   font-family: var(--font-mono), monospace;
   font-size: 0.82em;
-  background: var(--color-bg-subtle);
-  border: 1px solid var(--color-border);
+  background: var(--color-bg-vdb-shade-2);
+  border: 1px solid var(--color-bg-vdb-shade-3);
   padding: 1px 6px;
   border-radius: 4px;
-  color: var(--color-code);
+  color: var(--color-secondary);
 }
+
 code:hover {
-  color: oklch(90% 0.1 181); /* just L +10, same hue */
+  color: oklch(from var(--color-secondary) calc(l + 0.1) c h);
 }
 
 strong {
-  color: var(--color-text);
+  color: oklch(from var(--color-primary) calc(l + 0.3) calc(c - 0.16) h);
   font-weight: var(--weight-semibold);
 }
 
@@ -133,7 +113,7 @@ mark {
 /* LINKS                                        */
 /* ============================================= */
 a {
-  color: var(--color-accent);
+  color: var(--color-primary);
   text-decoration: none;
   transition:
     color 0.2s ease,
@@ -141,11 +121,11 @@ a {
 }
 
 a:hover {
-  color: oklch(from var(--color-accent) l c h / 0.08);
+  color: oklch(from var(--color-secondary) calc(l + 0.1) c h);
 }
 
 a:focus {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-primary);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
 }
@@ -163,14 +143,14 @@ a[data-tooltip]:hover::after {
   position: absolute;
   top: calc(100% + 10px);
   left: 25px;
-  background: var(--color-bg-subtle);
-  border: 1px solid var(--color-border);
+  background: var(--color-bg-vdb-shade-2);
+  border: 1px solid var(--color-bg-vdb-shade-3);
   padding: 4px 8px;
   border-radius: 4px;
   font-size: var(--text-fine);
   white-space: nowrap;
-  z-index: 100;
-  color: var(--color-span);
+  z-index: var(--z-tooltip);
+  color: var(--color-tertiary);
 }
 
 /* ============================================= */
@@ -185,6 +165,7 @@ ol {
 ul > li,
 ol > li {
   margin-bottom: var(--space-xs);
+  font-size: var(--text-body);
 }
 
 ul ul,
@@ -214,8 +195,8 @@ table {
 }
 
 thead {
-  background-color: var(--color-bg-elevated);
-  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-bg-vdb-shade-2);
+  border-bottom: 1px solid var(--color-bg-vdb-shade-3);
 }
 
 th {
@@ -227,11 +208,11 @@ th {
 
 td {
   padding: var(--space-sm);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-bg-vdb-shade-3);
 }
 
 tbody tr:hover {
-  background-color: var(--color-hover);
+  background-color: oklch(from var(--color-primary) l c h / 0.05);
 }
 
 /* ============================================= */
@@ -246,7 +227,7 @@ form {
 label {
   font-size: var(--text-tag);
   font-weight: var(--weight-medium);
-  color: var(--color-text);
+  color: oklch(from var(--color-primary) calc(l + 0.3) calc(c - 0.16) h);
   margin-bottom: var(--space-xs);
   display: block;
 }
@@ -258,9 +239,9 @@ select {
   padding: var(--space-sm);
   font-family: var(--font-main);
   font-size: var(--text-body-sm);
-  color: var(--color-text);
-  background-color: var(--color-bg-subtle);
-  border: 1px solid var(--color-border);
+  color: oklch(from var(--color-primary) calc(l + 0.3) calc(c - 0.16) h);
+  background-color: var(--color-bg-vdb-shade-3);
+  border: 1px solid var(--color-bg-vdb-shade-3);
   border-radius: var(--radius-sm);
   transition:
     border-color 0.2s ease,
@@ -271,16 +252,16 @@ input:focus,
 textarea:focus,
 select:focus {
   outline: none;
-  border-color: var(--color-accent);
-  background-color: var(--color-bg-elevated);
+  border-color: var(--color-primary);
+  background-color: var(--color-bg-vdb-shade-2);
   box-shadow: 0 0 0 2px rgba(124, 106, 247, 0.15);
 }
 
 input:hover:not(:focus),
 textarea:hover:not(:focus),
 select:hover:not(:focus) {
-  border-color: var(--color-text-muted);
-  background-color: var(--color-bg-elevated);
+  border-color: oklch(from var(--color-primary) l c h / 0.05);
+  background-color: var(--color-bg-vdb-shade-1);
 }
 
 textarea {
@@ -290,7 +271,7 @@ textarea {
 
 input::placeholder,
 textarea::placeholder {
-  color: var(--color-text-muted);
+  color: oklch(from var(--color-primary) l c h / 0.05);
   opacity: 1;
 }
 
@@ -300,24 +281,24 @@ textarea::placeholder {
 button {
   padding: var(--button-padding-y) var(--button-padding-x);
   font-family: var(--font-main);
-  font-size: var(--text-ui);
+  font-size: var(--text-eyebrow);
   font-weight: var(--weight-medium);
-  color: var(--color-text);
-  background-color: var(--color-bg-elevated);
-  border: 1px solid var(--color-border);
+  color: oklch(from var(--color-primary) calc(l + 0.2) calc(c - 0.16) h);
+  background-color: var(--color-bg-vdb-shade-2);
+  border: 1px solid var(--color-bg-vdb-shade-3);
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 button:hover {
-  background-color: var(--color-bg-subtle);
-  border-color: var(--color-accent);
+  background-color: var(--color-bg-vdb-shade-3);
+  border-color: var(--color-primary);
 }
 
 button:focus {
   outline: none;
-  border-color: var(--color-accent);
+  border-color: var(--color-primary);
   box-shadow: 0 0 0 2px rgba(124, 106, 247, 0.15);
 }
 
@@ -335,27 +316,20 @@ button:disabled {
 /* ============================================= */
 header {
   padding: var(--space-md) 0;
-  border-bottom: 1px solid var(--color-border);
-  background-color: var(--color-bg-elevated);
+  border-bottom: 1px solid var(--color-bg-vdb-shade-3);
+  background-color: var(--color-bg-vdb-shade-2);
 }
 
 footer {
   padding: var(--space-lg) 0;
-  border-top: 1px solid var(--color-border);
-  background-color: var(--color-bg-elevated);
+  border-top: 1px solid var(--color-bg-vdb-shade-3);
+  background-color: var(--color-bg-vdb-shade-2);
   margin-top: var(--space-3xl);
 }
-
-/* section {
-  padding: var(--section-padding-y) var(--section-padding-x);
-} */
 
 article {
   padding-block: var(--space-xl);
   padding-inline: var(--space-2xl);
-  /* background-color: var(--color-bg-subtle); */
-  /* border: 1px solid var(--color-border); */
-  /* border-radius: var(--radius-md); */
   margin-bottom: var(--space-lg);
   max-width: 1200px;
   margin: 0 auto;
@@ -373,7 +347,7 @@ main {
 /* ============================================= */
 hr {
   border: none;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--color-bg-vdb-shade-3);
   margin: var(--space-xl) 0;
 }
 
@@ -383,11 +357,11 @@ hr {
 blockquote {
   padding: var(--space-md) var(--space-lg);
   margin: var(--space-md) 0;
-  border-left: 4px solid var(--color-accent);
-  background-color: var(--color-bg-subtle);
+  border-left: 4px solid var(--color-primary);
+  background-color: var(--color-bg-vdb-shade-2);
   border-radius: var(--radius-sm);
   font-style: italic;
-  color: var(--color-text-muted);
+  color: oklch(from var(--color-primary) calc(l + 0.1) calc(c - 0.16) h);
 }
 
 /* ============================================= */
@@ -399,7 +373,7 @@ figure {
 
 figcaption {
   font-size: var(--text-caption);
-  color: var(--color-text-muted);
+  color: oklch(from var(--color-primary) calc(l + 0.1) calc(c - 0.16) h);
   text-align: center;
   margin-top: var(--space-xs);
 }
@@ -412,22 +386,22 @@ video {
 }
 
 /* ============================================= */
-/* UTILITY CLASSES (OPTIONAL)                   */
+/* UTILITY CLASSES                              */
 /* ============================================= */
 .text-muted {
   color: var(--color-text-muted);
 }
 
 .text-inverse {
-  color: var(--color-text-inverse);
+  color: var(--color-full-white);
 }
 
 .text-accent {
-  color: var(--color-accent);
+  color: var(--color-primary);
 }
 
 .text-code {
-  color: var(--color-code);
+  color: var(--color-secondary);
 }
 
 .text-danger {
@@ -435,120 +409,13 @@ video {
 }
 
 .bg-subtle {
-  background-color: var(--color-bg-subtle);
+  background-color: var(--color-bg-vdb-shade-3);
 }
 
 .bg-elevated {
-  background-color: var(--color-bg-elevated);
+  background-color: var(--color-bg-vdb-shade-2);
 }
 
 .border-subtle {
-  border-color: var(--color-border);
-}
-
-/* ============================================= */
-/* STYLE GUIDE DEMO — LAYOUT & STRUCTURE ONLY   */
-/* ============================================= */
-/* Demo-specific styling for presentation       */
-/* Does NOT duplicate style-guide.css styles   */
-
-/* ============================================= */
-/* CONTAINER & LAYOUT                           */
-/* ============================================= */
-.demo-container {
-  /* max-width: 900px; */
-  margin: 0 auto;
-  padding: var(--page-padding-y) var(--page-padding-x);
-}
-
-/* ============================================= */
-/* SECTIONS & SPACING                           */
-/* ============================================= */
-.demo-section {
-  margin-bottom: var(--space-3xl);
-  padding-bottom: var(--space-lg);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.demo-section:last-child {
-  border-bottom: none;
-}
-
-/* ============================================= */
-/* TYPOGRAPHY FOR DEMO                          */
-/* ============================================= */
-.demo-subtitle {
-  color: var(--color-text-muted);
-  margin: 0;
-}
-
-.demo-title {
-  color: var(--color-accent);
-  margin-bottom: var(--space-md);
-  margin-top: var(--space-lg);
-}
-
-.demo-hint {
-  color: var(--color-text-muted);
-  font-size: var(--text-caption);
-}
-
-/* ============================================= */
-/* GRIDS                                        */
-/* ============================================= */
-.demo-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: var(--space-md);
-  margin: var(--space-md) 0;
-}
-
-/* ============================================= */
-/* FORMS                                        */
-/* ============================================= */
-.demo-form {
-  max-width: 600px;
-}
-
-.demo-form-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.demo-inline-label {
-  display: flex;
-  align-items: center;
-  margin-bottom: var(--space-xs);
-  font-weight: var(--weight-regular);
-  cursor: pointer;
-}
-
-.demo-inline-label input {
-  width: auto;
-  margin-right: var(--space-xs);
-  margin-bottom: 0;
-}
-
-.demo-button-group {
-  display: flex;
-  gap: var(--space-sm);
-  flex-wrap: wrap;
-  margin-top: var(--space-md);
-}
-
-/* ============================================= */
-/* NESTED SECTION STYLING                       */
-/* ============================================= */
-.demo-nested-section {
-  background-color: var(--color-bg-subtle);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  margin-top: var(--space-md);
-}
-
-/* ============================================= */
-/* BORDER UTILITY DEMO                          */
-/* ============================================= */
-.demo-border-subtle {
-  border: 2px solid;
+  border-color: var(--color-bg-vdb-shade-3);
 }

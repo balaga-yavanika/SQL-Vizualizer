@@ -1,0 +1,61 @@
+/* ============================================= */
+/* JOINS PAGE — LAYOUT                           */
+/* ============================================= */
+/* Table grid layout, scroll wrappers, containers */
+
+/* ============================================= */
+/* TABLES AREA LAYOUT                            */
+/* ============================================= */
+.joins-tables-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-xs);
+  align-items: start;
+  min-width: fit-content;
+}
+
+/* ============================================= */
+/* SCROLL WRAPPERS                               */
+/* ============================================= */
+/* Visible on desktop, auto scroll on mobile */
+.tables-scroll-wrapper,
+.diagram-scroll-wrapper,
+.result-scroll-wrapper {
+  overflow-x: visible;
+}
+
+/* ============================================= */
+/* RESULT & SQL CONTAINER                        */
+/* ============================================= */
+.result-sql-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  margin-block: var(--space-lg);
+}
+
+.result-section {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================= */
+/* RESPONSIVE — TABLET (≤768px)                 */
+/* ============================================= */
+@media (max-width: 768px) {
+  .joins-tables-grid {
+    grid-template-columns: repeat(2, minmax(290px, 1fr));
+  }
+
+  .tables-scroll-wrapper,
+  .diagram-scroll-wrapper,
+  .result-scroll-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #conn-wrapper {
+    min-width: 600px;
+    flex-shrink: 0;
+  }
+}

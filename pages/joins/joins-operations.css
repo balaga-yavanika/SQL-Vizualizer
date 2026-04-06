@@ -1,0 +1,159 @@
+/* ============================================= */
+/* JOINS PAGE — OPERATIONS & SELECTORS           */
+/* ============================================= */
+/* Join type selector, pair selector, SVG column picker */
+
+/* ============================================= */
+/* OPERATIONS CONTAINER                          */
+/* ============================================= */
+.operations-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+  margin-block-end: var(--space-lg);
+}
+
+.operation-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.operation-section > .section-label-large {
+  display: block;
+  margin-bottom: var(--space-3xs);
+}
+
+.operation-dropdown {
+  padding: var(--space-2xs) var(--space-xs);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-vdb);
+  color: var(--color-text);
+  font-family: var(--font-main);
+  font-size: var(--text-tag);
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+@media (hover: hover) {
+  .operation-dropdown:hover {
+    border-color: var(--color-primary);
+    background: color-mix(
+      in srgb,
+      var(--color-primary) 5%,
+      var(--color-bg-vdb)
+    );
+  }
+}
+
+.operation-dropdown:focus-visible {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px
+    color-mix(in srgb, var(--color-primary) 25%, transparent);
+}
+
+/* ============================================= */
+/* PAIR SELECTOR (TABLE PAIR PICKER)             */
+/* ============================================= */
+.join-pair-selector {
+  display: flex;
+  gap: var(--space-sm);
+  margin-block: var(--space-lg);
+}
+
+.pair-selector-label {
+  font-size: var(--text-tag);
+  font-weight: var(--weight-medium);
+  color: var(--color-text);
+}
+
+#join-pair-select-wrapper {
+  max-width: 300px;
+}
+
+/* ============================================= */
+/* SVG COLUMN SELECTOR (DIAGRAM COLUMN PICKER)   */
+/* ============================================= */
+.diagram-col-picker {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-2xs);
+  margin-top: var(--space-2xs);
+  font-size: var(--text-fine);
+  overflow: visible;
+}
+
+.diagram-col-label {
+  flex-shrink: 0;
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+}
+
+.diagram-col-dropdown {
+  flex: 1;
+  min-width: 120px;
+  position: relative;
+  overflow: visible;
+}
+
+.diagram-col-dropdown .dropdown-toggle {
+  padding: var(--space-3xs) var(--space-2xs);
+  font-size: var(--text-fine);
+  justify-content: space-between;
+}
+
+.diagram-col-dropdown .dropdown-arrow {
+  font-size: var(--text-fine);
+  margin-left: var(--space-3xs);
+}
+
+.diagram-col-dropdown .dropdown-item {
+  padding: var(--space-3xs) var(--space-2xs);
+  font-size: var(--text-fine);
+}
+
+.diagram-col-dropdown .dropdown-menu {
+  position: absolute;
+  top: calc(100% + var(--space-3xs));
+  left: 0;
+  z-index: var(--z-dropdown);
+  min-width: 140px;
+  background: var(--color-bg-vdb);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.15);
+}
+
+/* ============================================= */
+/* DIAGRAM LABEL                                 */
+/* ============================================= */
+.diagram-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  margin-block: var(--space-md);
+  font-size: var(--text-tag);
+  font-weight: var(--weight-medium);
+  color: var(--color-text);
+}
+
+.diagram-label i {
+  font-size: var(--text-tag);
+  color: oklch(from var(--color-primary) calc(l + 0.6) c h);
+  cursor: help;
+  flex-shrink: 0;
+}
+
+/* ============================================= */
+/* RESPONSIVE — TABLET (≤768px)                 */
+/* ============================================= */
+@media (max-width: 768px) {
+  .operations-container {
+    grid-template-columns: 1fr;
+  }
+}

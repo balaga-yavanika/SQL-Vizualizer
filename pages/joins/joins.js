@@ -35,6 +35,7 @@ import {
   copySqlToClipboard,
   generateSql,
 } from "./sql-generator.js";
+import { initBanner } from "../../global/banner.js";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // UI State Management
@@ -293,7 +294,7 @@ function initHowToPopover() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 function reattachPairSelectItemListeners() {
-  const wrapper = document.getElementById("pair-select-wrapper");
+  const wrapper = document.getElementById("join-pair-select-wrapper");
   if (!wrapper) return;
 
   const items = wrapper.querySelectorAll(".dropdown-item");
@@ -322,7 +323,7 @@ function reattachPairSelectItemListeners() {
 
 function setupSvgColSelectors() {
   state.tables.forEach((t, ti) => {
-    const wrapperId = `svg-col-dropdown-${ti}`;
+    const wrapperId = `diagram-col-dropdown-${ti}`;
     const wrapper = document.getElementById(wrapperId);
     if (!wrapper) return;
 
@@ -443,7 +444,7 @@ window.copySqlButtonClicked = () => {
 // ─────────────────────────────────────────────────────────────────────────────
 
 function initPairSelectToggle() {
-  const wrapper = document.getElementById("pair-select-wrapper");
+  const wrapper = document.getElementById("join-pair-select-wrapper");
   if (!wrapper) return;
 
   const toggle = wrapper.querySelector(".dropdown-toggle");
@@ -544,6 +545,7 @@ function initPresetDropdown() {
 // Boot
 // ─────────────────────────────────────────────────────────────────────────────
 
+initBanner();
 initHowToPopover();
 initOperationDropdowns();
 initPresetDropdown();

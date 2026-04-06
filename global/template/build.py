@@ -143,11 +143,11 @@ def build_breadcrumb(show_breadcrumb):
     if not show_breadcrumb:
         return ""
     return '''<nav class="breadcrumb" aria-label="Breadcrumb" style="font-size: 0.7rem;">
-        <a><i class="fa-solid fa-angles-left"></i></a>
+        <a><i class="fa-solid fa-arrow-left-long"></i></a>
         <a href="#" onclick="history.back()" style="font-weight: 600;font-size: 0.8rem;">
         Go Back&nbsp;</a>
         <a href="/main.html" rel="prev"
-          ><i class="fa-solid fa-angles-left"></i>&nbsp;<i class="fa-solid fa-house"></i
+          ><i class="fa-solid fa-arrow-left-long"></i>&nbsp;<i class="fa-solid fa-house"></i
         ></a>
       </nav>'''
 

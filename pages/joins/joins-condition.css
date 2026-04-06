@@ -1,0 +1,137 @@
+/* ============================================= */
+/* JOINS PAGE — JOIN CONDITION BUILDER           */
+/* ============================================= */
+/* Join condition panel and editor UI */
+
+/* ============================================= */
+/* JOIN CONDITION PANEL                          */
+/* ============================================= */
+.join-condition-panel {
+  padding: var(--space-md);
+  margin-block: var(--space-md);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-vdb-shade-1);
+}
+
+.join-condition-editor {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding-block: var(--space-2xs);
+  margin-bottom: var(--space-sm);
+  border-radius: var(--radius-sm);
+}
+
+.join-cond-label {
+  font-size: var(--text-tag);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+/* ── Condition-specific dropdowns ── */
+#join-left-col-wrapper,
+#join-right-col-wrapper {
+  min-width: 140px;
+}
+
+#join-left-col-wrapper .dropdown-toggle,
+#join-right-col-wrapper .dropdown-toggle,
+#join-op-wrapper .dropdown-toggle {
+  padding: var(--space-2xs) var(--space-xs);
+}
+
+#join-op-wrapper {
+  min-width: 60px;
+}
+
+#join-op-wrapper .dropdown-toggle {
+  justify-content: space-between;
+}
+
+#join-op-wrapper .dropdown-toggle span:first-child {
+  flex: 0;
+}
+
+/* ============================================= */
+/* JOIN CONDITION SUMMARY                        */
+/* ============================================= */
+.join-condition-summary {
+  padding-block: var(--space-2xs);
+  font-size: var(--text-fine);
+  color: oklch(from var(--color-primary) calc(l + 0.6) c h);
+}
+
+#join-condition-summary {
+  font-weight: var(--weight-medium);
+  color: var(--color-text);
+}
+
+/* ============================================= */
+/* RESPONSIVE — TABLET (≤768px)                 */
+/* ============================================= */
+@media (max-width: 768px) {
+  .join-condition-editor {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-3xs);
+  }
+
+  .join-cond-label {
+    margin-bottom: var(--space-3xs);
+  }
+
+  #join-left-col-wrapper,
+  #join-right-col-wrapper,
+  #join-op-wrapper {
+    width: 100%;
+    min-width: unset;
+  }
+
+  #join-left-col-wrapper .dropdown-toggle,
+  #join-right-col-wrapper .dropdown-toggle,
+  #join-op-wrapper .dropdown-toggle {
+    width: 100%;
+  }
+}
+
+/* ============================================= */
+/* RESPONSIVE — MOBILE (≤480px)                 */
+/* ============================================= */
+@media (max-width: 480px) {
+  .join-condition-panel {
+    padding: var(--space-sm);
+    margin-block: var(--space-sm);
+  }
+
+  .join-condition-editor {
+    gap: var(--space-3xs);
+  }
+
+  .join-cond-label {
+    font-size: var(--text-fine);
+  }
+
+  .dropdown-arrow {
+    font-size: var(--text-fine);
+  }
+
+  #join-left-col-wrapper .dropdown-toggle,
+  #join-right-col-wrapper .dropdown-toggle,
+  #join-op-wrapper .dropdown-toggle {
+    padding: var(--space-3xs) var(--space-2xs);
+    font-size: var(--text-fine);
+  }
+}
+
+/* ============================================= */
+/* RESPONSIVE — TOUCH DEVICES                   */
+/* ============================================= */
+@media (pointer: coarse) {
+  #join-left-col-wrapper .dropdown-toggle,
+  #join-right-col-wrapper .dropdown-toggle,
+  #join-op-wrapper .dropdown-toggle {
+    min-height: 44px;
+  }
+}

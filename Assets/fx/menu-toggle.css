@@ -1,20 +1,25 @@
 /* ============================================= */
+/* MENU TOGGLE COMPONENT                         */
+/* Tokens: --menu-accent-dark, --menu-accent-lighter, --overlay-bg, --z-drawer-overlay, --z-drawer-menu, --z-footer-menu, --drawer-width in tokens.css */
+/* ============================================= */
+
+/* ============================================= */
 /* FOOTER MENU                                   */
 /* ============================================= */
 .footer-menu {
   position: fixed;
-  bottom: 2.8rem;
-  right: 5.2rem;
+  bottom: var(--space-xl);
+  right: var(--space-2xl);
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  max-height: calc(100vh - 8rem);
+  gap: var(--space-2xs);
+  max-height: calc(100vh - var(--space-4xl));
   padding: var(--space-sm);
   overflow-y: auto;
-  background: var(--color-bg-elevated);
-  border: 1px solid color-mix(in srgb, var(--color-text-muted) 35%, transparent);
+  background: var(--color-bg-vdb-shade-1);
+  border: 1px solid var(--color-bg-border);
   border-radius: var(--radius-md);
-  z-index: 100;
+  z-index: var(--z-footer-menu);
   transition:
     opacity 0.5s ease,
     visibility 0.5s ease;
@@ -30,11 +35,11 @@
 .footer-link {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding-block-end: 2px;
+  gap: var(--space-2xs);
+  padding-block-end: var(--space-3xs);
   font-family: var(--font-main);
   font-size: var(--text-tag);
-  color: var(--color-text-muted);
+  color: var(--color-pr-para);
   text-decoration: none;
   text-transform: capitalize;
   white-space: nowrap;
@@ -42,25 +47,24 @@
 }
 
 .footer-link:hover {
-  color: var(--color-accent);
+  color: var(--color-primary);
 }
 
 .footer-link:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-primary);
   outline-offset: 2px;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
 }
 
 .footer-link i {
-  width: 1rem;
+  width: var(--space-md);
   text-align: center;
   flex-shrink: 0;
 }
 
 /* ── Divider ── */
 .line {
-  border-bottom: 1px solid
-    color-mix(in srgb, var(--color-text-muted) 15%, transparent);
+  border-bottom: 1px solid var(--color-bg-border);
 }
 
 /* ============================================= */
@@ -68,12 +72,9 @@
 /* ============================================= */
 .drawer-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+  inset: 0;
+  background: var(--overlay-bg);
+  z-index: var(--z-drawer-overlay);
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -87,12 +88,12 @@
 .drawer-menu {
   position: fixed;
   top: 0;
-  right: -500px;
+  right: calc(var(--drawer-width) * -1);
   width: 100%;
   height: 100vh;
-  background: var(--color-bg-elevated);
-  border-left: 1px solid var(--color-border);
-  z-index: 1000;
+  background: var(--color-bg-vdb);
+  border-left: 1px solid var(--color-bg-border);
+  z-index: var(--z-drawer-menu);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -107,47 +108,46 @@
 
 .drawer-top-wrapper {
   display: flex;
-  margin-bottom: var(--space-4xl);
-  font-size: var(--text-h4);
-  justify-content: space-between;
-  padding-inline-start: var(--space-md);
   align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4xl);
+  padding-inline-start: var(--space-md);
+  font-size: var(--text-h4);
 }
 
 .drawer-close {
-  /* align-self: flex-end; */
-  width: 40px;
-  height: 40px;
+  width: var(--touch-target);
+  height: var(--touch-target);
   padding: 0;
   background: transparent;
   border: none;
-  color: var(--color-text-muted);
+  color: var(--color-pr-para);
   cursor: pointer;
   font-size: var(--text-h4);
   transition: color 0.2s ease;
 }
 
 .drawer-close:hover {
-  color: var(--color-accent);
+  color: var(--color-primary);
 }
 
 .drawer-close:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-primary);
   outline-offset: 2px;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
 }
 
 .drawer-menu .footer-link {
   padding: var(--space-sm);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   white-space: normal;
-  transition: background 0.2s ease;
   font-size: var(--text-h3);
-  gap: 30px;
+  gap: var(--space-lg);
+  transition: background 0.2s ease;
 }
 
 .drawer-menu .footer-link:hover {
-  background: var(--color-bg-subtle);
+  background: var(--color-primary);
 }
 
 .rm-p {
@@ -159,13 +159,13 @@
 @media (min-width: 769px) {
   .drawer-menu,
   .drawer-overlay {
-    display: none !important;
+    display: none;
   }
 }
 
 /* ── Tablet & Mobile ── */
 @media (max-width: 768px) {
   .footer-menu {
-    display: none !important;
+    display: none;
   }
 }
