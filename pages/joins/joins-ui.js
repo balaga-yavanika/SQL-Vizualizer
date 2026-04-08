@@ -121,12 +121,14 @@ export function renderTables(m1, m2, li, ri) {
     let html = `
       <div class="tbl-head" style="background:${pal.fill};color:${pal.text};border-bottom:1px solid ${pal.stroke}" aria-label="Table: ${escapedTableName}">
         <span class="table-name" contenteditable="true"
+          onfocus="this._originalValue=this.textContent"
           oninput="window.app.handleTableRenameInput(event, ${ti})"
           onblur="window.app.renameTableAndRender(${ti}, this.textContent)"
-          onkeydown="if(event.key==='Enter'){this.blur();event.preventDefault()}else if(event.key==='Escape'){this.blur();event.preventDefault()}"
+          onkeydown="if(event.key==='Enter'){this.blur();event.preventDefault()}else if(event.key==='Escape'){this.textContent=this._originalValue;this.blur();event.preventDefault()}"
           tabindex="0"
           role="button"
-          aria-label="Edit table name: ${escapedTableName}">${escapedTableName}</span>
+          aria-label="Edit table name: ${escapedTableName}"
+          aria-describedby="kb-help-edit-name">${escapedTableName}</span>
         ${
           state.tables.length > 2
             ? `<button onclick="app.removeTableAndRender(${ti})" title="Remove table" aria-label="Remove table ${escapedTableName}">×</button>`
@@ -145,12 +147,14 @@ export function renderTables(m1, m2, li, ri) {
       html += `<span class="col-header-cell" title="${escapedColName}${col.isKey ? " (key)" : ""}">
         ${typeIcon}
         <span class="col-header-name" contenteditable="true"
+          onfocus="this._originalValue=this.textContent"
           oninput="window.app.handleColumnRenameInput(event, ${ti}, '${col.id}')"
           onblur="window.app.renameColumnAndRender(${ti}, '${col.id}', this.textContent)"
-          onkeydown="if(event.key==='Enter'){this.blur();event.preventDefault()}else if(event.key==='Escape'){this.blur();event.preventDefault()}"
+          onkeydown="if(event.key==='Enter'){this.blur();event.preventDefault()}else if(event.key==='Escape'){this.textContent=this._originalValue;this.blur();event.preventDefault()}"
           tabindex="0"
           role="button"
-          aria-label="Edit column name: ${escapedColName}">${escapedColName}</span>
+          aria-label="Edit column name: ${escapedColName}"
+          aria-describedby="kb-help-edit-name">${escapedColName}</span>
         ${
           col.isKey
             ? `<span class="key-badge" style="color:${pal.text}">key</span>`
@@ -184,9 +188,10 @@ export function renderTables(m1, m2, li, ri) {
           html += `<input class="${col.isKey ? "id-input" : "col-input"}" type="${dt.inputType}"${stepA}${keyAttrs} maxlength="20"
             value="${colVal ?? ""}" placeholder="${col.name}"
             aria-label="${col.name}"
+            onfocus="this._originalValue=this.value"
             oninput="app.handleKeyInput(event, ${ti}, ${ri2}, '${col.id}', ${col.isKey}, '${col.type}')"
-            onchange="app.handleKeyChange(event, ${ti}, ${ri2}, '${col.id}', ${col.isKey}, '${col.type}')"
-            onkeydown="if(event.key==='Escape'){this.blur();event.preventDefault()}">`;
+            onchange="if(!this._escapePressed){app.handleKeyChange(event, ${ti}, ${ri2}, '${col.id}', ${col.isKey}, '${col.type}')}this._escapePressed=false"
+            onkeydown="if(event.key==='Escape'){this.value=this._originalValue;this._escapePressed=true;this.blur();event.preventDefault()}">`;
         }
       });
 
