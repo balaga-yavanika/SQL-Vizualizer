@@ -123,7 +123,10 @@ export function renderTables(m1, m2, li, ri) {
         <span class="table-name" contenteditable="true"
           oninput="window.app.handleTableRenameInput(event, ${ti})"
           onblur="window.app.renameTableAndRender(${ti}, this.textContent)"
-          onkeydown="if(event.key==='Enter'){this.blur();event.preventDefault()}">${escapedTableName}</span>
+          onkeydown="if(event.key==='Enter'){this.blur();event.preventDefault()}else if(event.key==='Escape'){this.blur();event.preventDefault()}"
+          tabindex="0"
+          role="button"
+          aria-label="Edit table name: ${escapedTableName}">${escapedTableName}</span>
         ${
           state.tables.length > 2
             ? `<button onclick="app.removeTableAndRender(${ti})" title="Remove table" aria-label="Remove table ${escapedTableName}">×</button>`
@@ -144,7 +147,10 @@ export function renderTables(m1, m2, li, ri) {
         <span class="col-header-name" contenteditable="true"
           oninput="window.app.handleColumnRenameInput(event, ${ti}, '${col.id}')"
           onblur="window.app.renameColumnAndRender(${ti}, '${col.id}', this.textContent)"
-          onkeydown="if(event.key==='Enter'){this.blur();event.preventDefault()}">${escapedColName}</span>
+          onkeydown="if(event.key==='Enter'){this.blur();event.preventDefault()}else if(event.key==='Escape'){this.blur();event.preventDefault()}"
+          tabindex="0"
+          role="button"
+          aria-label="Edit column name: ${escapedColName}">${escapedColName}</span>
         ${
           col.isKey
             ? `<span class="key-badge" style="color:${pal.text}">key</span>`
@@ -179,7 +185,8 @@ export function renderTables(m1, m2, li, ri) {
             value="${colVal ?? ""}" placeholder="${col.name}"
             aria-label="${col.name}"
             oninput="app.handleKeyInput(event, ${ti}, ${ri2}, '${col.id}', ${col.isKey}, '${col.type}')"
-            onchange="app.handleKeyChange(event, ${ti}, ${ri2}, '${col.id}', ${col.isKey}, '${col.type}')">`;
+            onchange="app.handleKeyChange(event, ${ti}, ${ri2}, '${col.id}', ${col.isKey}, '${col.type}')"
+            onkeydown="if(event.key==='Escape'){this.blur();event.preventDefault()}">`;
         }
       });
 

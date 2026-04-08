@@ -4,12 +4,119 @@
 /* Table grid layout, scroll wrappers, containers */
 
 /* ============================================= */
+/* HEADING — SHARE BUTTON                       */
+/* ============================================= */
+.share-btn-subtle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin-left: var(--space-sm);
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-secondary);
+  font-size: 12px;
+  vertical-align: middle;
+}
+
+.share-btn-subtle:hover {
+  color: var(--color-secondary);
+  border-color: var(--color-secondary);
+  background: oklch(from var(--color-secondary) l c h / 0.1);
+}
+
+.share-btn-subtle:focus {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
+}
+
+.share-btn-subtle:disabled,
+.share-btn-subtle.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  color: var(--color-secondary);
+}
+
+.share-btn-subtle:not(:disabled):hover {
+  color: var(--color-secondary);
+  border-color: var(--color-secondary);
+  background: oklch(from var(--color-secondary) l c h / 0.1);
+}
+
+.share-btn-subtle:not(:disabled):focus {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
+}
+
+.share-btn-subtle.animate-bell {
+  animation: bellShake 0.75s ease-in-out !important;
+  transform-origin: bottom center !important;
+  position: relative;
+}
+
+@keyframes bellShake {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(15deg);
+  }
+  50% {
+    transform: rotate(-15deg);
+  }
+  75% {
+    transform: rotate(8deg);
+  }
+}
+
+.share-btn-subtle.animate-bell i {
+  color: var(--color-secondary) !important;
+  text-shadow: 0 0 8px var(--color-secondary);
+}
+
+.share-btn-subtle.animate-bell::before,
+.share-btn-subtle.animate-bell::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--color-secondary);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.share-btn-subtle.animate-bell::before {
+  animation: bellRingWave 0.75s ease-out 3;
+}
+
+@keyframes bellRingWave {
+  0% {
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+  }
+  100% {
+    width: 150%;
+    height: 150%;
+    opacity: 0;
+  }
+}
+
+/* ============================================= */
 /* TABLES AREA LAYOUT                            */
 /* ============================================= */
 .joins-tables-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-xs);
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-lg);
   align-items: start;
   min-width: fit-content;
 }
@@ -37,6 +144,41 @@
 .result-section {
   display: flex;
   flex-direction: column;
+}
+
+/* ============================================= */
+/* TABLE INPUT ACCESSIBILITY                     */
+/* ============================================= */
+.col-input,
+.id-input {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 4px 6px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: inherit;
+}
+
+.col-input:focus,
+.id-input:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+  border-color: var(--color-primary);
+}
+
+/* Editable name fields (table names, column names) */
+.table-name[contenteditable],
+.col-header-name[contenteditable] {
+  border-radius: var(--radius-sm);
+  padding: 2px 4px;
+  cursor: text;
+}
+
+.table-name[contenteditable]:focus,
+.col-header-name[contenteditable]:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+  background: oklch(from var(--color-primary) l c h / 0.1);
 }
 
 /* ============================================= */
