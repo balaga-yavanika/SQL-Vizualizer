@@ -762,7 +762,7 @@ export function render() {
   });
   
   document.getElementById("pair-row").style.display =
-    state.tables.length > 2 ? "flex" : "none";
+    state.tables.length >= 2 ? "flex" : "none";
 
   // Only show join condition panel for join operations, not set operators
   const joinCondPanel = document.querySelector(".join-condition-panel");
