@@ -227,12 +227,21 @@ export function renderConn() {
     return;
   }
 
+  // Set ARIA attributes for accessibility
+  svg.setAttribute("role", "img");
+
   let [li, ri] = getPair();
   const isSelfJoin = state.currentOp === "self";
   if (isSelfJoin) ri = li;
 
   const palL = PALETTE[li % PALETTE.length];
   const palR = PALETTE[ri % PALETTE.length];
+
+  // Set aria-label for screen readers
+  const lTable = state.tables[li]?.name || "Table";
+  const rTable = state.tables[ri]?.name || "Table";
+  const opType = state.currentOp === "self" ? "self-join" : (state.currentOp || "join");
+  svg.setAttribute("aria-label", `Diagram showing ${opType} between ${escapeHtml(lTable)} and ${escapeHtml(rTable)}`);
 
   // Set operators don't show diagrams - they combine/compare tables at row level
   const isSetOperator = state.currentOp && ["union", "union_all", "except", "intersect"].includes(state.currentOp);
@@ -432,7 +441,7 @@ export function renderResult() {
     heads.innerHTML = allCols
       .map(
         (c) =>
-          `<div class="rg-head" style="border-bottom:2px solid ${c.side === "l" ? palL.line : palR.line}33">
+          `<div class="rg-head" role="columnheader" style="border-bottom:2px solid ${c.side === "l" ? palL.line : palR.line}33">
         ${t.name}${c.side === "r" ? " (alias)" : ""}.${escapeHtml(c.name)}</div>`,
       )
       .join("");
@@ -445,10 +454,10 @@ export function renderResult() {
               const rd = c.side === "l" ? lRow : rRow;
               const pal = c.side === "l" ? palL : palR;
               const val = rd ? rd[c.id] : null;
-              return `<div class="rg-cell" style="background:${pal.bg}">
+              return `<div class="rg-cell" role="cell" style="background:${pal.bg}">
               ${val === null || val === undefined || val === "" ? nullBadge() : escapeHtml(String(val))}</div>`;
             });
-            return `<div class="rg-data-row" style="grid-template-columns:${tpl}">${cells.join("")}</div>`;
+            return `<div class="rg-data-row" role="row" style="grid-template-columns:${tpl}">${cells.join("")}</div>`;
           })
           .join("")
       : emptyState(emptyReason);
@@ -476,7 +485,7 @@ export function renderResult() {
     const tpl = allCols.map(() => "1fr").join(" ");
     heads.style.gridTemplateColumns = tpl;
     heads.innerHTML = allCols
-      .map((c) => `<div class="rg-head" style="border-bottom:2px solid ${c.side === 'r' ? palR.line : palL.line}33">${escapeHtml(c.name)}</div>`)
+      .map((c) => `<div class="rg-head" role="columnheader" style="border-bottom:2px solid ${c.side === 'r' ? palR.line : palL.line}33">${escapeHtml(c.name)}</div>`)
       .join("");
     
     body.innerHTML = rows.length
@@ -511,7 +520,7 @@ export function renderResult() {
     heads.innerHTML = allCols
       .map(
         (c) =>
-          `<div class="rg-head" style="border-bottom:2px solid ${c.side === "l" ? palL.line : palR.line}33">
+          `<div class="rg-head" role="columnheader" style="border-bottom:2px solid ${c.side === "l" ? palL.line : palR.line}33">
         ${escapeHtml(state.tables[c.ti].name)}.${escapeHtml(c.name)}</div>`,
       )
       .join("");
@@ -524,26 +533,26 @@ export function renderResult() {
               const rd = c.side === "l" ? lRow : rRow;
               const pal = c.side === "l" ? palL : palR;
               const val = rd ? rd[c.id] : null;
-              return `<div class="rg-cell" style="background:${pal.bg}">
+              return `<div class="rg-cell" role="cell" style="background:${pal.bg}">
               ${val === null || val === undefined || val === "" ? nullBadge() : escapeHtml(String(val))}</div>`;
             });
-            return `<div class="rg-data-row" style="grid-template-columns:${tpl}">${cells.join("")}</div>`;
+            return `<div class="rg-data-row" role="row" style="grid-template-columns:${tpl}">${cells.join("")}</div>`;
           })
           .join("")
       : emptyState(emptyReason);
   } else {
     // Anti joins — show IDs from both tables
     heads.style.gridTemplateColumns = "1fr 1fr";
-    heads.innerHTML = `<div class="rg-head">${escapeHtml(state.tables[li].name)}.id</div>
-      <div class="rg-head">${escapeHtml(state.tables[ri].name)}.id</div>`;
+    heads.innerHTML = `<div class="rg-head" role="columnheader">${escapeHtml(state.tables[li].name)}.id</div>
+      <div class="rg-head" role="columnheader">${escapeHtml(state.tables[ri].name)}.id</div>`;
     body.innerHTML = rows.length
       ? rows
           .map(
             (
               r,
-            ) => `<div class="rg-data-row" style="grid-template-columns:1fr 1fr">
-          <div class="rg-cell" style="background:${palL.bg}">${r.c1 === null ? nullBadge() : escapeHtml(String(r.c1))}</div>
-          <div class="rg-cell" style="background:${palR.bg}">${r.c2 === null ? nullBadge() : r.c2 === undefined ? "—" : escapeHtml(String(r.c2))}</div>
+            ) => `<div class="rg-data-row" role="row" style="grid-template-columns:1fr 1fr">
+          <div class="rg-cell" role="cell" style="background:${palL.bg}">${r.c1 === null ? nullBadge() : escapeHtml(String(r.c1))}</div>
+          <div class="rg-cell" role="cell" style="background:${palR.bg}">${r.c2 === null ? nullBadge() : r.c2 === undefined ? "—" : escapeHtml(String(r.c2))}</div>
         </div>`,
           )
           .join("")
