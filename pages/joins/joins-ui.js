@@ -454,8 +454,10 @@ export function renderResult() {
               const rd = c.side === "l" ? lRow : rRow;
               const pal = c.side === "l" ? palL : palR;
               const val = rd ? rd[c.id] : null;
+              const sideLabel = c.side === "l" ? " (left)" : " (right)";
+              const cellContent = val === null || val === undefined || val === "" ? nullBadge() : `${escapeHtml(String(val))}<span style="font-size:0.7em;opacity:0.5">${sideLabel}</span>`;
               return `<div class="rg-cell" role="cell" style="background:${pal.bg}">
-              ${val === null || val === undefined || val === "" ? nullBadge() : escapeHtml(String(val))}</div>`;
+              ${cellContent}</div>`;
             });
             return `<div class="rg-data-row" role="row" style="grid-template-columns:${tpl}">${cells.join("")}</div>`;
           })
@@ -502,7 +504,9 @@ export function renderResult() {
             // Column color based on which table the column comes from, not the row's source
             // Left-only columns: always palL, Right-only: always palR, Both: use row's source
             const cellPal = c.side === 'r' ? palR : (c.side === 'l' ? palL : rowPal);
-            return `<div class="rg-cell" style="background:${cellPal.bg}">${val === null || val === undefined || val === '' ? nullBadge() : escapeHtml(String(val))}</div>`;
+            const sideLabel = c.side === 'r' ? ' (right)' : (c.side === 'l' ? ' (left)' : '');
+            const cellContent = val === null || val === undefined || val === '' ? nullBadge() : `${escapeHtml(String(val))}<span style="font-size:0.7em;opacity:0.5">${sideLabel}</span>`;
+            return `<div class="rg-cell" role="cell" style="background:${cellPal.bg}">${cellContent}</div>`;
           }).join('');
           return `<div class="rg-data-row" style="grid-template-columns:${tpl}">${cells}</div>`;
         }).join("")
@@ -533,8 +537,10 @@ export function renderResult() {
               const rd = c.side === "l" ? lRow : rRow;
               const pal = c.side === "l" ? palL : palR;
               const val = rd ? rd[c.id] : null;
+              const sideLabel = c.side === "l" ? " (left)" : " (right)";
+              const cellContent = val === null || val === undefined || val === "" ? nullBadge() : `${escapeHtml(String(val))}<span style="font-size:0.7em;opacity:0.5">${sideLabel}</span>`;
               return `<div class="rg-cell" role="cell" style="background:${pal.bg}">
-              ${val === null || val === undefined || val === "" ? nullBadge() : escapeHtml(String(val))}</div>`;
+              ${cellContent}</div>`;
             });
             return `<div class="rg-data-row" role="row" style="grid-template-columns:${tpl}">${cells.join("")}</div>`;
           })
@@ -551,8 +557,8 @@ export function renderResult() {
             (
               r,
             ) => `<div class="rg-data-row" role="row" style="grid-template-columns:1fr 1fr">
-          <div class="rg-cell" role="cell" style="background:${palL.bg}">${r.c1 === null ? nullBadge() : escapeHtml(String(r.c1))}</div>
-          <div class="rg-cell" role="cell" style="background:${palR.bg}">${r.c2 === null ? nullBadge() : r.c2 === undefined ? "—" : escapeHtml(String(r.c2))}</div>
+          <div class="rg-cell" role="cell" style="background:${palL.bg}">${r.c1 === null ? nullBadge() : `${escapeHtml(String(r.c1))}<span style="font-size:0.7em;opacity:0.5"> (left)</span>`}</div>
+          <div class="rg-cell" role="cell" style="background:${palR.bg}">${r.c2 === null ? nullBadge() : r.c2 === undefined ? "—" : `${escapeHtml(String(r.c2))}<span style="font-size:0.7em;opacity:0.5"> (right)</span>`}</div>
         </div>`,
           )
           .join("")
