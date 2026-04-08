@@ -1,122 +1,199 @@
-# Keyboard Accessibility Issues - Ready for GitHub
+# GitHub Issues: Keyboard Accessibility
 
-## Quick Copy-Paste Issues
+## SIMPLE SUMMARY
 
-### Issue #1: Delete Operations Not Keyboard Accessible
-```
-- [ ] No keyboard shortcut to delete a row (× button is click-only)
-- [ ] No keyboard shortcut to delete a column (× button is click-only)  
-- [ ] No keyboard shortcut to delete a table (× button is click-only)
-- [ ] Suggest: Ctrl+Delete for row, Ctrl+Shift+Delete for column, Ctrl+Alt+Delete for table
-```
+**Title**: ⌨️ Add missing keyboard shortcuts and accessibility features
 
-### Issue #2: Join Condition Editor Not Keyboard Accessible
-```
-- [ ] Join type/operator dropdown is click-only
-- [ ] Table selectors are click-only dropdowns
-- [ ] Column selectors are click-only dropdowns
-- [ ] Add/Remove condition buttons not keyboard accessible
-- [ ] Keyboard users cannot create or modify join conditions
-```
+**Description**:
+While basic keyboard navigation works (Tab, Enter, Escape), several features are still click-only, blocking keyboard-only users from efficient data entry and operations.
 
-### Issue #3: Missing Keyboard Shortcut Indicators
-```
-- [ ] No UI indication that Ctrl+Enter, Ctrl+N, Ctrl+Shift+R exist
-- [ ] Users discover shortcuts by accident or documentation only
-- [ ] Buttons should show keyboard hints in tooltips/help text
-- [ ] Add Help/Keyboard section to About page
-```
+**Currently Working**:
+- ✅ Tab between cells
+- ✅ Enter/Escape for edits
+- ✅ Ctrl+Enter (add row), Ctrl+N (add table), Ctrl+Shift+R (reset)
+- ✅ Space to toggle booleans
 
-### Issue #4: Spreadsheet-Style Navigation Missing
-```
-- [ ] Arrow keys (up/down/left/right) don't navigate between cells
-- [ ] Enter key doesn't move to next cell (like Excel)
-- [ ] No Tab behavior to move to next row after last column
-- [ ] Makes bulk data entry slower than necessary
-```
+**Currently Broken** (Click-Only):
+- ❌ Delete row/column/table (only × button)
+- ❌ Edit join conditions (all dropdowns are click-only)
+- ❌ No keyboard hints in UI (users don't know shortcuts exist)
+- ❌ No arrow key navigation between cells
+- ❌ No copy-paste support (Ctrl+C/V)
 
-### Issue #5: Data Entry Features Missing
-```
-- [ ] Copy-paste (Ctrl+C/V) not supported for cells
-- [ ] Ctrl+A in cell doesn't select all text
-- [ ] No select-all shortcut for rows/columns
-- [ ] Reduces efficiency for users with large datasets
-```
-
-### Issue #6: Boolean Checkbox Accessibility
-```
-- [ ] Checkbox has aria-label but no visible column label
-- [ ] Multiple checkboxes in a row are confusing without labels
-- [ ] In 4-column table with 3 booleans, unclear which is which
-- [ ] Add visible text label next to checkbox (e.g., "Active:")
-```
-
-### Issue #7: Tab Order and Focus Management
-```
-- [ ] Focus order may not follow logical flow through form
-- [ ] No aria-flowto to indicate intended tab order
-- [ ] Users might get lost navigating complex layout with Tab
-- [ ] Audit and document expected tab order
-```
-
-### Issue #8: Undo/Redo Not Supported
-```
-- [ ] Ctrl+Z doesn't undo changes
-- [ ] Ctrl+Y doesn't redo
-- [ ] Users must manually retype or use Reset button
-- [ ] Should maintain undo history for edits
-```
+**Testing** (Pick Any):
+- [ ] Try deleting a row with keyboard only (no click) → Should work with shortcut
+- [ ] Try editing a join condition with Tab only → Should access all fields
+- [ ] Look for keyboard hints on buttons → Should show available shortcuts
+- [ ] Try arrow keys to navigate cells → Should move between cells
 
 ---
 
-## Single-Line Issue Template
+## DETAILED INFORMATION
 
-Use these as GitHub issue titles/descriptions:
+### Currently Working ✅
 
 ```
-🚀 Keyboard Shortcut: Delete row [Ctrl+Delete]
-🚀 Keyboard Shortcut: Delete column [Ctrl+Shift+Delete]
-🚀 Keyboard Shortcut: Delete table [Ctrl+Alt+Delete]
-🚀 Join condition editor should support keyboard navigation and Tab access
-🚀 Add tooltip/help text showing available keyboard shortcuts
-🚀 Support arrow key navigation between table cells
-🚀 Support Enter key to move to next cell (spreadsheet behavior)
-🚀 Add copy-paste support (Ctrl+C/V) for table cells
-🚀 Boolean checkboxes need visible column labels, not just aria-label
-🚀 Implement Ctrl+Z (Undo) and Ctrl+Y (Redo) support
-🚀 Document and optimize Tab focus order through all controls
-🚀 Add keyboard accessibility guide to Help/About section
+Ctrl+Enter    → Add row to current table
+Ctrl+N        → Add new table
+Ctrl+Shift+R  → Reset all data
+Tab           → Navigate to next cell
+Shift+Tab     → Navigate to previous cell
+Enter         → Save table/column name edit
+Escape        → Cancel and revert edit
+Space         → Toggle boolean checkbox
 ```
+
+### Missing Keyboard Shortcuts ❌
+
+#### Issue #1: Delete Operations Not Keyboard Accessible
+**Problem**: Only × button (click-only) to delete rows, columns, or tables
+**Suggested Shortcuts**:
+- Ctrl+Delete → Delete row
+- Ctrl+Shift+Delete → Delete column
+- Ctrl+Alt+Delete → Delete table
+
+**Impact**: Users can't delete anything with keyboard
 
 ---
 
-## WCAG 2.1 Compliance Mapping
+#### Issue #2: Join Condition Editor Not Keyboard Accessible
+**Problem**: All dropdowns for join conditions are click-only
+- Join type/operator selector
+- Table selectors (left/right)
+- Column selectors (left/right)
+- Add/Remove condition buttons
 
-| Issue | WCAG Criteria | Level |
-|-------|---------------|-------|
-| Delete shortcuts missing | 2.1.1 Keyboard | AA |
-| Join editor click-only | 2.1.1 Keyboard | AA |
-| No keyboard hints | 2.4.4 Link Purpose | AA |
-| No arrow navigation | 2.1.1 Keyboard | AAA |
-| Copy-paste missing | 2.1.1 Keyboard | AAA |
-| Checkbox label missing | 1.3.1 Info & Relationships | A |
-| Tab order not documented | 2.4.3 Focus Order | A |
+**Impact**: Keyboard users cannot create or modify join conditions at all
 
 ---
 
-## Currently Working ✅
+#### Issue #3: Missing Keyboard Shortcut Indicators
+**Problem**: No UI indication that shortcuts exist
+- Ctrl+Enter, Ctrl+N, Ctrl+Shift+R not shown anywhere
+- Users discover shortcuts by accident or documentation only
 
-Users CAN currently:
-- Tab between all cells
-- Use Enter/Escape in text edits
-- Toggle boolean checkboxes with Space
-- Use Ctrl+Enter (add row), Ctrl+N (add table), Ctrl+Shift+R (reset)
-- See focus outlines on all interactive elements
+**Impact**: Users don't know shortcuts exist, stick to mouse
 
-Users CANNOT currently:
-- Delete rows/columns/tables with keyboard
-- Edit join conditions with keyboard
-- Know what keyboard shortcuts exist
-- Use arrow keys or Enter like a spreadsheet
-- Copy/paste between cells
-- Undo recent changes
+---
+
+#### Issue #4: Spreadsheet-Style Navigation Missing
+**Problem**: No arrow key navigation or Enter-to-move behavior
+- Arrow keys don't navigate between cells
+- Enter doesn't move to next cell (like Excel)
+- No Tab behavior to move to next row after last column
+
+**Impact**: Data entry is slower than necessary
+
+---
+
+#### Issue #5: Copy-Paste Support Missing
+**Problem**: Can't copy/paste cell values
+- Ctrl+C/V not supported
+- Users must retype values
+
+**Impact**: Bulk data entry very inefficient
+
+---
+
+#### Issue #6: Undo/Redo Not Supported
+**Problem**: No undo/redo functionality
+- Ctrl+Z doesn't undo changes
+- Ctrl+Y doesn't redo
+- Users must manually revert or use Reset
+
+**Impact**: Accidental changes can't be easily reverted
+
+---
+
+#### Issue #7: Boolean Checkbox Visual Accessibility
+**Problem**: Checkbox has aria-label but no visible text label
+- Multiple booleans in a row are confusing
+- Unclear which checkbox represents which column
+
+**Impact**: Keyboard users can't easily tell which column they're in
+
+---
+
+### WCAG Compliance Mapping
+
+| Issue | WCAG Criteria | Level | Status |
+|-------|---------------|-------|--------|
+| Delete shortcuts | 2.1.1 Keyboard | AA | ❌ Missing |
+| Join editor keyboard | 2.1.1 Keyboard | AA | ❌ Missing |
+| Shortcut indicators | 2.4.4 Link Purpose | AA | ❌ Missing |
+| Arrow key navigation | 2.1.1 Keyboard | AAA | ❌ Missing |
+| Copy-paste support | 2.1.1 Keyboard | AAA | ❌ Missing |
+| Undo/Redo | 2.1.1 Keyboard | AAA | ❌ Missing |
+| Checkbox labels | 1.3.1 Info Relationships | A | ⚠️ Partial |
+
+### Implementation Priority
+
+#### High Priority (Blocker for keyboard-only users)
+1. Delete row/column/table shortcuts
+2. Join condition editor keyboard access
+3. Keyboard shortcut indicators in UI
+
+#### Medium Priority (Nice to have)
+4. Spreadsheet-style Enter/arrow behavior
+5. Copy-paste support
+6. Visual checkbox labels
+
+#### Low Priority (Polish)
+7. Undo/Redo functionality
+8. Column reordering via keyboard
+9. Keyboard accessibility guide/help
+
+### Files to Modify
+
+**High Priority**:
+- `pages/joins/joins.js` - Add keyboard event listeners for delete shortcuts
+- `js/components/dropdown-handler.js` - Ensure join condition dropdowns are keyboard accessible
+- Multiple files - Add keyboard shortcut indicators in UI (tooltips)
+
+**Medium Priority**:
+- `pages/joins/joins-ui.js` - Add arrow key navigation to table cells
+- `pages/joins/joins.js` - Add copy-paste handlers
+
+**Low Priority**:
+- `js/core/state.js` - Add undo/redo history
+- Help documentation - Add keyboard guide
+
+### Testing Checklist
+
+**Keyboard-Only Testing**:
+- [ ] Delete row with keyboard only
+- [ ] Delete column with keyboard only
+- [ ] Delete table with keyboard only
+- [ ] Edit all join condition fields with Tab only
+- [ ] Add new join condition with keyboard
+- [ ] Remove join condition with keyboard
+- [ ] Navigate all cells with arrow keys
+- [ ] See keyboard shortcuts displayed somewhere in UI
+
+**Accessibility Testing**:
+- [ ] Tab order is logical
+- [ ] Focus visible on all interactive elements
+- [ ] Screen reader announces shortcuts
+- [ ] No keyboard traps (can always escape)
+
+### Related Files & Issues
+- KEYBOARD_ACCESSIBILITY_CHECKLIST.md - Full tracking list
+- Previous fixes: Tab navigation, Escape-to-cancel
+- Keyboard help text (aria-describedby) already added
+
+### Status
+⚠️ **PARTIALLY COMPLETE**
+- [x] Tab navigation working
+- [x] Enter/Escape working
+- [x] Basic shortcuts (Ctrl+N, Ctrl+Enter, Ctrl+Shift+R) working
+- [ ] Delete shortcuts missing
+- [ ] Join editor not keyboard accessible
+- [ ] No shortcut indicators in UI
+- [ ] No arrow key navigation
+- [ ] No copy-paste
+
+### Labels
+`enhancement` `accessibility` `keyboard-navigation` `usability`
+
+### Priority
+High - Keyboard users are completely blocked for several features
