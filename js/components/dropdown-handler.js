@@ -18,11 +18,22 @@ export const DropdownHandler = {
 
     const toggle = wrapper.querySelector(".dropdown-toggle");
     const menu = wrapper.querySelector(".dropdown-menu");
-    const items = menu.querySelectorAll(".dropdown-item");
     const displaySpan = toggle.querySelector("span:first-child");
     const placeholderText = displaySpan.textContent;
 
     if (!toggle || !menu) return;
+
+    // Remove old items' event listeners by cloning and replacing
+    const oldItems = menu.querySelectorAll(".dropdown-item");
+    oldItems.forEach(item => {
+      const newItem = item.cloneNode(false);
+      newItem.className = item.className;
+      newItem.setAttribute("data-value", item.getAttribute("data-value"));
+      newItem.textContent = item.textContent;
+      item.parentNode.replaceChild(newItem, item);
+    });
+
+    const items = menu.querySelectorAll(".dropdown-item");
 
     // Store dropdown instance
     const dropdownInstance = { wrapper, toggle, menu, items, displaySpan, placeholderText, wrapperId };
@@ -38,6 +49,13 @@ export const DropdownHandler = {
         this._closeAllDropdowns(wrapperId);
         toggle.setAttribute("aria-expanded", "true");
         menu.style.display = "block";
+
+        // Position dropdown relative to toggle button (for modals and overflow containers)
+        const rect = toggle.getBoundingClientRect();
+        menu.style.position = "fixed";
+        menu.style.left = rect.left + "px";
+        menu.style.top = (rect.bottom + 4) + "px"; // 4px gap below toggle
+        menu.style.width = rect.width + "px";
       } else {
         toggle.setAttribute("aria-expanded", "false");
         menu.style.display = "none";

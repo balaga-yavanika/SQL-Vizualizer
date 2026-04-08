@@ -3,6 +3,7 @@
 /* ============================================= */
 @import url("/global/tokens.css");
 
+/* ── Base ── */
 .custom-dropdown {
   position: relative;
   width: 100%;
@@ -15,11 +16,8 @@
   justify-content: space-between;
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid oklch(from var(--color-primary) l c h / 0.15);
+  border: 1px solid var(--color-pr-border);
   background: var(--color-bg-vdb-shade-1);
-  transition:
-    background 0.15s ease,
-    border-color 0.15s ease;
 }
 
 @media (hover: hover) {
@@ -38,7 +36,6 @@
   flex-shrink: 0;
   margin-left: 8px;
   font-size: 11px;
-  transition: transform 0.15s ease;
 }
 
 .dropdown-toggle[aria-expanded="true"] .dropdown-arrow {
@@ -47,17 +44,16 @@
 
 /* ── Menu ── */
 .dropdown-menu {
-  position: absolute;
-  inset-inline: 0;
-  top: calc(100% + 4px);
-  z-index: 100;
+  position: fixed;
+  z-index: 9999;
   max-height: 300px;
   overflow-y: auto;
-  background: var(--color-bg-vdb-shade-2);
-  border: 1px solid var(--color-border);
+  background: var(--color-bg-vdb-shade-1);
+  border: 1px solid var(--color-pr-border);
   border-radius: 6px;
   box-shadow: 0 4px 12px rgb(0 0 0 / 0.15);
   animation: dropdownSlideDown 0.15s ease-out;
+  /* Position (left, top, width) set dynamically by JavaScript */
 }
 
 [data-theme="light"] .dropdown-menu {
@@ -85,15 +81,14 @@
 .dropdown-menu::-webkit-scrollbar {
   width: 6px;
 }
+
 .dropdown-menu::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .dropdown-menu::-webkit-scrollbar-thumb {
   border-radius: 3px;
-  background: color-mix(in srgb, var(--color-border) 60%, transparent);
-}
-.dropdown-menu::-webkit-scrollbar-thumb:hover {
-  background: color-mix(in srgb, var(--color-border) 80%, transparent);
+  background: var(--color-bg-vdb-shade-2);
 }
 
 /* ── Items ── */
@@ -102,39 +97,37 @@
   width: 100%;
   padding: 10px 12px;
   border: none;
-  border-radius: 0;
-  background: transparent;
-  color: inherit;
+ 
   text-align: left;
-  font-family: inherit;
   font-size: inherit;
-  cursor: pointer;
-  transition: background 0.1s ease;
 }
 
-.dropdown-item:hover {
-  background: color-mix(in srgb, var(--color-primary) 10%, var(--color-bg-vdb));
+@media (hover: hover) {
+  .dropdown-item:hover {
+    background: var(--color-bg-vdb-shade-1);
+    color: var(--color-secondary);
+  }
 }
 
 .dropdown-item.selected {
-  background: color-mix(in srgb, var(--color-primary) 20%, var(--color-bg-vdb));
+  background: var(--color-bg-vdb-shade-1);
   color: var(--color-primary);
   font-weight: 500;
 }
 
-/* ============================================= */
-/* RESPONSIVE                                    */
-/* ============================================= */
+/* ── Responsive ── */
 @media (max-width: 640px) {
   .dropdown-toggle,
   .dropdown-item {
     padding: 9px 10px;
     font-size: 12px;
   }
+
   .dropdown-arrow {
     font-size: 10px;
     margin-left: 6px;
   }
+
   .dropdown-menu {
     max-height: 200px;
   }
@@ -142,18 +135,17 @@
 
 @media (max-width: 480px) {
   .dropdown-toggle,
-  .dropdown-item,
-  .dropdown-menu {
-    font-size: 11px;
-  }
-  .dropdown-toggle,
   .dropdown-item {
     padding: 8px 10px;
+    font-size: 11px;
   }
+
+  .dropdown-menu {
+    font-size: 11px;
+    max-height: 180px;
+  }
+
   .dropdown-arrow {
     font-size: 9px;
-  }
-  .dropdown-menu {
-    max-height: 180px;
   }
 }
