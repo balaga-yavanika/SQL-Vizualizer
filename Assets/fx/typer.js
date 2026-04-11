@@ -10,9 +10,11 @@ if (!el || !words.length) {
 }
 
 // ─── State ────────────────────────────────────────────────────────────────────
-let wordIndex = 0; // Which word from the array we're on (0, 1, 2, ...)
-let charIndex = 0; // How many characters of current word to show
-let typing = true; // Are we typing (true) or deleting (false)?
+// Start on "Visualizer" (index 1) fully typed — matches the static HTML fallback
+// so the pre-filled text is never cleared before the animation begins.
+let wordIndex = 1; // Which word from the array we're on (0, 1, 2, ...)
+let charIndex = words[1].length; // How many characters of current word to show
+let typing = false; // Are we typing (true) or deleting (false)?
 let timeoutId = null; // Store timeout ID to prevent memory leaks
 
 // ─── Animation trigger ─────────────────────────────────────────────────────────

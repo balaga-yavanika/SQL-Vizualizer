@@ -1,12 +1,13 @@
 {
-  "title": "Y-SQLVIZ — License & Terms",
-  "description": "License and terms for Y-SQLVIZ. Educational use only.",
-  "keywords": "license, terms, usage rights",
+  "title": "License & Terms: Y-SQLVIZ MIT License | YSQLVIZ",
+  "description": "Y-SQLVIZ license, privacy policy, and terms of use. MIT Licensed open-source SQL visualizer. Free for educational and personal use.",
+  "keywords": "MIT license, privacy, terms, open source, Y-SQLVIZ",
   "author": "Y-SQLVIZ",
-  "robots": "index, follow",
-  "canonical": "/pages/about/privacy.html",
-  "og_title": "Y-SQLVIZ License",
-  "og_description": "License and terms for Y-SQLVIZ SQL Visualizer.",
+  "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+  "csp": "default-src 'self'; script-src 'self' 'sha256-vvt4KWwuNr51XfE5m+hzeNEGhiOfZzG97ccfqGsPwvE='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; object-src 'none'",
+  "canonical": "/pages/about/privacy/",
+  "og_title": "License & Terms: Y-SQLVIZ MIT License | YSQLVIZ",
+  "og_description": "Y-SQLVIZ license, privacy policy, and terms of use. MIT Licensed open-source SQL visualizer. Free for educational and personal use.",
   "og_type": "website",
   "og_image": {
     "url": "{{BASE_URL}}/Assets/preview.jpg",
@@ -15,11 +16,19 @@
     "alt": "Y-SQLVIZ License"
   },
   "twitter_card": "summary_large_image",
-  "twitter_title": "Y-SQLVIZ License",
-  "twitter_description": "License and terms for Y-SQLVIZ.",
+  "twitter_title": "License & Terms: Y-SQLVIZ MIT License | YSQLVIZ",
+  "twitter_description": "Y-SQLVIZ is MIT Licensed, open-source, free for educational and personal use.",
   "twitter_image": {
     "url": "{{BASE_URL}}/Assets/preview.jpg",
     "alt": "License"
+  },
+  "profile_link": "https://medium.com/@balaga-yavanika",
+  "jsonld": {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "License & Terms",
+    "description": "Y-SQLVIZ license, privacy policy, and terms of use. MIT Licensed.",
+    "url": "{{BASE_URL}}/pages/about/privacy/"
   },
   "showBreadcrumb": true,
   "showLoader": false,

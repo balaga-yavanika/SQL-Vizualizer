@@ -1,13 +1,16 @@
 /* ============================================= */
-/* NAVIGATION CARDS GRID                         */
-/* Tokens: --button-accent-muted, --button-border, --button-min-height, --button-label-height in tokens.css */
+/* NAVIGATION CARDS GRID                           */
 /* ============================================= */
+
 .buttons-grid {
+  --grid-gap: var(--space-lg);
+  --max-width: 500px;
+
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-lg);
-  width: min(500px, 100%);
-  margin: 0 auto;
+  gap: var(--grid-gap);
+  inline-size: min(var(--max-width), 100%);
+  margin-inline: auto;
 }
 
 .button-item {
@@ -17,22 +20,24 @@
 }
 
 .button-label {
-  height: var(--button-label-height);
   margin-block-start: var(--space-md);
   font-family: var(--font-mono);
   font-size: var(--text-fine);
   color: var(--button-accent-muted);
   text-transform: uppercase;
   text-align: center;
+  line-height: 1.2;
 }
 
 .button-link {
+  --btn-border: 2px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: var(--button-min-height);
+  min-block-size: var(--button-min-height);
   padding: var(--space-lg);
-  border: 2px solid var(--button-border);
+  border: var(--btn-border) solid var(--button-border);
   border-radius: var(--radius-md);
   font-family: var(--font-mono);
   font-size: var(--text-tag);
@@ -41,49 +46,49 @@
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
-  transition:
-    border-color 0.3s ease,
-    color 0.3s ease;
-}
 
-@media (hover: hover) {
-  .button-link:hover {
+  &:hover {
     border-color: var(--color-primary);
     color: var(--color-primary);
   }
-}
 
-.button-link:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
 }
 
 /* ============================================= */
 /* RESPONSIVE                                    */
 /* ============================================= */
+
 @media (max-width: 1024px) {
   .buttons-grid {
-    gap: var(--space-md);
-    width: min(700px, 100%);
+    --grid-gap: var(--space-md);
+    --max-width: 700px;
   }
 }
 
 @media (max-width: 768px) {
   .buttons-grid {
-    gap: clamp(var(--space-sm), 0.8rem, var(--space-md));
-    width: min(600px, 100%);
+    --grid-gap: clamp(var(--space-sm), 0.8rem, var(--space-md));
+    --max-width: 600px;
   }
 }
 
 @media (max-width: 480px) {
   .buttons-grid {
-    gap: var(--space-sm);
-    width: 80%;
+    --grid-gap: var(--space-sm);
+    --max-width: 80%;
   }
 
   .button-link {
     padding: var(--space-md);
-    min-height: 60px;
+    min-block-size: 60px;
     font-size: var(--text-fine);
   }
 

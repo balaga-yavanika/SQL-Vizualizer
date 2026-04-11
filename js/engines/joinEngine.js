@@ -19,18 +19,10 @@ export function validateSetOperatorCompatibility(li, ri) {
     };
   }
 
-  // Check that columns are in the same order (by ID and type)
+  // Check that columns are compatible by position (count + type)
   for (let i = 0; i < leftTable.columns.length; i++) {
     const lCol = leftTable.columns[i];
     const rCol = rightTable.columns[i];
-
-    // Check if column IDs match (ensures same logical column)
-    if (lCol.id !== rCol.id) {
-      return {
-        valid: false,
-        error: `Column order mismatch at position ${i + 1}: "${lCol.name}" (ID: ${lCol.id}) vs "${rCol.name}" (ID: ${rCol.id}). Reorder columns to match.`
-      };
-    }
 
     // Check data types match
     if (lCol.type !== rCol.type) {
@@ -133,6 +125,11 @@ export function computeResult(op) {
     vr = validRows(ri);
   const kv = (ti, i) => getKeyValue(ti, i);
 
+  // ── Helper: serialize row values by column position (not by column ID keys)
+  // Needed so rows from two different tables with different column IDs can be compared.
+  const rowValuesKey = (table, rowIndex) =>
+    JSON.stringify(table.columns.map(c => table.rows[rowIndex][c.id]));
+
   // ── Set operators ────────────────────────────────────────────────────────────
   if (op === "union") {
     // UNION: combine unique rows from both tables, show all columns
@@ -161,10 +158,7 @@ export function computeResult(op) {
     const seen = new Set();
     
     for (const row of allRows) {
-      const table = state.tables[row.ti];
-      const rowData = table.rows[row.ri];
-      // Create key from all column values
-      const key = JSON.stringify(rowData);
+      const key = rowValuesKey(state.tables[row.ti], row.ri);
       if (!seen.has(key)) {
         seen.add(key);
         uniqueRows.push(row);
@@ -195,14 +189,10 @@ export function computeResult(op) {
     const leftColIds = leftTable.columns.map(c => c.id);
     const rightColIds = rightTable.columns.map(c => c.id);
     
-    // Build set of right row keys
-    const rightKeys = new Set(vr.map(b => {
-      const row = state.tables[ri].rows[b.i];
-      return JSON.stringify(row);
-    }));
-    
+    const rightKeys = new Set(vr.map(b => rowValuesKey(state.tables[ri], b.i)));
+
     return vl
-      .filter(a => !rightKeys.has(JSON.stringify(state.tables[li].rows[a.i])))
+      .filter(a => !rightKeys.has(rowValuesKey(state.tables[li], a.i)))
       .map(x => ({ ti: li, ri: x.i, cols: leftColIds, isSetOp: true }));
   }
 
@@ -213,12 +203,10 @@ export function computeResult(op) {
     const leftColIds = leftTable.columns.map(c => c.id);
     const rightColIds = rightTable.columns.map(c => c.id);
     
-    const rightKeys = new Set(vr.map(b => 
-      JSON.stringify(state.tables[ri].rows[b.i])
-    ));
-    
+    const rightKeys = new Set(vr.map(b => rowValuesKey(state.tables[ri], b.i)));
+
     return vl
-      .filter(a => rightKeys.has(JSON.stringify(state.tables[li].rows[a.i])))
+      .filter(a => rightKeys.has(rowValuesKey(state.tables[li], a.i)))
       .map(x => ({ ti: li, ri: x.i, cols: leftColIds, isSetOp: true }));
   }
 
@@ -226,12 +214,12 @@ export function computeResult(op) {
   if (op === "left_anti")
     return vl
       .filter((a) => !vr.some((b) => matchesConditions(li, a.i, ri, b.i)))
-      .map((a) => ({ c1: kv(li, a.i), c2: null, i1: a.i, i2: -1 }));
+      .map((a) => ({ c1: kv(li, a.i), c2: undefined, i1: a.i, i2: -1 }));
 
   if (op === "right_anti")
     return vr
       .filter((b) => !vl.some((a) => matchesConditions(li, a.i, ri, b.i)))
-      .map((b) => ({ c1: null, c2: kv(ri, b.i), i1: -1, i2: b.i }));
+      .map((b) => ({ c1: undefined, c2: kv(ri, b.i), i1: -1, i2: b.i }));
 
   if (op === "left_semi")
     return vl

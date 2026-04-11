@@ -8,12 +8,12 @@
 /* ============================================= */
 :root {
   /* Colors */
-  --color-category-planner: #378add;
-  --color-category-source: #d85a30;
-  --color-category-filter: #1d9e75;
-  --color-category-shape: #ba7517;
-  --color-category-output: #7f77dd;
-  --color-category-dedup: #d4537e;
+  --color-category-planner: hsl(210, 80%, 60%);
+  --color-category-source: hsl(15, 70%, 60%);
+  --color-category-filter: hsl(161, 80%, 40%); 
+  --color-category-shape: hsl(35, 80%, 60%);
+  --color-category-output: hsl(245, 60%, 70%);
+  --color-category-dedup: hsl(340, 60%, 70%);
 
   /* Component sizing */
   --size-circle: 28px;
@@ -92,7 +92,7 @@
   top: calc(var(--size-circle) / 4);
   bottom: 0;
   width: var(--size-line-thickness);
-  background: var(--color-bg-vdb);
+  background: var(--color-bg-vdb-shade-2);
   pointer-events: none;
   z-index: -2;
 }
@@ -117,10 +117,10 @@
 }
 
 .step:hover {
-  background: color-mix(in srgb, var(--color-hover) 95%, transparent);
+  background: var(--color-bg-vdb-shade-1);
 }
 .step.active {
-  background: var(--color-hover);
+  background: oklch(from var(--color-pr-border) calc(l - 0.1) calc(c - 0.1) h);
 }
 
 .step-num {
@@ -129,13 +129,13 @@
   justify-content: center;
   width: var(--size-circle);
   height: var(--size-circle);
-  border: var(--size-circle-border) solid var(--color-border);
+  border: var(--size-circle-border) solid var(--color-pr-border);
   border-radius: 50%;
   flex-shrink: 0;
   font-family: var(--font-main);
   font-size: 11px;
   font-weight: 500;
-  color: oklch(from var(--color-primary) calc(l + 0.6) c h);
+  color: var(--color-pr-bold);
   background: var(--color-bg-vdb);
 }
 
@@ -154,7 +154,7 @@
   margin-left: auto;
   flex-shrink: 0;
   font-size: 9px;
-  color: oklch(from var(--color-primary) calc(l + 0.6) c h);
+  color: var(--color-pr-bold);
   opacity: 0;
   transition: var(--transition-opacity);
 }
@@ -172,7 +172,7 @@
   margin-left: var(--space-sidenote-offset);
   font-size: var(--text-fine);
   letter-spacing: 0.04em;
-  color: oklch(from var(--color-primary) calc(l + 0.6) c h);
+  color: var(--color-pr-para);
   position: relative;
   z-index: 1;
 }
@@ -181,7 +181,7 @@
   content: "";
   width: var(--size-line-connector);
   height: var(--size-line-thickness);
-  background: var(--color-bg-vdb);
+  background: var(--color-bg-vdb-shade-2);
   flex-shrink: 0;
 }
 

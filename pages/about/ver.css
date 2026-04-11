@@ -9,19 +9,19 @@ body {
 
 li span {
   font-family: var(--font-mono), monospace;
-  font-size: 0.82em;
-  background: var(--color-bg-vdb);
-  border: 1px solid var(--color-border);
+  font-size: var(--text-fine);
+  background: var(--color-bg-vdb-shade-2);
+  border: 1px solid var(--color-bg-vdb-shade-3);
   padding: 1px 4px;
   border-radius: 4px;
 }
 li span a {
   position: relative;
-  color: var(--color-span);
+  color: var(--color-tertiary);
 }
 li span a:hover {
   /* color: oklch(from var(--color-span) calc(l + 0.15) c h); lighter */
-  color: oklch(from var(--color-span) l c h / 0.6); /* 60% — still visible */
+  color: oklch(from var(--color-tertiary) calc(l + 0.15) c h ); 
 }
 
 /* ── List ── */
@@ -99,10 +99,12 @@ h6 {
 }
 
 .version-tag {
-  padding: 4px 8px;
+  padding: 3px 12px;
+  border: 1px solid var(--color-bg-vdb-shade-3);
   border-radius: var(--radius-sm);
-  background: var(--color-bg-vdb);
+  background: var(--color-bg-vdb-shade-2);
   text-transform: uppercase;
+  color: var(--color-pr-para);
 }
 
 .version-tag.latest {

@@ -4,15 +4,15 @@
 
 /* ── Code block container ── */
 .code-block {
+  border: 0.5px solid var(--color-bg-vdb-shade-3);
   border-radius: var(--radius-md);
   background: var(--color-bg-vdb-shade-1);
-  border: 0.5px solid var(--color-bg-vdb-shade-3);
 }
 
 .code-header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   gap: var(--space-sm);
 
   padding-inline: var(--space-sm);
@@ -20,11 +20,11 @@
 }
 
 .code-lang {
-  font-family: var(--font-mono);
-  font-size: var(--text-fine);
-  font-weight: 500;
-  letter-spacing: 0.05em;
   color: var(--color-pr-para);
+  font-weight: 500;
+  font-size: var(--text-fine);
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
@@ -32,15 +32,15 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 10px;
   border-radius: var(--radius-sm);
+  padding: 4px 10px;
   font-size: var(--text-fine);
 }
 
 .copy-btn:hover {
   border-color: var(--color-primary);
-  color: var(--color-primary);
   background: var(--color-bg-vdb-shade-2);
+  color: var(--color-primary);
 }
 
 .copy-btn:focus-visible {
@@ -58,21 +58,42 @@
   font-weight: 500;
 }
 
+/* ── SQL String Highlighting ── */
+.sql-string {
+  color: #CE9178;
+}
+
+/* ── SQL Number Highlighting ── */
+.sql-number {
+  color: #B5CEA8;
+}
+
+/* ── SQL Comment Highlighting ── */
+.sql-comment {
+  color: #6A9955;
+  font-style: italic;
+}
+
+/* ── SQL Function Highlighting ── */
+.sql-function {
+  color: #DCDCAA;
+}
+
 /* ── Code display ── */
 pre {
-  padding: var(--space-md);
+  border: 1px solid var(--color-bg-vdb-shade-3);
   border-radius: var(--radius-sm);
   background: var(--color-bg-vdb-shade-2);
-  border: 1px solid var(--color-bg-vdb-shade-3);
+  padding: var(--space-md);
   overflow-x: auto;
 }
 
 code {
-  font-family: var(--font-mono);
-  font-size: var(--text-code);
-  line-height: 1.5;
   border: none;
   pointer-events: none;
+  font-size: var(--text-code);
+  line-height: 1.5;
+  font-family: var(--font-mono);
 }
 
 pre code {
@@ -81,9 +102,10 @@ pre code {
 
 /* Inline code */
 :not(pre) > code {
-  padding: 2px 6px;
-  border-radius: var(--radius-xs);
+  border: 1px solid var(--color-bg-vdb-shade-3);
+  border-radius: var(--radius-sm);
   background: var(--color-bg-vdb-shade-2);
+  padding: 2px 6px;
   color: var(--color-secondary);
   font-size: var(--text-fine);
 }

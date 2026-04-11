@@ -4,6 +4,29 @@
 /* Table grid layout, scroll wrappers, containers */
 
 /* ============================================= */
+/* NUMBER INPUT — HIDE SPINNER ARROWS            */
+/* ============================================= */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+  display: none !important;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield !important;
+}
+
+input[type="number"].id-input::-webkit-outer-spin-button,
+input[type="number"].id-input::-webkit-inner-spin-button,
+input[type="number"].col-input::-webkit-outer-spin-button,
+input[type="number"].col-input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+  display: none !important;
+}
+
+/* ============================================= */
 /* HEADING — SHARE BUTTON                       */
 /* ============================================= */
 .share-btn-subtle {

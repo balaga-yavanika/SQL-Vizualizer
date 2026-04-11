@@ -1,11 +1,7 @@
 /* ============================================= */
 /* JOINS PAGE — PRESET DATASETS                  */
 /* ============================================= */
-/* Dataset selector section and controls */
 
-/* ============================================= */
-/* PRESET SECTION                                */
-/* ============================================= */
 .preset-section {
   margin-block-start: var(--space-lg);
 }
@@ -23,24 +19,22 @@
   min-width: 150px;
 }
 
-/* ============================================= */
-/* PRESET BUTTONS                                */
-/* ============================================= */
+/* ── Preset Buttons ── */
 .preset-btn:active {
   transform: scale(0.98);
 }
 
 @media (hover: hover) {
   .preset-btn:hover {
-    background: color-mix(in srgb, var(--color-primary) 15%, transparent);
-    border-color: var(--color-primary);
+    background: var(--color-reset);
+    border-color: var(--color-reset);
   }
 }
 
 .preset-btn.reset-btn {
-  border-color: oklch(from var(--color-reset) l c h / 0.2);
   background: oklch(from var(--color-reset) l c h / 0.12);
-  color: oklch(from var(--color-reset) calc(l + 0.09) c h);
+  border-color: oklch(from var(--color-reset) l c h / 0.2);
+  color: oklch(from var(--color-reset) calc(l + 0.05) c h);
 }
 
 @media (hover: hover) {

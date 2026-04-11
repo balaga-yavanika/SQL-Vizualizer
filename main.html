@@ -5,65 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- ─── SEO & Social ─────────────────────────────────────────── -->
-    <meta
-      name="description"
-      content="Y-SQLVIZ — An interactive SQL visualizer. Understand SQL joins, clauses, and queries visually. Learn SQL through live diagrams and examples."
-    />
-    <meta
-      name="keywords"
-      content="SQL visualizer, SQL joins, learn SQL, SQL clauses, visualize SQL, SQL query tool, interactive SQL, SQL tutorial, JOIN visualization, SQL SELECT, SQL WHERE, SQL GROUP BY, SQL ORDER BY, SQL HAVING, SQL subqueries, SQL for beginners, database learning tool"
-    />
+    <meta name="description" content="SQL confusing? Explore joins, execution order, and queries through free interactive diagrams — no experience needed." />
+    <meta name="keywords" content="SQL visualizer, SQL joins, learn SQL, execution order, interactive tutorial" />
     <meta name="author" content="Y-SQLVIZ" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="theme-color" content="#121212" />
 
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://YOUR_URL/" />
+    <link rel="canonical" href="https://sqlviz.vercel.app/" />
 
     <!-- Open Graph -->
-    <meta property="og:title" content="Y-SQLVIZ — SQL Visualizer" />
-    <meta
-      property="og:description"
-      content="Visualize SQL joins, clauses, and queries interactively. A free tool to learn and understand SQL through live diagrams."
-    />
+    <meta property="og:title" content="SQL Visualizer – Learn SQL Joins & Execution Order Visually" />
+    <meta property="og:description" content="SQL Visualizer is a free, interactive tool for mastering joins, execution order, and SQL queries. Learn through live diagrams, real examples, and no setup required." />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Y-SQLVIZ" />
-    <meta property="og:image" content="https://YOUR_URL/Assets/preview.jpg" />
+    <meta property="og:site_name" content="SQL Visualizer" />
+    <meta property="og:image" content="https://sqlviz.vercel.app/Assets/preview.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Y-SQLVIZ — SQL Visualizer preview" />
-    <meta property="og:url" content="https://YOUR_URL/" />
-    <meta property="og:locale" content="en_IN" />
+    <meta property="og:image:alt" content="Screenshot of SQL Visualizer showing an interactive SQL joins diagram" />
+    <meta property="og:url" content="https://sqlviz.vercel.app/" />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter/X -->
     <meta name="twitter:card" content="summary_large_image" />
+    <!-- Uncomment when Twitter account @Y_SQLVIZ is created and claimed:
     <meta name="twitter:site" content="@Y_SQLVIZ" />
     <meta name="twitter:creator" content="@Y_SQLVIZ" />
-    <meta name="twitter:title" content="Y-SQLVIZ — SQL Visualizer" />
-    <meta
-      name="twitter:description"
-      content="Visualize SQL joins, clauses, and queries interactively. Learn SQL through live diagrams."
-    />
-    <meta name="twitter:image" content="https://YOUR_URL/Assets/preview.jpg" />
-    <meta
-      name="twitter:image:alt"
-      content="Y-SQLVIZ — SQL Visualizer preview"
-    />
+    -->
+    <meta name="twitter:title" content="SQL Visualizer – Learn SQL Joins & Execution Order Visually" />
+    <meta name="twitter:description" content="Free SQL visualizer for mastering joins & execution order. Learn through interactive diagrams. No setup required." />
+    <meta name="twitter:image" content="https://sqlviz.vercel.app/Assets/preview.jpg" />
+    <meta name="twitter:image:alt" content="Screenshot of SQL Visualizer showing an interactive SQL joins diagram" />
 
     <!-- Profile -->
-    <link rel="me" href="https://medium.com/@whyaweeye25" />
+    <link rel="me" href="https://medium.com/@balaga-yavanika" />
 
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "WebApplication",
-        "name": "Y-SQLVIZ",
-        "url": "https://YOUR_URL/",
+        "name": "SQL Visualizer",
+        "url": "https://sqlviz.vercel.app/",
         "description": "An interactive SQL visualizer for learning SQL joins, clauses, and queries through live diagrams.",
         "applicationCategory": "EducationalApplication",
         "operatingSystem": "All",
-        "browserRequirements": "Requires JavaScript",
+        "browserRequirements": "Requires JavaScript enabled; Modern browser recommended",
         "offers": {
           "@type": "Offer",
           "price": "0",
@@ -71,60 +58,51 @@
         },
         "author": {
           "@type": "Person",
-          "name": "Y-SQLVIZ",
-          "url": "https://medium.com/@whyaweeye25"
+          "name": "Yavanika",
+          "url": "https://medium.com/@balaga-yavanika"
         },
-        "keywords": "SQL visualizer, SQL joins, learn SQL, SQL clauses, interactive SQL"
+        "keywords": "SQL visualizer, SQL joins, learn SQL, SQL clauses, interactive SQL",
+        "audience": {
+          "@type": "EducationalAudience",
+          "educationalRole": "student"
+        },
+        "educationalLevel": "Beginner"
       }
     </script>
 
-    <title>Y-SQLVIZ — SQL Visualizer</title>
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-vvt4KWwuNr51XfE5m+hzeNEGhiOfZzG97ccfqGsPwvE='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; object-src 'none'" />
+
+    <title>SQL Visualizer – Learn SQL Joins & Execution Order Visually</title>
 
     <!-- ─── Favicon ───────────────────────────────── -->
-    <link
-      rel="icon"
-      href="/Assets/Favicon/favicon_io/favicon.ico"
-      sizes="any"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="/Assets/Favicon/favicon_io/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="/Assets/Favicon/favicon_io/favicon-16x16.png"
-    />
+    <link rel="icon" href="/Assets/Favicon/favicon_io/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/Assets/Favicon/favicon_io/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/Assets/Favicon/favicon_io/favicon-16x16.png" />
     <link rel="manifest" href="/Assets/Favicon/favicon_io/site.webmanifest" />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="/Assets/Favicon/favicon_io/apple-touch-icon.png"
-    />
+    <link rel="apple-touch-icon" sizes="180x180" href="/Assets/Favicon/favicon_io/apple-touch-icon.png" />
 
     <!-- Font Awesome -->
+    <link rel="preload" href="/Assets/fonts/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/Assets/fonts/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/Assets/fonts/css/all.min.css" as="style" />
     <link rel="stylesheet" href="/Assets/fonts/css/all.min.css" />
+
+    <!-- Global Navigation & Menu Styles -->
+    <link rel="stylesheet" href="/global/nav.css" />
+    <link rel="stylesheet" href="/Assets/fx/menu-toggle.css" />
 
     <!-- ─── Google Fonts ─────────────────────────────── -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-      media="print"
-      onload="this.media = 'all'"
-    />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" as="style" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" media="print" />
     <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-      />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" />
     </noscript>
 
     <!-- ─── Page-specific CSS ─────────────────────────── -->
+    <link rel="preload" href="/pages/home/home.css" as="style" />
     <link rel="stylesheet" href="/pages/home/home.css" />
 
     <!-- ==== Scripts ==== -->
@@ -133,6 +111,7 @@
     <script src="/Assets/fx/menu-toggle.js" defer></script>
     <script type="module" src="/script.js" defer></script>
     <script type="module" src="/Assets/fx/typer.js" defer></script>
+    <script type="module" src="/Assets/fx/theme.js" defer></script>
   </head>
   <body>
     <!-- ── LOADING SCREEN ── -->
@@ -141,47 +120,79 @@
       <div id="percentage">[0%]</div>
     </div>
     <div class="outer-wrapper">
-      <div class="body-section" id="content">
-        <!-- Title Section -->
+        <div class="body-section" id="content">
+  <!-- Title Section -->
 
-        <div class="content-center">
-          <div class="title-section-wrapper">
-            <div>
-              <p class="page-version">
-                <i class="fa-solid fa-database"></i> v1.3
-              </p>
-            </div>
-            <div>
-              <h1 class="page-title">SQL&nbsp;<span id="type"></span></h1>
-            </div>
-            <div>
-              <p>Select a topic you'd like to visualize</p>
-            </div>
-          </div>
-          <!-- Buttons Grid -->
-          <div class="buttons-grid">
-            <!-- Row 1 -->
-            <div class="button-item">
-              <div class="button-label">[01]</div>
-              <a href="/pages/joins/joins.html" class="button-link">
-                <span>SQL<br />Joins</span>
-              </a>
-            </div>
-            <div class="button-item">
-              <div class="button-label">[02]</div>
-              <a href="/pages/execorder/eo.html" class="button-link">
-                <span>EXECUTION<br />ORDER</span>
-              </a>
-            </div>
-          </div>
+  <div class="content-layout-two-column">
+    <!-- Left Column: Title & Tagline -->
+    <div class="content-left-column">
+      <div class="title-section-wrapper">
+        <div>
+          <p class="page-version"><i class="fa-solid fa-database"></i> v 1.3</p>
         </div>
-        <!-- ── Window functions (next) ── -->
-
-        <div class="section-label">
-          <i class="fa-regular fa-calendar"></i>&nbsp;&nbsp;Coming next ⇾ window
-          functions. Stay Tuned.
+        <div>
+          <h1 class="page-title">
+            SQL&nbsp;
+            <br />
+            <span id="type">Visualizer</span>
+          </h1>
+        </div>
+        <div>
+          <p>Select a topic you'd like to visualize →</p>
+        </div>
+        <div>
+          <p class="site-description">
+            Interactive SQL visualizations for JOINS, execution order, window
+            functions, and more — built for beginners who want to understand
+            SQL, not just memorize it.
+          </p>
         </div>
       </div>
     </div>
+
+    <!-- Right Column: Vertical Navigation -->
+    <div class="content-right-column">
+      <p>⏷ Project Index</p>
+      <div class="pages-indicator">
+        <p>Active Pages ↷</p>
+      </div>
+      <h2 class="visually-hidden">Available SQL Topics</h2>
+      <div class="nav-vertical-list">
+        <a
+          href="/pages/joins/joins.html"
+          class="nav-link"
+          aria-label="SQL Joins – interactive visualizer for INNER, LEFT, RIGHT, and FULL joins"
+          data-content="01&nbsp;&nbsp;-&nbsp;&nbsp;SQL JOINS"
+          ><span>01&nbsp;&nbsp;-&nbsp;&nbsp;SQL JOINS</span></a
+        >
+        <a
+          href="/pages/execorder/eo.html"
+          class="nav-link"
+          aria-label="SQL Execution Order – visual guide to how a SQL query is processed"
+          data-content="02&nbsp;&nbsp;-&nbsp;&nbsp;EXECUTION ORDER"
+          ><span>02&nbsp;&nbsp;-&nbsp;&nbsp;EXECUTION ORDER</span></a
+        >
+        <br />
+        <div class="pages-indicator">
+          <p>Coming Soon Pages ↷</p>
+        </div>
+        <span
+          class="cs-page"
+          aria-label="SQL Window Functions – coming soon"
+          data-content="03&nbsp;&nbsp;-&nbsp;&nbsp;WINDOW FUNCTIONS"
+          ><span>03&nbsp;&nbsp;-&nbsp;&nbsp;WINDOW FUNCTIONS</span></span
+        >
+      </div>
+    </div>
+  </div>
+  <!-- ── Window functions (next) ── -->
+
+  <div class="section-label">
+    <i class="fa-regular fa-calendar"></i>&nbsp;&nbsp;Coming next ⇾ window
+    functions. Stay Tuned.
+  </div>
+</div>
+
+      </div>
   </body>
 </html>

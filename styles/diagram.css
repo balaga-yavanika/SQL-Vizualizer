@@ -2,11 +2,64 @@
 /* SVG DIAGRAM                                   */
 /* SVG COLUMN SELECTOR — see joins-operations.css for .diagram-col-picker */
 /* ============================================= */
+/* .diagram-scroll-wrapper{
+  border: 1px dashed var(--color-pr-border);
+  border-radius: var(--radius-md);
+} */
+
+.diagram-section-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-block: var(--space-lg);
+}
+
+.diagram-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+}
+
+.diagram-col-selectors-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  align-items: flex-start;
+  overflow: visible;
+  padding-block: var(--space-xs);
+  padding-inline: var(--space-xs);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-vdb-shade-2);
+  border: 1px solid var(--color-bg-vdb-shade-3);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-bg-vdb-shade-3) transparent;
+}
+
+.diagram-col-selectors-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.diagram-col-selectors-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.diagram-col-selectors-container::-webkit-scrollbar-thumb {
+  background: var(--color-bg-vdb-shade-3);
+  border-radius: 3px;
+}
+
+.diagram-col-selectors-container::-webkit-scrollbar-thumb:hover {
+  background: var(--color-bg-vdb-shade-4);
+}
+
 .conn-wrapper {
   width: 90%;
   margin-inline: auto;
   margin-block-end: 2rem;
   overflow: visible;
+
 }
 
 svg.conn {
@@ -14,4 +67,29 @@ svg.conn {
   width: 100%;
   font-family: var(--font-mono), monospace;
   user-select: none;
+
+}
+
+/* ============================================= */
+/* RESPONSIVE — TABLET (≤768px)                 */
+/* ============================================= */
+@media (max-width: 768px) {
+  .diagram-col-selectors-container {
+    padding-block: var(--space-2xs);
+    gap: var(--space-sm);
+  }
+}
+
+/* ============================================= */
+/* RESPONSIVE — MOBILE (≤480px)                 */
+/* ============================================= */
+@media (max-width: 480px) {
+  .diagram-section-header {
+    gap: var(--space-sm);
+  }
+
+  .diagram-col-selectors-container {
+    padding-inline: var(--space-2xs);
+    gap: var(--space-2xs);
+  }
 }

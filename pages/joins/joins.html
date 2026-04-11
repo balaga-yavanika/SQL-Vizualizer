@@ -5,43 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- ─── SEO & Social ─────────────────────────────────────────── -->
-    <meta name="description" content="Interactive SQL Joins visualizer. Understand INNER, LEFT, RIGHT, FULL, CROSS joins and more through live diagrams." />
-    <meta name="keywords" content="SQL joins, INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL JOIN, CROSS JOIN, join visualization, learn SQL, visualize SQL joins, learn SQL joins interactively, SQL join types, SQL join explained, interactive SQL join, visual SQL join, SQL join tutorial, SQL join online practice, SQL join diagram, database join visualizer, SQL join tool" />
+    <meta name="description" content="Master SQL joins with interactive visualizations. Explore INNER, LEFT, RIGHT, OUTER, CROSS, and SELF joins with real examples. Try it free — no setup needed." />
+    <meta name="keywords" content="SQL joins, join visualization, learn SQL, interactive tutorial, SQL join types, visualizer tool" />
     <meta name="author" content="Y-SQLVIZ" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="theme-color" content="#121212" />
 
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://YOUR_URL/pages/joins/joins.html" />
+    <link rel="canonical" href="https://sqlviz.vercel.app/pages/joins/joins.html" />
 
     <!-- Open Graph -->
-    <meta property="og:title" content="SQL Joins Visualizer" />
-    <meta property="og:description" content="Interactive SQL Joins visualizer. Understand all join types through live diagrams." />
+    <meta property="og:title" content="SQL Joins Visualizer: INNER, LEFT, RIGHT, OUTER | YSQLVIZ" />
+    <meta property="og:description" content="Master SQL joins with interactive visualizations. Explore INNER, LEFT, RIGHT, OUTER, CROSS, and SELF joins through live diagrams, real examples, and step-by-step breakdown." />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Y-SQLVIZ" />
-    <meta property="og:image" content="https://YOUR_URL/Assets/preview.jpg" />
+    <meta property="og:site_name" content="SQL Visualizer" />
+    <meta property="og:image" content="https://sqlviz.vercel.app/Assets/preview.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="SQL Joins Visualizer" />
-    <meta property="og:url" content="https://YOUR_URL/pages/joins/joins.html" />
-    <meta property="og:locale" content="en_IN" />
+    <meta property="og:url" content="https://sqlviz.vercel.app/pages/joins/joins.html" />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter/X -->
     <meta name="twitter:card" content="summary_large_image" />
+    <!-- Uncomment when Twitter account @Y_SQLVIZ is created and claimed:
     <meta name="twitter:site" content="@Y_SQLVIZ" />
     <meta name="twitter:creator" content="@Y_SQLVIZ" />
-    <meta name="twitter:title" content="SQL Joins Visualizer" />
-    <meta name="twitter:description" content="Interactive SQL Joins visualizer with live diagrams." />
-    <meta name="twitter:image" content="https://YOUR_URL/Assets/preview.jpg" />
+    -->
+    <meta name="twitter:title" content="SQL Joins Visualizer: INNER, LEFT, RIGHT, OUTER | YSQLVIZ" />
+    <meta name="twitter:description" content="Master SQL joins with interactive visualizations. INNER, LEFT, RIGHT, OUTER, CROSS, SELF joins with real-world examples. Free, no setup." />
+    <meta name="twitter:image" content="https://sqlviz.vercel.app/Assets/preview.jpg" />
     <meta name="twitter:image:alt" content="SQL Joins Visualizer" />
 
     <!-- Profile -->
-    
+    <link rel="me" href="https://medium.com/@balaga-yavanika" />
 
     <!-- Structured Data (JSON-LD) -->
-    
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebApplication",
+            "name": "SQL Joins Visualizer",
+            "description": "Master SQL joins with interactive visualizations. Learn INNER, LEFT, RIGHT, OUTER, CROSS, and SELF joins with real-world examples.",
+            "url": "https://sqlviz.vercel.app/pages/joins/",
+            "applicationCategory": "EducationalApplication",
+            "operatingSystem": "All",
+            "browserRequirements": "Requires JavaScript enabled; Modern browser recommended",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            }
+          },
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://sqlviz.vercel.app/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "SQL Joins Visualizer",
+                "item": "https://sqlviz.vercel.app/pages/joins/joins.html"
+              }
+            ]
+          }
+        ]
+      }
+    </script>
 
-    <title>JOINS — YSQLVIZ</title>
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-vvt4KWwuNr51XfE5m+hzeNEGhiOfZzG97ccfqGsPwvE='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; object-src 'none'" />
+
+    <title>SQL Joins Visualizer: INNER, LEFT, RIGHT, OUTER | YSQLVIZ</title>
 
     <!-- ─── Favicon ───────────────────────────────── -->
     <link rel="icon" href="/Assets/Favicon/favicon_io/favicon.ico" sizes="any" />
@@ -51,6 +93,9 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/Assets/Favicon/favicon_io/apple-touch-icon.png" />
 
     <!-- Font Awesome -->
+    <link rel="preload" href="/Assets/fonts/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/Assets/fonts/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/Assets/fonts/css/all.min.css" as="style" />
     <link rel="stylesheet" href="/Assets/fonts/css/all.min.css" />
 
     <!-- Global Navigation & Menu Styles -->
@@ -60,12 +105,14 @@
     <!-- ─── Google Fonts ─────────────────────────────── -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" media="print" onload="this.media = 'all'" />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" as="style" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" media="print" />
     <noscript>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" />
     </noscript>
 
     <!-- ─── Page-specific CSS ─────────────────────────── -->
+    <link rel="preload" href="/pages/joins/joins.css" as="style" />
     <link rel="stylesheet" href="/pages/joins/joins.css" />
 
     <!-- ==== Scripts ==== -->
@@ -81,12 +128,9 @@
       <div class="outer-wrapper">
         <article>
         <nav class="breadcrumb" aria-label="Breadcrumb" style="font-size: 0.7rem;">
-        <a><i class="fa-solid fa-arrow-left-long"></i></a>
-        <a href="#" onclick="history.back()" style="font-weight: 600;font-size: 0.8rem;">
-        Go Back&nbsp;</a>
-        <a href="/main.html" rel="prev"
-          ><i class="fa-solid fa-arrow-left-long"></i>&nbsp;<i class="fa-solid fa-house"></i
-        ></a>
+        <a href="/" id="go-back-btn" style="font-weight: 600;font-size: 0.8rem;">
+          <i class="fa-solid fa-arrow-left-long"></i> Go Back
+        </a>
       </nav>
     <!--  -->
 <!--  -->
@@ -94,13 +138,12 @@
   <div class="heading-part-top">
     <div>
       <div class="heading-label-per-page">[01]</div>
-      <h2 class="heading-text"><strong>Joins</strong> Visualizer</h2>
+      <h1 class="heading-text"><strong>SQL Joins</strong> Visualizer</h1>
       <p class="hero-sub">
-        A visual, step-by-step breakdown of working of Joins in SQL.
+        Master INNER, LEFT, RIGHT, OUTER, CROSS, and SELF joins with interactive visualizations.
         <button
           class="share-btn-subtle"
           id="share-btn"
-          onclick="window.app.copyShareLink()"
           title="Share your work to others to explain joins visually (disabled until data is added)"
           aria-label="Copy share link"
           disabled
@@ -123,7 +166,7 @@
       >
         <i class="fa-solid fa-times"></i>
       </button>
-      <h6>Before you start</h6>
+      <h2>Before you start</h2>
       <p>
         <strong>Start with preset sample data</strong> or add tables dynamically
         using the <strong>+ add table</strong> button. Create columns and sample
@@ -166,7 +209,7 @@
 <!-- ── Preset Datasets ── -->
 <div class="preset-section">
   <div>
-    <label class="section-label-large"
+    <h2 class="section-label-large"
       >Quick Start
       <span
         class="tooltip-wrapper"
@@ -174,7 +217,7 @@
       >
         <!-- <i class="fa-solid fa-circle-info"></i> -->
       </span>
-    </label>
+    </h2>
   </div>
   <div class="preset-controls">
     <div class="custom-dropdown" id="preset-dropdown-wrapper">
@@ -207,10 +250,7 @@
         </button>
       </div>
     </div>
-    <button
-      class="preset-btn reset-btn"
-      onclick="window.app.resetAllAndRender()"
-    >
+    <button class="preset-btn reset-btn" id="reset-all-btn">
       <i class="fa-solid fa-arrow-rotate-left"></i>&nbsp;&nbsp;Reset All
     </button>
   </div>
@@ -219,7 +259,7 @@
 <!-- ── Join Type & Set Operators (Side by Side) ── -->
 <div class="operations-container">
   <div class="operation-section">
-    <label class="section-label-large">Join type</label>
+    <h2 class="section-label-large">Join type</h2>
     <div class="custom-dropdown" id="join-type-dropdown-wrapper">
       <button
         class="dropdown-toggle"
@@ -236,7 +276,7 @@
   </div>
 
   <div class="operation-section">
-    <label class="section-label-large">Set operators</label>
+    <h2 class="section-label-large">Set operators</h2>
     <div class="custom-dropdown" id="set-op-dropdown-wrapper">
       <button
         class="dropdown-toggle"
@@ -297,19 +337,10 @@
   </div>
 </div>
 
-<!-- ── Keyboard Help (Screen Reader Only) ── -->
-<div id="kb-help-edit-name" class="sr-only">
-  Press Enter to edit, Escape to cancel, Tab to navigate between fields
-</div>
-
 <!-- ── Tables ── -->
 <div class="tables-scroll-wrapper">
   <div class="joins-tables-grid" id="tables-area" aria-label="Data tables">
-    <button
-      class="add-tbl-btn"
-      onclick="window.app.addTableAndRender()"
-      aria-label="Add new table"
-    >
+    <button class="add-tbl-btn" id="add-table-btn" aria-label="Add new table">
       + add table
     </button>
   </div>
@@ -333,7 +364,12 @@
 <!-- ── SVG wrapper ── -->
 <div class="diagram-scroll-wrapper">
   <div id="conn-wrapper" class="conn-wrapper">
-    <svg class="conn" id="conn-svg" viewBox="0 0 480 10"></svg>
+    <svg class="conn" id="conn-svg" viewBox="0 0 480 10" role="img" aria-label="Visual diagram showing join connections between tables"></svg>
+    <noscript>
+      <p style="margin: var(--space-sm) 0; color: var(--color-text-muted); font-size: var(--text-sm);">
+        <i class="fa-solid fa-triangle-exclamation"></i> Interactive diagram requires JavaScript. Enable it to visualize join connections.
+      </p>
+    </noscript>
   </div>
 </div>
 
@@ -346,8 +382,8 @@
       <span class="count-badge" id="row-count" aria-live="polite">0 rows</span>
     </div>
     <div class="result-scroll-wrapper">
-      <div class="result-grid" role="table" aria-label="Join operation results">
-        <div class="rg-head-row" role="row" id="rg-heads"></div>
+      <div class="result-grid">
+        <div class="rg-head-row" id="rg-heads"></div>
         <div id="result-body"></div>
       </div>
     </div>
@@ -362,12 +398,7 @@
   >
     <div class="code-header">
       <span class="code-lang">SQL</span>
-      <button
-        id="sql-copy-btn"
-        class="copy-btn"
-        onclick="window.copySqlButtonClicked()"
-        aria-label="Copy SQL query"
-      >
+      <button id="sql-copy-btn" class="copy-btn" aria-label="Copy SQL query">
         <i class="fa-regular fa-clipboard"></i> Copy
       </button>
     </div>
@@ -375,17 +406,14 @@
   </div>
 </div>
 
+<p class="related-link">Next: <a href="/pages/execorder/eo.html">Explore SQL Execution Order →</a></p>
+
 <!-- ─── Add Column Modal ─── -->
 <div id="col-modal" class="modal-backdrop" style="display: none">
   <div class="modal-box">
     <div class="modal-header">
-      <h4 class="modal-title">Add Column</h4>
-      <button
-        class="modal-close"
-        onclick="document.getElementById('col-modal').style.display = 'none'"
-      >
-        ×
-      </button>
+      <h3 class="modal-title">Add Column</h3>
+      <button class="modal-close" id="col-modal-close">×</button>
     </div>
     <div class="modal-body">
       <div class="modal-field">
@@ -395,7 +423,6 @@
           id="col-modal-name"
           class="modal-input"
           placeholder="e.g., user_id"
-          oninput="window.app.handleColModalInput(event)"
         />
         <span
           id="col-modal-error"

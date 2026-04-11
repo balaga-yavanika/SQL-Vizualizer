@@ -1,32 +1,65 @@
 <div class="body-section" id="content">
   <!-- Title Section -->
 
-  <div class="content-center">
-    <div class="title-section-wrapper">
-      <div>
-        <p class="page-version"><i class="fa-solid fa-database"></i> v1.3</p>
-      </div>
-      <div>
-        <h1 class="page-title">SQL&nbsp;<span id="type"></span></h1>
-      </div>
-      <div>
-        <p>Select a topic you'd like to visualize</p>
+  <div class="content-layout-two-column">
+    <!-- Left Column: Title & Tagline -->
+    <div class="content-left-column">
+      <div class="title-section-wrapper">
+        <div>
+          <p class="page-version"><i class="fa-solid fa-database"></i> v 1.3</p>
+        </div>
+        <div>
+          <h1 class="page-title">
+            SQL&nbsp;
+            <br />
+            <span id="type">Visualizer</span>
+          </h1>
+        </div>
+        <div>
+          <p>Select a topic you'd like to visualize →</p>
+        </div>
+        <div>
+          <p class="site-description">
+            Interactive SQL visualizations for JOINS, execution order, window
+            functions, and more — built for beginners who want to understand
+            SQL, not just memorize it.
+          </p>
+        </div>
       </div>
     </div>
-    <!-- Buttons Grid -->
-    <div class="buttons-grid">
-      <!-- Row 1 -->
-      <div class="button-item">
-        <div class="button-label">[01]</div>
-        <a href="/pages/joins/joins.html" class="button-link">
-          <span>SQL<br />Joins</span>
-        </a>
+
+    <!-- Right Column: Vertical Navigation -->
+    <div class="content-right-column">
+      <p>⏷ Project Index</p>
+      <div class="pages-indicator">
+        <p>Active Pages ↷</p>
       </div>
-      <div class="button-item">
-        <div class="button-label">[02]</div>
-        <a href="/pages/execorder/eo.html" class="button-link">
-          <span>EXECUTION<br />ORDER</span>
-        </a>
+      <h2 class="visually-hidden">Available SQL Topics</h2>
+      <div class="nav-vertical-list">
+        <a
+          href="/pages/joins/joins.html"
+          class="nav-link"
+          aria-label="SQL Joins – interactive visualizer for INNER, LEFT, RIGHT, and FULL joins"
+          data-content="01&nbsp;&nbsp;-&nbsp;&nbsp;SQL JOINS"
+          ><span>01&nbsp;&nbsp;-&nbsp;&nbsp;SQL JOINS</span></a
+        >
+        <a
+          href="/pages/execorder/eo.html"
+          class="nav-link"
+          aria-label="SQL Execution Order – visual guide to how a SQL query is processed"
+          data-content="02&nbsp;&nbsp;-&nbsp;&nbsp;EXECUTION ORDER"
+          ><span>02&nbsp;&nbsp;-&nbsp;&nbsp;EXECUTION ORDER</span></a
+        >
+        <br />
+        <div class="pages-indicator">
+          <p>Coming Soon Pages ↷</p>
+        </div>
+        <span
+          class="cs-page"
+          aria-label="SQL Window Functions – coming soon"
+          data-content="03&nbsp;&nbsp;-&nbsp;&nbsp;WINDOW FUNCTIONS"
+          ><span>03&nbsp;&nbsp;-&nbsp;&nbsp;WINDOW FUNCTIONS</span></span
+        >
       </div>
     </div>
   </div>

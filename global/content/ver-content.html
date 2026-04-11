@@ -5,17 +5,27 @@
     A record of every release of SQL Visualizer — what changed, what was added,
     and what was fixed. Versions are listed most recent first.
   </p>
+  <!-- <hr /> -->
+  <blockquote>
+    For new feature suggestions,
+    <a
+      href="https://github.com/balaga-yavanika/SQL-Vizualizer/issues?q=is%3Aissue%20state%3Aopen%20label%3AVOTE"
+      target="_blank"
+      rel="noopener noreferrer"
+      >vote here</a
+    >
+  </blockquote>
   <hr />
   <div class="version-list">
     <!-- v1.3 -->
     <div class="version">
       <div class="version-header">
         <div>
-          <h4>v1.2</h4>
-          <h5 class="version-date">March 2026</h5>
+          <h4>v1.3</h4>
+          <h5 class="version-date">April 2026</h5>
           <h6 class="version-tag latest">Latest</h6>
         </div>
-        <div><small>Major Release - Late March</small></div>
+        <div><small>Major Release - Early April</small></div>
       </div>
       <p>
         A substantial overhaul across the board. The SQL engine was rewritten
@@ -58,9 +68,55 @@
     <div class="version">
       <div class="version-header">
         <div>
+          <h4>v1.2</h4>
+          <h5 class="version-date">March 2026</h5>
+          <!-- <h6 class="version-tag latest">Latest</h6> -->
+        </div>
+        <div><small>Major Release - Late March</small></div>
+      </div>
+      <p>
+        A substantial overhaul across the board. The SQL engine was rewritten
+        from scratch to handle joins and set operators reliably, the Generated
+        SQL panel was introduced with live output, and the Execution Order
+        visualizer was added as a new standalone page.<br />
+        The overall visual language was refreshed and the page structure
+        simplified throughout.
+      </p>
+      <ul>
+        <li>
+          Introduced the <code>Generated SQL</code> panel. A live code block
+          that reflects the current join configuration, with a one-click copy
+          button.
+        </li>
+        <li>
+          Rewrote the SQL engine to support <code>JOINS</code> and
+          <code>SET OPERATORS</code>
+        </li>
+        <li>
+          Added two pre-loaded sample datasets in pages
+          <span
+            ><a
+              href="/pages/joins/joins.html"
+              target="_top"
+              data-tooltip="Joins Visualizer"
+              >[01]</a
+            ></span
+          >
+          covering common patterns.
+        </li>
+        <li>New Execution Order page with an 12-step expandable timeline</li>
+        <li>Sidebar groups now labelled and separated by section</li>
+        <li>Refreshed typography and theme overall.</li>
+      </ul>
+    </div>
+    <hr />
+
+    <!-- v1.1 -->
+    <div class="version">
+      <div class="version-header">
+        <div>
           <h4>v1.1</h4>
           <h5 class="version-date">March 2026</h5>
-          <h6 class="version-tag latest">Latest</h6>
         </div>
         <div><small>minor Release - Early March</small></div>
       </div>
@@ -87,7 +143,7 @@
         <div>
           <h4>v1.0</h4>
           <h5 class="version-date">February 2026</h5>
-          <h6 class="version-tag latest">Latest</h6>
+          <h6 class="version-tag">Initial</h6>
         </div>
         <div><small>minor Release - Early February</small></div>
       </div>

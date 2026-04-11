@@ -17,6 +17,7 @@
   margin-block: 0;
   color: var(--color-primary);
   text-transform: uppercase;
+  font-size: var(--text-h2);
 }
 
 .heading-body {
@@ -24,12 +25,11 @@
 }
 
 .heading-label-per-page {
-  text-align: left;
-  height: var(--button-label-height);
   margin-block-start: var(--space-md);
+  height: var(--button-label-height);
   font-family: var(--font-mono);
   font-size: var(--text-fine);
-  color: var(--button-accent-muted);
+  color: var(--color-text-muted);
   text-transform: uppercase;
 }
 
@@ -39,6 +39,7 @@
   margin-block: var(--space-md) 0;
   font-size: var(--text-h4);
   text-transform: uppercase;
+  color: var(--color-primary);
 }
 
 .section-label-medium {
@@ -49,8 +50,10 @@
 .desc {
   margin-block: var(--space-lg);
   padding-inline: var(--space-md);
-  border-left: 4px solid var(--color-secondary);
-  background: oklch(from var(--color-secondary) l c h / 0.07);
+  border: 1.2px dashed oklch(from var(--color-secondary) l c h / 0.2);
+  background: oklch(from var(--color-secondary) l c h / 0.05);
   line-height: 1.5;
   color: var(--color-secondary);
+  border-radius: var(--radius-md);
+  font-style: normal;
 }

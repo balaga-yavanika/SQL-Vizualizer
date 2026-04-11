@@ -7,14 +7,16 @@ Generates HTML pages from template + config + content files
 import os
 import json
 import sys
+import subprocess
 from pathlib import Path
+from datetime import datetime
 
 # ============================================================================
 # CONFIGURATION
 # ============================================================================
 
 # Set your base URL here (used in all pages)
-BASE_URL = "https://YOUR_URL"
+BASE_URL = "https://sqlviz.vercel.app"
 
 # Directories
 SCRIPT_DIR = Path(__file__).parent
@@ -99,6 +101,12 @@ def build_jsonld(jsonld_data):
 
     return '<script type="application/ld+json">\n      ' + json.dumps(jsonld_data, indent=2).replace('\n', '\n      ') + '\n    </script>'
 
+def build_csp(csp_policy):
+    """Generate Content Security Policy meta tag"""
+    if not csp_policy:
+        return ""
+    return f'<meta http-equiv="Content-Security-Policy" content="{csp_policy}" />'
+
 def build_keywords(keywords):
     """Generate keywords meta tag"""
     if not keywords:
@@ -106,7 +114,7 @@ def build_keywords(keywords):
     return f'<meta name="keywords" content="{keywords}" />'
 
 def build_css_imports(css_file):
-    """Generate CSS import link"""
+    """Generate CSS import link with preload hint"""
     if not css_file:
         return ""
     # Convert relative paths to absolute (start with /)
@@ -114,7 +122,7 @@ def build_css_imports(css_file):
         href = css_file
     else:
         href = '/' + css_file
-    return f'<link rel="stylesheet" href="{href}" />'
+    return f'<link rel="preload" href="{href}" as="style" />\n    <link rel="stylesheet" href="{href}" />'
 
 def build_scripts(scripts_list):
     """Generate script tags"""
@@ -143,12 +151,9 @@ def build_breadcrumb(show_breadcrumb):
     if not show_breadcrumb:
         return ""
     return '''<nav class="breadcrumb" aria-label="Breadcrumb" style="font-size: 0.7rem;">
-        <a><i class="fa-solid fa-arrow-left-long"></i></a>
-        <a href="#" onclick="history.back()" style="font-weight: 600;font-size: 0.8rem;">
-        Go Back&nbsp;</a>
-        <a href="/main.html" rel="prev"
-          ><i class="fa-solid fa-arrow-left-long"></i>&nbsp;<i class="fa-solid fa-house"></i
-        ></a>
+        <a href="/" id="go-back-btn" style="font-weight: 600;font-size: 0.8rem;">
+          <i class="fa-solid fa-arrow-left-long"></i> Go Back
+        </a>
       </nav>'''
 
 def build_loader(show_loader):
@@ -219,6 +224,9 @@ def generate_html(config_dict, template):
     html = html.replace('{{PROFILE_LINK}}', build_profile_link(config_dict.get('profile_link')))
     html = html.replace('{{JSONLD}}', build_jsonld(config_dict.get('jsonld')))
 
+    # Content Security Policy
+    html = html.replace('{{CSP}}', build_csp(config_dict.get('csp', '')))
+
     # CSS, Scripts, Body Class, Breadcrumb, and Loader
     html = html.replace('{{CSS_IMPORTS}}', build_css_imports(config_dict.get('cssImports', '')))
     html = html.replace('{{SCRIPTS}}', build_scripts(config_dict.get('scripts', [])))
@@ -251,6 +259,91 @@ def write_output(html, output_path):
 
     with open(full_path, 'w', encoding='utf-8') as f:
         f.write(html)
+
+def get_last_commit_date(file_path):
+    """Get the last commit date for a file in YYYY-MM-DD format.
+    If the file has uncommitted changes, return today's date instead."""
+    today = datetime.now().strftime('%Y-%m-%d')
+    try:
+        # Check if file has uncommitted changes
+        dirty = subprocess.run(
+            ['git', 'status', '--porcelain', str(file_path)],
+            cwd=PROJECT_ROOT,
+            capture_output=True,
+            text=True
+        )
+        if dirty.returncode == 0 and dirty.stdout.strip():
+            return today
+
+        result = subprocess.run(
+            ['git', 'log', '-1', '--format=%ci', str(file_path)],
+            cwd=PROJECT_ROOT,
+            capture_output=True,
+            text=True
+        )
+        if result.returncode == 0 and result.stdout.strip():
+            # Format: 2026-04-11 12:34:56 +0000 → extract YYYY-MM-DD
+            return result.stdout.strip()[:10]
+    except Exception as e:
+        print(f"  [WARN] Could not get git date for {file_path}: {e}")
+
+    # Fallback to today's date if git fails
+    return today
+
+def generate_sitemap(config_files, base_url):
+    """Generate sitemap.xml with git-based lastmod dates"""
+    sitemap_entries = []
+
+    # Home page
+    sitemap_entries.append({
+        'loc': base_url + '/',
+        'lastmod': get_last_commit_date(PROJECT_ROOT / 'main.html'),
+        'changefreq': 'weekly',
+        'priority': '1.0'
+    })
+
+    # Generate entries for each config
+    for config_file in sorted(config_files):
+        try:
+            config = load_config(config_file)
+            canonical = config.get('canonical', '/')
+            content_file = config.get('content', '')
+
+            if canonical == '/':
+                continue  # Skip home, already added
+
+            # Get lastmod from content file or fall back to today
+            if content_file:
+                content_path = PROJECT_ROOT / content_file
+                lastmod = get_last_commit_date(content_path)
+            else:
+                lastmod = datetime.now().strftime('%Y-%m-%d')
+
+            sitemap_entries.append({
+                'loc': base_url + canonical,
+                'lastmod': lastmod,
+                'changefreq': config.get('changefreq', 'monthly'),
+                'priority': config.get('priority', '0.7')
+            })
+        except Exception as e:
+            print(f"  [WARN] Skipping {config_file.name} in sitemap: {e}")
+
+    # Build XML
+    xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n\n'
+    for entry in sitemap_entries:
+        xml += f'  <url>\n'
+        xml += f'    <loc>{entry["loc"]}</loc>\n'
+        xml += f'    <lastmod>{entry["lastmod"]}</lastmod>\n'
+        xml += f'    <changefreq>{entry.get("changefreq", "monthly")}</changefreq>\n'
+        xml += f'    <priority>{entry.get("priority", "0.5")}</priority>\n'
+        xml += f'  </url>\n\n'
+    xml += '</urlset>\n'
+
+    # Write sitemap.xml
+    sitemap_path = PROJECT_ROOT / 'sitemap.xml'
+    with open(sitemap_path, 'w', encoding='utf-8') as f:
+        f.write(xml)
+    print(f"[OK] Generated: sitemap.xml")
 
 def main():
     """Main build process"""
@@ -294,6 +387,10 @@ def main():
             print(f"[ERROR] {config_file.name}: {str(e)}")
 
     print(f"\n[DONE] Build complete! Generated {success_count}/{len(config_files)} pages.")
+
+    # Generate sitemap with git-based lastmod dates
+    print("\nGenerating sitemap...")
+    generate_sitemap(config_files, BASE_URL)
 
 if __name__ == '__main__':
     main()

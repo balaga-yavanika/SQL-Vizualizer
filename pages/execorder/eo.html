@@ -5,43 +5,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- ─── SEO & Social ─────────────────────────────────────────── -->
-    <meta name="description" content="SQL Execution Order Visualizer. Understand how SQL queries are executed with interactive diagrams." />
-    <meta name="keywords" content="SQL execution order, SQL query execution, database optimization, SQL learning" />
+    <meta name="description" content="Master SQL execution order with interactive visualizations. Explore FROM, WHERE, GROUP BY, HAVING, SELECT, ORDER BY, and LIMIT phases. See how databases process queries step-by-step." />
+    <meta name="keywords" content="SQL execution order, query execution, FROM WHERE GROUP BY, learn SQL, interactive visualizer" />
     <meta name="author" content="Y-SQLVIZ" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="theme-color" content="#121212" />
 
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://YOUR_URL/pages/execorder/eo.html" />
+    <link rel="canonical" href="https://sqlviz.vercel.app/pages/execorder/eo.html" />
 
     <!-- Open Graph -->
-    <meta property="og:title" content="SQL Execution Order Visualizer" />
-    <meta property="og:description" content="Interactive visualizer for SQL query execution order." />
+    <meta property="og:title" content="SQL Execution Order Visualizer: FROM, WHERE, GROUP BY, SELECT | YSQLVIZ" />
+    <meta property="og:description" content="Did you know SQL doesn't run in the order you write it? See every step — FROM to LIMIT — visualized interactively. Free, no setup." />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Y-SQLVIZ" />
-    <meta property="og:image" content="https://YOUR_URL/Assets/preview.jpg" />
+    <meta property="og:site_name" content="SQL Visualizer" />
+    <meta property="og:image" content="https://sqlviz.vercel.app/Assets/preview.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="SQL Execution Order Visualizer" />
-    <meta property="og:url" content="https://YOUR_URL/pages/execorder/eo.html" />
-    <meta property="og:locale" content="en_IN" />
+    <meta property="og:url" content="https://sqlviz.vercel.app/pages/execorder/eo.html" />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter/X -->
     <meta name="twitter:card" content="summary_large_image" />
+    <!-- Uncomment when Twitter account @Y_SQLVIZ is created and claimed:
     <meta name="twitter:site" content="@Y_SQLVIZ" />
     <meta name="twitter:creator" content="@Y_SQLVIZ" />
-    <meta name="twitter:title" content="SQL Execution Order Visualizer" />
-    <meta name="twitter:description" content="Interactive SQL execution order visualization." />
-    <meta name="twitter:image" content="https://YOUR_URL/Assets/preview.jpg" />
+    -->
+    <meta name="twitter:title" content="SQL Execution Order Visualizer: FROM, WHERE, GROUP BY, SELECT | YSQLVIZ" />
+    <meta name="twitter:description" content="Master SQL execution order with interactive visualizations. FROM, WHERE, GROUP BY, HAVING, SELECT, ORDER BY, LIMIT. Free, no setup." />
+    <meta name="twitter:image" content="https://sqlviz.vercel.app/Assets/preview.jpg" />
     <meta name="twitter:image:alt" content="SQL Execution Order" />
 
     <!-- Profile -->
-    
+    <link rel="me" href="https://medium.com/@balaga-yavanika" />
 
     <!-- Structured Data (JSON-LD) -->
-    
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebApplication",
+            "name": "SQL Execution Order Visualizer",
+            "description": "Master SQL execution order with interactive visualizations. Explore FROM, WHERE, GROUP BY, HAVING, SELECT, ORDER BY, and LIMIT phases.",
+            "url": "https://sqlviz.vercel.app/pages/execorder/",
+            "applicationCategory": "EducationalApplication",
+            "educationalUse": "instruction",
+            "educationalLevel": "Beginner",
+            "audience": {
+              "@type": "EducationalAudience",
+              "educationalRole": "student"
+            },
+            "operatingSystem": "All",
+            "browserRequirements": "Requires JavaScript enabled; Modern browser recommended",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            }
+          },
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://sqlviz.vercel.app/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "SQL Execution Order Visualizer",
+                "item": "https://sqlviz.vercel.app/pages/execorder/eo.html"
+              }
+            ]
+          }
+        ]
+      }
+    </script>
 
-    <title>EXECUTION ORDER — YSQLVIZ</title>
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-vvt4KWwuNr51XfE5m+hzeNEGhiOfZzG97ccfqGsPwvE='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; object-src 'none'" />
+
+    <title>SQL Execution Order Visualizer – Learn How Queries Run</title>
 
     <!-- ─── Favicon ───────────────────────────────── -->
     <link rel="icon" href="/Assets/Favicon/favicon_io/favicon.ico" sizes="any" />
@@ -51,6 +99,9 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/Assets/Favicon/favicon_io/apple-touch-icon.png" />
 
     <!-- Font Awesome -->
+    <link rel="preload" href="/Assets/fonts/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/Assets/fonts/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/Assets/fonts/css/all.min.css" as="style" />
     <link rel="stylesheet" href="/Assets/fonts/css/all.min.css" />
 
     <!-- Global Navigation & Menu Styles -->
@@ -60,12 +111,14 @@
     <!-- ─── Google Fonts ─────────────────────────────── -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" media="print" onload="this.media = 'all'" />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" as="style" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" media="print" />
     <noscript>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" />
     </noscript>
 
     <!-- ─── Page-specific CSS ─────────────────────────── -->
+    <link rel="preload" href="/pages/execorder/eo.css" as="style" />
     <link rel="stylesheet" href="/pages/execorder/eo.css" />
 
     <!-- ==== Scripts ==== -->
@@ -80,24 +133,21 @@
       <div class="outer-wrapper">
         <article>
         <nav class="breadcrumb" aria-label="Breadcrumb" style="font-size: 0.7rem;">
-        <a><i class="fa-solid fa-arrow-left-long"></i></a>
-        <a href="#" onclick="history.back()" style="font-weight: 600;font-size: 0.8rem;">
-        Go Back&nbsp;</a>
-        <a href="/main.html" rel="prev"
-          ><i class="fa-solid fa-arrow-left-long"></i>&nbsp;<i class="fa-solid fa-house"></i
-        ></a>
+        <a href="/" id="go-back-btn" style="font-weight: 600;font-size: 0.8rem;">
+          <i class="fa-solid fa-arrow-left-long"></i> Go Back
+        </a>
       </nav>
     <!-- Hero -->
 <div>
   <div class="heading-wrapper">
     <div>
-      <div class="button-label for-page">[02]</div>
-      <h3 class="heading-text">EXECUTION Order<br />Visualizer</h3>
+      <div class="button-label for-page" aria-hidden="true">[02]</div>
+      <h1 class="heading-text">SQL Execution Order Visualizer</h1>
     </div>
   </div>
   <p class="heading-body">
     SQL doesn't run in the order you write it. You write
-    <code class>SELECT</code> first, but it executes almost last. Understanding
+    <code>SELECT</code> first, but it executes almost last. Understanding
     this order explains why you can't use a <code>WHERE</code> alias, why
     <code>HAVING</code> exists, and how the database stays fast.
   </p>
@@ -129,6 +179,27 @@
   </div>
 </div>
 
+<ol class="visually-hidden" aria-label="SQL execution order steps">
+  <li><strong>Query planner</strong> — Before a single row is touched, the database reads your entire query and builds an execution plan. It picks which indexes to use and the cheapest join order.</li>
+  <li><strong>FROM &amp; JOIN</strong> — The database fetches your tables and combines them. CTEs and subqueries run at this point too. The result is a big, unfiltered working dataset.</li>
+  <li><strong>ON condition</strong> — The ON clause filters which row pairs from the join survive. Only matching pairs move forward.</li>
+  <li><strong>OUTER JOIN</strong> — If you used LEFT, RIGHT, or FULL OUTER JOIN, unmatched rows are added back into the result here, with NULLs filling the columns from the missing side.</li>
+  <li><strong>WHERE clause</strong> — Rows that don't match the condition are removed. Because this runs before SELECT, you cannot reference column aliases defined in SELECT.</li>
+  <li><strong>GROUP BY</strong> — Rows sharing the same GROUP BY value(s) are collapsed into one group each. After this step, individual row values are gone.</li>
+  <li><strong>Aggregate functions</strong> — SUM, COUNT, AVG, MIN, MAX are calculated across each group. One output row is produced per group.</li>
+  <li><strong>HAVING clause</strong> — HAVING filters groups, just like WHERE filters rows. It runs after aggregation, so you can write conditions like HAVING COUNT(*) &gt; 5.</li>
+  <li><strong>SELECT</strong> — Now the columns you asked for are selected and aliases are assigned. This is step 9, not step 1, which is why aliases can't be used earlier.</li>
+  <li><strong>DISTINCT</strong> — Duplicate rows are removed from the result. It runs after SELECT so it compares the final column values you've selected.</li>
+  <li><strong>ORDER BY</strong> — The result is sorted. Because ORDER BY runs after SELECT, it can reference aliases you created in the SELECT step.</li>
+  <li><strong>LIMIT / OFFSET</strong> — The final result is trimmed to the requested slice. All prior steps still ran over every qualifying row — LIMIT only cuts at the very end.</li>
+</ol>
+
+<h2 class="visually-hidden">SQL Query Execution Pipeline</h2>
+
+<noscript>
+  <p class="noscript-notice">This visualizer requires JavaScript. Please enable it in your browser settings to explore the SQL execution order diagram.</p>
+</noscript>
+
 <div class="layout">
   <div class="pipeline" id="pipeline"></div>
   <div id="panel">
@@ -144,6 +215,8 @@
     </div>
   </div>
 </div>
+
+<p class="related-link"><a href="/">← Back to Home</a> &nbsp;|&nbsp; Next: <a href="/pages/joins/joins.html">Explore SQL Joins →</a></p>
 
       </article>
       </div>

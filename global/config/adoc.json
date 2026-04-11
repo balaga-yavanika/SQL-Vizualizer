@@ -1,12 +1,13 @@
 {
-  "title": "SQL Visualizer — Documentation",
-  "description": "Documentation for Y-SQLVIZ SQL Visualizer. Learn how to use the tool effectively.",
-  "keywords": "SQL documentation, SQL tutorial, SQL guide, SQL learning",
+  "title": "About Y-SQLVIZ: Interactive SQL Visualizer | YSQLVIZ",
+  "description": "Learn about Y-SQLVIZ — an interactive SQL visualizer for mastering joins, execution order, and SQL concepts. Free, offline, no dependencies.",
+  "keywords": "SQL visualizer, SQL learning, interactive tutorial, about Y-SQLVIZ, SQL tool",
   "author": "Y-SQLVIZ",
-  "robots": "index, follow",
-  "canonical": "/pages/about/adoc.html",
-  "og_title": "SQL Visualizer Documentation",
-  "og_description": "Complete documentation and guide for Y-SQLVIZ.",
+  "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+  "csp": "default-src 'self'; script-src 'self' 'sha256-vvt4KWwuNr51XfE5m+hzeNEGhiOfZzG97ccfqGsPwvE='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; object-src 'none'",
+  "canonical": "/pages/about/adoc/",
+  "og_title": "About Y-SQLVIZ: Interactive SQL Visualizer | YSQLVIZ",
+  "og_description": "Learn about Y-SQLVIZ — an interactive SQL visualizer for mastering joins, execution order, and SQL concepts. Free, offline, no dependencies.",
   "og_type": "website",
   "og_image": {
     "url": "{{BASE_URL}}/Assets/preview.jpg",
@@ -15,11 +16,48 @@
     "alt": "SQL Visualizer Documentation"
   },
   "twitter_card": "summary_large_image",
-  "twitter_title": "SQL Visualizer Documentation",
-  "twitter_description": "Documentation for Y-SQLVIZ SQL Visualizer.",
+  "twitter_title": "About Y-SQLVIZ: Interactive SQL Visualizer | YSQLVIZ",
+  "twitter_description": "Learn about Y-SQLVIZ — interactive SQL visualizer for joins, execution order, and SQL concepts. Free, offline, no setup.",
   "twitter_image": {
     "url": "{{BASE_URL}}/Assets/preview.jpg",
     "alt": "Documentation"
+  },
+  "profile_link": "https://medium.com/@balaga-yavanika",
+  "jsonld": {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "Y-SQLVIZ SQL Visualizer",
+        "description": "An interactive SQL visualizer for mastering joins, execution order, and SQL concepts. Free, offline, no dependencies.",
+        "url": "{{BASE_URL}}/pages/about/adoc/",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript enabled; Modern browser recommended",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "{{BASE_URL}}/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "About Y-SQLVIZ",
+            "item": "{{BASE_URL}}/pages/about/adoc/"
+          }
+        ]
+      }
+    ]
   },
   "showBreadcrumb": true,
   "showLoader": false,

@@ -2,13 +2,13 @@
 <div>
   <div class="heading-wrapper">
     <div>
-      <div class="button-label for-page">[02]</div>
-      <h3 class="heading-text">EXECUTION Order<br />Visualizer</h3>
+      <div class="button-label for-page" aria-hidden="true">[02]</div>
+      <h1 class="heading-text">SQL Execution Order Visualizer</h1>
     </div>
   </div>
   <p class="heading-body">
     SQL doesn't run in the order you write it. You write
-    <code class>SELECT</code> first, but it executes almost last. Understanding
+    <code>SELECT</code> first, but it executes almost last. Understanding
     this order explains why you can't use a <code>WHERE</code> alias, why
     <code>HAVING</code> exists, and how the database stays fast.
   </p>
@@ -40,6 +40,27 @@
   </div>
 </div>
 
+<ol class="visually-hidden" aria-label="SQL execution order steps">
+  <li><strong>Query planner</strong> — Before a single row is touched, the database reads your entire query and builds an execution plan. It picks which indexes to use and the cheapest join order.</li>
+  <li><strong>FROM &amp; JOIN</strong> — The database fetches your tables and combines them. CTEs and subqueries run at this point too. The result is a big, unfiltered working dataset.</li>
+  <li><strong>ON condition</strong> — The ON clause filters which row pairs from the join survive. Only matching pairs move forward.</li>
+  <li><strong>OUTER JOIN</strong> — If you used LEFT, RIGHT, or FULL OUTER JOIN, unmatched rows are added back into the result here, with NULLs filling the columns from the missing side.</li>
+  <li><strong>WHERE clause</strong> — Rows that don't match the condition are removed. Because this runs before SELECT, you cannot reference column aliases defined in SELECT.</li>
+  <li><strong>GROUP BY</strong> — Rows sharing the same GROUP BY value(s) are collapsed into one group each. After this step, individual row values are gone.</li>
+  <li><strong>Aggregate functions</strong> — SUM, COUNT, AVG, MIN, MAX are calculated across each group. One output row is produced per group.</li>
+  <li><strong>HAVING clause</strong> — HAVING filters groups, just like WHERE filters rows. It runs after aggregation, so you can write conditions like HAVING COUNT(*) &gt; 5.</li>
+  <li><strong>SELECT</strong> — Now the columns you asked for are selected and aliases are assigned. This is step 9, not step 1, which is why aliases can't be used earlier.</li>
+  <li><strong>DISTINCT</strong> — Duplicate rows are removed from the result. It runs after SELECT so it compares the final column values you've selected.</li>
+  <li><strong>ORDER BY</strong> — The result is sorted. Because ORDER BY runs after SELECT, it can reference aliases you created in the SELECT step.</li>
+  <li><strong>LIMIT / OFFSET</strong> — The final result is trimmed to the requested slice. All prior steps still ran over every qualifying row — LIMIT only cuts at the very end.</li>
+</ol>
+
+<h2 class="visually-hidden">SQL Query Execution Pipeline</h2>
+
+<noscript>
+  <p class="noscript-notice">This visualizer requires JavaScript. Please enable it in your browser settings to explore the SQL execution order diagram.</p>
+</noscript>
+
 <div class="layout">
   <div class="pipeline" id="pipeline"></div>
   <div id="panel">
@@ -55,3 +76,5 @@
     </div>
   </div>
 </div>
+
+<p class="related-link"><a href="/">← Back to Home</a> &nbsp;|&nbsp; Next: <a href="/pages/joins/joins.html">Explore SQL Joins →</a></p>

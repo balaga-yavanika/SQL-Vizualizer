@@ -2,12 +2,17 @@
 deploy/
 
 # Documentation
-STYLES.md
 addltr.txt
 OPTIMIZATION_GUIDE.md
 OPTIMIZATION_PLAN.md
 BANNER_SETUP.md
-
+PROGRESS.md
+CLAUDE.LOCAL.MD
+.claude
+FILE_STRUCTURE.md
+AGENTS.md
+oc.md
+style-guide-demo.html
 # Experimental/Inspiration files
 inspi.html
 

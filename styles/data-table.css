@@ -8,10 +8,10 @@
 /* ============================================= */
 .tbl-wrap {
   flex: 1;
-  min-width: 130px;
-  border: 0.5px solid var(--color-bg-vdb-shade-3);
-  background-color: var(--color-bg-vdb-shade-1);
+  border: 1px solid var(--color-bg-vdb-shade-2);
   border-radius: var(--radius-md);
+  background-color: var(--color-bg-vdb-shade-1);
+  min-width: 130px;
   overflow: visible;
 }
 
@@ -22,22 +22,22 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 7px var(--table-cell-padding);
-  font-size: 12px;
+  padding: 7px 8px;
   font-weight: 500;
+  font-size: 12px;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 
 .tbl-head button {
-  padding: 2px 6px;
+  opacity: 0.6;
+  cursor: pointer;
   border: none;
   border-radius: var(--radius-sm);
   background: transparent;
+  padding: 2px 6px;
+  color: inherit;
   font-size: 14px;
   line-height: 1;
-  color: inherit;
-  opacity: 0.6;
-  cursor: pointer;
-  transition: opacity var(--table-transition);
 }
 
 .tbl-head button:hover {
@@ -53,12 +53,12 @@
 /* ============================================= */
 .col-hr {
   display: grid;
-  gap: var(--table-gap);
-  padding: 3px var(--table-cell-padding);
   border-top: 0.5px solid var(--color-bg-vdb-shade-3);
   background: var(--color-bg-vdb-shade-1);
-  font-size: 10px;
+  /* gap: var(--table-gap); */
+  padding: 3px var(--table-cell-padding);
   color: oklch(from var(--color-primary) calc(l + 0.6) c h);
+  font-size: 10px;
 }
 
 .col-header-cell {
@@ -66,38 +66,54 @@
   align-items: center;
   gap: var(--table-gap);
   overflow: hidden;
+  font-size: 9px;
+  font-family: var(--font-mono), monospace;
+}
+
+.col-separator {
+  flex-shrink: 0;
+  margin: 0 2px;
+  background: rgba(255, 255, 255, 0.15);
+  width: 1px;
+  height: 14px;
 }
 
 .col-header-name {
   flex: 1;
   overflow: hidden;
-  white-space: nowrap;
   text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.col-type-icon {
+  flex-shrink: 0;
+  opacity: 0.5;
+  margin-right: 4px;
+  font-size: 9px;
 }
 
 .key-badge {
   flex-shrink: 0;
-  font-size: 9px;
+  opacity: 0.8;
   font-weight: 700;
+  font-size: 9px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  opacity: 0.8;
 }
 
 .col-remove-btn {
   flex-shrink: 0;
-  padding: 0 2px;
   border: none;
-  background: transparent;
+  padding: 2px 2px;
   font-size: 11px;
   line-height: 1;
-  color: oklch(from var(--color-primary) calc(l + 0.6) c h);
-  cursor: pointer;
-  transition: color var(--table-transition);
+  color: var(--color-pink);
 }
 
 .col-remove-btn:hover {
-  color: var(--color-danger);
+  border-color: var(--color-danger);
+  background: var(--color-danger);
+  color: var(--color-full-white);
 }
 
 /* ============================================= */
@@ -107,9 +123,8 @@
   display: grid;
   align-items: center;
   gap: var(--table-gap);
-  padding: var(--table-row-padding) var(--table-cell-padding);
   border-top: 0.5px solid var(--color-bg-vdb-shade-3);
-  transition: background-color var(--table-transition);
+  padding: var(--table-row-padding) var(--table-cell-padding);
 }
 
 .tbl-row:hover {
@@ -121,8 +136,8 @@
 }
 
 .row-num {
-  font-size: 10px;
-  color: oklch(from var(--color-primary) calc(l + 0.6) c h);
+  color: var(--color-pr-para);
+  font-size: 9px;
 }
 
 /* ============================================= */
@@ -130,15 +145,11 @@
 /* ============================================= */
 .id-input,
 .col-input {
-  width: 100%;
   padding: 3px 6px;
-  border: 0.5px solid var(--color-bg-vdb-shade-1);
-  border-radius: var(--radius-sm);
-  background: var(--color-bg-vdb-shade-1);
+  width: 100%;
+  color: var(--color-pr-para);
+  font-size: 10px;
   font-family: var(--font-mono), monospace;
-  font-size: 12px;
-  color: var(--color-text);
-  transition: border-color var(--table-transition);
 }
 
 .id-input:hover,
@@ -154,22 +165,21 @@
 
 .id-input::placeholder,
 .col-input::placeholder {
-  color: oklch(from var(--color-primary) calc(l + 0.6) c h);
+  color: oklch(from var(--color-pr-para) l c h / 0.6);
 }
 
 .bool-input {
   display: flex;
-  align-items: center;
   justify-content: center;
-  height: 24px;
-  cursor: pointer;
+  align-items: center;
+  margin-bottom: 0;
 }
 
 .bool-input input[type="checkbox"] {
+  cursor: pointer;
   width: 18px;
   height: 18px;
   accent-color: var(--color-primary);
-  cursor: pointer;
 }
 
 .bool-input input[type="checkbox"]:disabled {
@@ -184,34 +194,30 @@
 .add-row-btn,
 .add-col-btn,
 .add-tbl-btn {
+  cursor: pointer;
   background: transparent;
   font-family: inherit;
-  cursor: pointer;
-  transition:
-    background var(--table-transition),
-    color var(--table-transition),
-    border-color var(--table-transition);
 }
 
 /* ── Delete ── */
 .del-btn {
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  border: 1px solid var(--color-bg-vdb-shade-3);
+  border-radius: 50%;
+  padding: 0;
   width: 20px;
   height: 20px;
-  padding: 0;
-  border: 0.5px solid var(--color-bg-vdb-shade-1);
-  border-radius: 50%;
+  color: var(--color-pink);
   font-size: 12px;
   line-height: 1;
-  color: var(--color-pr-para);
 }
 
 .del-btn:hover {
-  background: var(--color-danger);
   border-color: var(--color-danger);
-  color: var(--color-text-inverse);
+  background: var(--color-danger);
+  color: var(--color-full-white);
 }
 
 .del-btn:focus-visible {
@@ -222,14 +228,14 @@
 /* ── Add row / col ── */
 .add-row-btn,
 .add-col-btn {
-  width: 100%;
-  padding: 5px;
   border: none;
-  border-top: 0.5px dashed var(--color-bg-vdb-shade-3);
-  background-color: var(--color-bg-vdb-shade-2);
+  border-top: 0.5px dashed var(--color-primary);
   border-radius: 0;
-  font-size: 11px;
+  background-color: var(--color-bg-vdb-shade-2);
+  padding: 5px;
+  width: 100%;
   color: var(--color-pr-para);
+  font-size: 11px;
 }
 
 .add-row-btn:hover {
@@ -249,19 +255,31 @@
 /* ── Add table ── */
 .add-tbl-btn {
   align-self: center;
-  padding: 8px 14px;
-  border: 0.5px dashed var(--color-bg-vdb-shade-3);
-  background-color: var(--color-bg-vdb-shade-2);
+  border: 1px dashed var(--color-bg-vdb-shade-3);
   border-radius: var(--radius-md);
+  background-color: var(--color-bg-vdb-shade-2);
+  padding: 8px 14px;
   font-size: 12px;
-  color: var(--color-text);
   white-space: nowrap;
+ 
 }
 
-.add-tbl-btn:hover {
-  background: var(--color-bg-vdb-shade-1);
+/* .add-tbl-btn:hover:not(:disabled) {
   border-color: var(--color-primary);
+  background: var(--color-bg-vdb-shade-1);
   color: var(--color-primary);
+} */
+
+.add-tbl-btn.disabled-btn {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+ 
+}
+
+.add-tbl-btn.disabled-btn:hover {
+  
+  border-color: var(--color-bg-vdb-shade-1);
+ 
 }
 
 .add-tbl-btn:focus-visible {

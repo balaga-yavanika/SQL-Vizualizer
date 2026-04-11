@@ -1,12 +1,14 @@
 {
-  "title": "JOINS — YSQLVIZ",
-  "description": "Interactive SQL Joins visualizer. Understand INNER, LEFT, RIGHT, FULL, CROSS joins and more through live diagrams.",
-  "keywords": "SQL joins, INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL JOIN, CROSS JOIN, join visualization, learn SQL",
+  "title": "SQL Joins Visualizer: INNER, LEFT, RIGHT, OUTER | YSQLVIZ",
+  "description": "Master SQL joins with interactive visualizations. Explore INNER, LEFT, RIGHT, OUTER, CROSS, and SELF joins with real examples. Try it free — no setup needed.",
+  "keywords": "SQL joins, join visualization, learn SQL, interactive tutorial, SQL join types, visualizer tool",
   "author": "Y-SQLVIZ",
-  "robots": "index, follow",
+  "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+  "csp": "default-src 'self'; script-src 'self' 'sha256-vvt4KWwuNr51XfE5m+hzeNEGhiOfZzG97ccfqGsPwvE='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; object-src 'none'",
   "canonical": "/pages/joins/joins.html",
-  "og_title": "SQL Joins Visualizer",
-  "og_description": "Interactive SQL Joins visualizer. Understand all join types through live diagrams.",
+  "priority": "0.9",
+  "og_title": "SQL Joins Visualizer: INNER, LEFT, RIGHT, OUTER | YSQLVIZ",
+  "og_description": "Master SQL joins with interactive visualizations. Explore INNER, LEFT, RIGHT, OUTER, CROSS, and SELF joins through live diagrams, real examples, and step-by-step breakdown.",
   "og_type": "website",
   "og_image": {
     "url": "{{BASE_URL}}/Assets/preview.jpg",
@@ -15,11 +17,48 @@
     "alt": "SQL Joins Visualizer"
   },
   "twitter_card": "summary_large_image",
-  "twitter_title": "SQL Joins Visualizer",
-  "twitter_description": "Interactive SQL Joins visualizer with live diagrams.",
+  "twitter_title": "SQL Joins Visualizer: INNER, LEFT, RIGHT, OUTER | YSQLVIZ",
+  "twitter_description": "Master SQL joins with interactive visualizations. INNER, LEFT, RIGHT, OUTER, CROSS, SELF joins with real-world examples. Free, no setup.",
   "twitter_image": {
     "url": "{{BASE_URL}}/Assets/preview.jpg",
     "alt": "SQL Joins Visualizer"
+  },
+  "profile_link": "https://medium.com/@balaga-yavanika",
+  "jsonld": {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "SQL Joins Visualizer",
+        "description": "Master SQL joins with interactive visualizations. Learn INNER, LEFT, RIGHT, OUTER, CROSS, and SELF joins with real-world examples.",
+        "url": "{{BASE_URL}}/pages/joins/",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript enabled; Modern browser recommended",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "{{BASE_URL}}/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "SQL Joins Visualizer",
+            "item": "{{BASE_URL}}/pages/joins/joins.html"
+          }
+        ]
+      }
+    ]
   },
   "showBreadcrumb": true,
   "showLoader": false,
@@ -27,7 +66,7 @@
   "showOuterWrapper": true,
   "showArticle": true,
   "cssImports": "pages/joins/joins.css",
-  "scripts": ["pages/joins/joins.js"],
+  "scripts": ["pages/joins/joins.js", "/Assets/fx/theme.js"],
   "content": "global/content/joins-content.html",
   "outputPath": "pages/joins/joins.html"
 }

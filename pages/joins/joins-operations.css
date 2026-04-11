@@ -63,29 +63,36 @@
   display: flex;
   gap: var(--space-sm);
   margin-block: var(--space-lg);
+  justify-content: space-between;
+  background: var(--color-bg-vdb-shade-1);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
 }
 
 .pair-selector-label {
-  font-size: var(--text-tag);
-  font-weight: var(--weight-medium);
-  color: var(--color-text);
+  font-size: var(--text-ui);
+  text-transform: uppercase;
 }
 
 #join-pair-select-wrapper {
-  max-width: 300px;
+  max-width: 500px;
 }
 
 /* ============================================= */
 /* SVG COLUMN SELECTOR (DIAGRAM COLUMN PICKER)   */
 /* ============================================= */
 .diagram-col-picker {
-  display: flex;
+  display: flex !important;
   align-items: center;
   gap: var(--space-2xs);
-  padding: var(--space-2xs);
-  margin-top: var(--space-2xs);
+  padding: 0;
   font-size: var(--text-fine);
-  overflow: visible;
+  overflow: visible !important;
+  visibility: visible !important;
+  border: none;
+  flex-shrink: 0;
+  white-space: nowrap;
+  position: relative;
 }
 
 .diagram-col-label {
@@ -95,13 +102,15 @@
 }
 
 .diagram-col-dropdown {
-  flex: 1;
-  min-width: 120px;
   position: relative;
   overflow: visible;
+  min-width: 120px;
+  width: auto;
 }
 
 .diagram-col-dropdown .dropdown-toggle {
+  display: flex !important;
+  visibility: visible !important;
   padding: var(--space-3xs) var(--space-2xs);
   font-size: var(--text-fine);
   justify-content: space-between;
@@ -115,15 +124,34 @@
 .diagram-col-dropdown .dropdown-item {
   padding: var(--space-3xs) var(--space-2xs);
   font-size: var(--text-fine);
+  border-radius: unset;
+  background-color: var(--color-bg-vdb-shade-2);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background-color 0.1s ease, color 0.1s ease;
+}
+
+@media (hover: hover) {
+  .diagram-col-dropdown .dropdown-item:hover {
+    background-color: var(--color-bg-vdb-shade-1);
+    color: var(--color-secondary);
+  }
+}
+
+.diagram-col-dropdown .dropdown-item.selected {
+  background-color: var(--color-bg-vdb-shade-1);
+  color: var(--color-primary);
+  font-weight: 500;
 }
 
 .diagram-col-dropdown .dropdown-menu {
   position: absolute;
-  top: calc(100% + var(--space-3xs));
+  top: calc(100% + 4px);
   left: 0;
-  z-index: var(--z-dropdown);
+  z-index: 9999;
   min-width: 140px;
   background: var(--color-bg-vdb);
+  display: none;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   box-shadow: 0 4px 12px rgb(0 0 0 / 0.15);
@@ -150,10 +178,126 @@
 }
 
 /* ============================================= */
+/* SHARED VIEW BANNER                           */
+/* ============================================= */
+#shared-view-banner {
+  background: oklch(from var(--color-yellow) l c h / 0.1);
+  /* background: 
+  linear-gradient(135deg, var(--color-bg-vdb-shade-2), 
+  var(--color-bg-vdb-shade-1)); */
+  border: 1px solid var(--color-yellow);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin-block-end: var(--space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+#shared-view-banner > div:first-child {
+  flex: 1;
+}
+
+#shared-view-banner .banner-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: 6px;
+}
+
+#shared-view-banner .banner-title i {
+  color: var(--color-secondary);
+  font-size: var(--text-subtitle);
+}
+
+#shared-view-banner .banner-title strong{
+   font-size: var(--text-h4);
+}
+ 
+#shared-view-banner .banner-text {
+  margin: 0;
+  color: var(--color-full-white);
+  font-size: var(--text-ui);
+  line-height: 1.4;
+}
+
+#shared-view-banner .copy-btn {
+  background: var(--color-secondary);
+  color: var(--color-bg-vdb);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-weight: 500;
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+}
+
+#shared-view-banner .copy-btn:hover {
+  background: var(--color-primary);
+  color: var(--color-bg-vdb);
+  transform: translateY(-1px);
+}
+
+#shared-view-banner .copy-btn:active {
+  transform: translateY(0);
+}
+
+#shared-view-banner .copy-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ============================================= */
+/* CROSS JOIN NOTE                              */
+/* ============================================= */
+.cross-join-note {
+  padding-block:  var(--space-xs);
+  /* border-left: 2px solid var(--color-primary); */
+  border-radius: var(--radius-sm);
+  font-size: var(--text-body-sm);
+  color: var(--color-pr-bold);
+  line-height: 1.5;
+}
+
+.cross-join-note strong {
+  color: var(--color-primary);
+  font-weight: var(--weight-bold);
+}
+
+/* ============================================= */
 /* RESPONSIVE — TABLET (≤768px)                 */
 /* ============================================= */
 @media (max-width: 768px) {
   .operations-container {
     grid-template-columns: 1fr;
+  }
+
+  #shared-view-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+
+  #shared-view-banner .copy-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .diagram-col-picker {
+    flex-basis: calc(50% - var(--space-sm));
+  }
+}
+
+/* ============================================= */
+/* RESPONSIVE — MOBILE (≤480px)                 */
+/* ============================================= */
+@media (max-width: 480px) {
+  .diagram-col-picker {
+    flex-basis: 100%;
   }
 }

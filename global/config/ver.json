@@ -1,12 +1,13 @@
 {
-  "title": "SQL Visualizer — Version History",
-  "description": "Version history and changelog for Y-SQLVIZ SQL Visualizer.",
-  "keywords": "SQL visualizer updates, changelog, version history, release notes",
+  "title": "Version Notes: Y-SQLVIZ Updates & Changelog | YSQLVIZ",
+  "description": "Track Y-SQLVIZ updates and improvements. View latest features, bug fixes, and enhancements to the SQL visualizer.",
+  "keywords": "version history, changelog, updates, release notes, Y-SQLVIZ",
   "author": "Y-SQLVIZ",
-  "robots": "index, follow",
-  "canonical": "/pages/about/ver.html",
-  "og_title": "SQL Visualizer — Version History",
-  "og_description": "Updates and changelog for Y-SQLVIZ.",
+  "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+  "csp": "default-src 'self'; script-src 'self' 'sha256-vvt4KWwuNr51XfE5m+hzeNEGhiOfZzG97ccfqGsPwvE='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; object-src 'none'",
+  "canonical": "/pages/about/ver/",
+  "og_title": "Version Notes: Y-SQLVIZ Updates & Changelog | YSQLVIZ",
+  "og_description": "Track Y-SQLVIZ updates and improvements. View latest features, bug fixes, and enhancements to the SQL visualizer.",
   "og_type": "website",
   "og_image": {
     "url": "{{BASE_URL}}/Assets/preview.jpg",
@@ -15,11 +16,31 @@
     "alt": "SQL Visualizer Version History"
   },
   "twitter_card": "summary_large_image",
-  "twitter_title": "SQL Visualizer Version History",
-  "twitter_description": "Latest updates and releases for Y-SQLVIZ.",
+  "twitter_title": "Version Notes: Y-SQLVIZ Updates & Changelog | YSQLVIZ",
+  "twitter_description": "Track Y-SQLVIZ updates and improvements. Latest features, bug fixes, and enhancements.",
   "twitter_image": {
     "url": "{{BASE_URL}}/Assets/preview.jpg",
     "alt": "Version History"
+  },
+  "profile_link": "https://medium.com/@balaga-yavanika",
+  "jsonld": {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "Y-SQLVIZ",
+        "description": "Interactive SQL visualizer for learning joins, execution order, and SQL concepts.",
+        "url": "{{BASE_URL}}/pages/about/ver/",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript enabled; Modern browser recommended",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    ]
   },
   "showBreadcrumb": true,
   "showLoader": false,

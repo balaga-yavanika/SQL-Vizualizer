@@ -59,16 +59,16 @@ export function renderDiagramColSelectors() {
     }
 
     const currentCol = t.columns.find((c) => c.id === t.svgColId);
-    const currentColName = currentCol ? currentCol.name : "Select column";
+    const currentColName = escapeHtml(currentCol ? currentCol.name : "Select column");
     const items = t.columns
       .map(
         (c) =>
-          `<button class="dropdown-item${c.id === t.svgColId ? " selected" : ""}" data-value="${c.id}">${c.name}</button>`,
+          `<button class="dropdown-item${c.id === t.svgColId ? " selected" : ""}" data-value="${c.id}">${escapeHtml(c.name)}</button>`,
       )
       .join("");
 
     html += `<div class="diagram-col-picker">
-      <span class="diagram-col-label" style="color:${pal.text}">${t.name}:</span>
+      <span class="diagram-col-label" style="color:${pal.text}">${escapeHtml(t.name)}:</span>
       <div class="custom-dropdown diagram-col-dropdown" id="diagram-col-dropdown-${ti}">
         <button class="dropdown-toggle" id="diagram-col-toggle-${ti}" aria-haspopup="listbox" style="border-color:${pal.stroke};color:${pal.text}">
           <span id="diagram-col-display-${ti}">${currentColName}</span>
@@ -120,18 +120,14 @@ export function renderTables(m1, m2, li, ri) {
     const escapedTableName = escapeHtml(t.name);
     let html = `
       <div class="tbl-head" style="background:${pal.fill};color:${pal.text};border-bottom:1px solid ${pal.stroke}" aria-label="Table: ${escapedTableName}">
-        <span class="table-name" contenteditable="true"
-          onfocus="this._originalValue=this.textContent"
-          oninput="window.app.handleTableRenameInput(event, ${ti})"
-          onblur="window.app.renameTableAndRender(${ti}, this.textContent)"
-          onkeydown="if(event.key==='Enter'){this.blur();event.preventDefault()}else if(event.key==='Escape'){this.textContent=this._originalValue;this.blur();event.preventDefault()}"
+        <span class="table-name" contenteditable="true" data-ti="${ti}"
           tabindex="0"
           role="button"
           aria-label="Edit table name: ${escapedTableName}"
           aria-describedby="kb-help-edit-name">${escapedTableName}</span>
         ${
           state.tables.length > 2
-            ? `<button onclick="app.removeTableAndRender(${ti})" title="Remove table" aria-label="Remove table ${escapedTableName}">×</button>`
+            ? `<button class="remove-table-btn" data-ti="${ti}" title="Remove table" aria-label="Remove table ${escapedTableName}">×</button>`
             : ""
         }
       </div>
@@ -146,11 +142,7 @@ export function renderTables(m1, m2, li, ri) {
       const escapedColName = escapeHtml(col.name);
       html += `<span class="col-header-cell" title="${escapedColName}${col.isKey ? " (key)" : ""}">
         ${typeIcon}
-        <span class="col-header-name" contenteditable="true"
-          onfocus="this._originalValue=this.textContent"
-          oninput="window.app.handleColumnRenameInput(event, ${ti}, '${col.id}')"
-          onblur="window.app.renameColumnAndRender(${ti}, '${col.id}', this.textContent)"
-          onkeydown="if(event.key==='Enter'){this.blur();event.preventDefault()}else if(event.key==='Escape'){this.textContent=this._originalValue;this.blur();event.preventDefault()}"
+        <span class="col-header-name" contenteditable="true" data-ti="${ti}" data-col-id="${col.id}"
           tabindex="0"
           role="button"
           aria-label="Edit column name: ${escapedColName}"
@@ -158,7 +150,7 @@ export function renderTables(m1, m2, li, ri) {
         ${
           col.isKey
             ? `<span class="key-badge" style="color:${pal.text}">key</span>`
-            : `<button class="col-remove-btn" onclick="app.removeColAndRender(${ti},'${col.id}')" title="Remove column ${escapedColName}" aria-label="Remove column ${escapedColName}">×</button>`
+            : `<button class="col-remove-btn" data-ti="${ti}" data-col-id="${col.id}" title="Remove column ${escapedColName}" aria-label="Remove column ${escapedColName}">×</button>`
         }
         ${!isLastCol ? '<span class="col-separator"></span>' : ''}
       </span>`;
@@ -177,33 +169,32 @@ export function renderTables(m1, m2, li, ri) {
         const colVal = row[col.id];
         const dt = DATA_TYPES[col.type] || DATA_TYPES.string;
         const stepA = dt.step ? ` step="${dt.step}"` : "";
+        const escapedColName = escapeHtml(col.name);
+        const escapedColVal = escapeHtml(String(colVal ?? ""));
         if (col.type === "boolean") {
           const isChecked = colVal === true || colVal === "true";
           html += `<label class="bool-input" title="Checked = true, Unchecked = false"><input type="checkbox" ${isChecked ? "checked" : ""}
-            onchange="app.updateValAndRefresh(${ti},${ri2},'${col.id}',this.checked)"
-            aria-label="${col.name}"
+            class="cell-checkbox" data-ti="${ti}" data-ri="${ri2}" data-col-id="${col.id}"
+            aria-label="${escapedColName}"
             ${col.isKey ? "disabled" : ""}></label>`;
         } else {
           const keyAttrs = col.isKey ? ' min="1" data-key="true"' : ' data-key="false"';
-          html += `<input class="${col.isKey ? "id-input" : "col-input"}" type="${dt.inputType}"${stepA}${keyAttrs} maxlength="20"
-            value="${colVal ?? ""}" placeholder="${col.name}"
-            aria-label="${col.name}"
-            onfocus="this._originalValue=this.value"
-            oninput="app.handleKeyInput(event, ${ti}, ${ri2}, '${col.id}', ${col.isKey}, '${col.type}')"
-            onchange="if(!this._escapePressed){app.handleKeyChange(event, ${ti}, ${ri2}, '${col.id}', ${col.isKey}, '${col.type}')}this._escapePressed=false"
-            onkeydown="if(event.key==='Escape'){this.value=this._originalValue;this._escapePressed=true;this.blur();event.preventDefault()}">`;
+          html += `<input class="${col.isKey ? "id-input" : "col-input"} cell-input" type="${dt.inputType}"${stepA}${keyAttrs} maxlength="20"
+            data-ti="${ti}" data-ri="${ri2}" data-col-id="${col.id}" data-col-type="${col.type}" data-is-key="${col.isKey}"
+            value="${escapedColVal}" placeholder="${escapedColName}"
+            aria-label="${escapedColName}">`;
         }
       });
 
-      html += `<button class="del-btn" onclick="app.delRowAndRender(${ti},${ri2})" aria-label="Delete row ${ri2 + 1}">×</button></div>`;
+      html += `<button class="del-btn" data-ti="${ti}" data-ri="${ri2}" aria-label="Delete row ${ri2 + 1}">×</button></div>`;
     });
 
     // Footer: add row, add column
     const nonKeyColCount = t.columns.filter((c) => !c.isKey).length;
     const canAddCol = nonKeyColCount < LIMITS.MAX_COLS_PER_TABLE;
     html += `</div>
-      <button class="add-row-btn" onclick="app.addRowAndFocus(${ti})" aria-label="Add row to ${t.name}">+ row</button>
-      <button class="add-col-btn" onclick="app.showColModal(${ti})" ${!canAddCol ? `disabled style="opacity:0.5;cursor:not-allowed" title="${LIMIT_MESSAGES.COLUMN_LIMIT}"` : ''} aria-label="Add column to ${t.name}">+ column</button>`;
+      <button class="add-row-btn" data-ti="${ti}" aria-label="Add row to ${escapeHtml(t.name)}">+ row</button>
+      <button class="add-col-btn" data-ti="${ti}" ${!canAddCol ? `disabled style="opacity:0.5;cursor:not-allowed" title="${LIMIT_MESSAGES.COLUMN_LIMIT}"` : ''} aria-label="Add column to ${escapeHtml(t.name)}">+ column</button>`;
 
     div.innerHTML = html;
     area.insertBefore(div, addBtn);
@@ -420,7 +411,7 @@ export function renderResult() {
   const isSelfJoin = state.currentOp === "self";
   const isSingleCol = rows.length > 0 && rows[0].single;
   const isStdJoin =
-    rows.length > 0 && !rows[0].single && rows[0].li !== undefined;
+    rows.length > 0 && !rows[0].single && rows[0].li !== undefined && rows[0].c1 === undefined;
 
   // Get empty state reason only when there are no rows
   const emptyReason = rows.length === 0 ? getEmptyStateReason() : null;
@@ -467,14 +458,14 @@ export function renderResult() {
               const pal = c.side === "l" ? palL : palR;
               const val = rd ? rd[c.id] : null;
               const sideLabel = c.side === "l" ? " (left)" : " (right)";
-              const cellContent = val === null || val === undefined || val === "" ? nullBadge() : `${escapeHtml(String(val))}<span style="font-size:0.7em;opacity:0.5">${sideLabel}</span>`;
+              const cellContent = val === null || val === undefined || val === "" ? `<span class="null-val">${nullBadge()}</span>` : `${escapeHtml(String(val))}<span style="font-size:0.7em;opacity:0.5">${sideLabel}</span>`;
               return `<div class="rg-cell" role="cell" style="background:${pal.bg}">
               ${cellContent}</div>`;
             });
             return `<div class="rg-data-row" role="row" style="grid-template-columns:${tpl}">${cells.join("")}</div>`;
           })
           .join("")
-      : emptyState(emptyReason);
+      : `<p class="empty-state">${emptyState(emptyReason)}</p>`;
   } else if (isSingleCol || (rows.length > 0 && rows[0].isSetOp)) {
     // Set operators (UNION, EXCEPT, INTERSECT) — show all columns from both tables
     const tL = state.tables[li];
@@ -517,12 +508,12 @@ export function renderResult() {
             // Left-only columns: always palL, Right-only: always palR, Both: use row's source
             const cellPal = c.side === 'r' ? palR : (c.side === 'l' ? palL : rowPal);
             const sideLabel = c.side === 'r' ? ' (right)' : (c.side === 'l' ? ' (left)' : '');
-            const cellContent = val === null || val === undefined || val === '' ? nullBadge() : `${escapeHtml(String(val))}<span style="font-size:0.7em;opacity:0.5">${sideLabel}</span>`;
+            const cellContent = val === null || val === undefined || val === '' ? `<span class="null-val">${nullBadge()}</span>` : `${escapeHtml(String(val))}<span style="font-size:0.7em;opacity:0.5">${sideLabel}</span>`;
             return `<div class="rg-cell" role="cell" style="background:${cellPal.bg}">${cellContent}</div>`;
           }).join('');
-          return `<div class="rg-data-row" style="grid-template-columns:${tpl}">${cells}</div>`;
+          return `<div class="rg-data-row" role="row" style="grid-template-columns:${tpl}">${cells}</div>`;
         }).join("")
-      : emptyState(emptyReason);
+      : `<p class="empty-state">${emptyState(emptyReason)}</p>`;
   } else if (isStdJoin) {
     // Standard join — all columns from both tables
     const tL = state.tables[li],
@@ -550,14 +541,14 @@ export function renderResult() {
               const pal = c.side === "l" ? palL : palR;
               const val = rd ? rd[c.id] : null;
               const sideLabel = c.side === "l" ? " (left)" : " (right)";
-              const cellContent = val === null || val === undefined || val === "" ? nullBadge() : `${escapeHtml(String(val))}<span style="font-size:0.7em;opacity:0.5">${sideLabel}</span>`;
+              const cellContent = val === null || val === undefined || val === "" ? `<span class="null-val">${nullBadge()}</span>` : `${escapeHtml(String(val))}<span style="font-size:0.7em;opacity:0.5">${sideLabel}</span>`;
               return `<div class="rg-cell" role="cell" style="background:${pal.bg}">
               ${cellContent}</div>`;
             });
             return `<div class="rg-data-row" role="row" style="grid-template-columns:${tpl}">${cells.join("")}</div>`;
           })
           .join("")
-      : emptyState(emptyReason);
+      : `<p class="empty-state">${emptyState(emptyReason)}</p>`;
   } else {
     // Anti joins — show IDs from both tables
     heads.style.gridTemplateColumns = "1fr 1fr";
@@ -569,11 +560,11 @@ export function renderResult() {
             (
               r,
             ) => `<div class="rg-data-row" role="row" style="grid-template-columns:1fr 1fr">
-          <div class="rg-cell" role="cell" style="background:${palL.bg}">${r.c1 === null ? nullBadge() : `${escapeHtml(String(r.c1))}<span style="font-size:0.7em;opacity:0.5"> (left)</span>`}</div>
-          <div class="rg-cell" role="cell" style="background:${palR.bg}">${r.c2 === null ? nullBadge() : r.c2 === undefined ? "—" : `${escapeHtml(String(r.c2))}<span style="font-size:0.7em;opacity:0.5"> (right)</span>`}</div>
+          <div class="rg-cell" role="cell" style="background:${palL.bg}">${r.c1 === null ? `<span class="null-val">${nullBadge()}</span>` : r.c1 === undefined ? "—" : `${escapeHtml(String(r.c1))}<span style="font-size:0.7em;opacity:0.5"> (left)</span>`}</div>
+          <div class="rg-cell" role="cell" style="background:${palR.bg}">${r.c2 === null ? `<span class="null-val">${nullBadge()}</span>` : r.c2 === undefined ? "—" : `${escapeHtml(String(r.c2))}<span style="font-size:0.7em;opacity:0.5"> (right)</span>`}</div>
         </div>`,
           )
           .join("")
-      : emptyState(emptyReason);
+      : `<p class="empty-state">${emptyState(emptyReason)}</p>`;
   }
 }

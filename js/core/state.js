@@ -39,11 +39,11 @@ export const PALETTE = [
 ];
 
 export const DATA_TYPES = {
-  number: { label: "Number", defaultValue: "", inputType: "number" },
-  float: { label: "Float", defaultValue: "", inputType: "number", step: "any" },
-  string: { label: "String", defaultValue: "", inputType: "text" },
-  boolean: { label: "Boolean", defaultValue: false, inputType: "checkbox" },
-  date: { label: "Date", defaultValue: "", inputType: "date" },
+  number: { label: "Number", defaultValue: "", inputType: "number", icon: "fa-hashtag" },
+  float: { label: "Float", defaultValue: "", inputType: "number", step: "0.1", icon: "fa-arrow-up-9-1" },
+  string: { label: "String", defaultValue: "", inputType: "text", icon: "fa-font" },
+  boolean: { label: "Boolean", defaultValue: false, inputType: "checkbox", icon: "fa-check-square" },
+  date: { label: "Date", defaultValue: "", inputType: "date", icon: "fa-calendar" },
 };
 
 export const JOIN_OPS = {
@@ -56,6 +56,8 @@ export const JOIN_OPS = {
   right_anti: { label: "RIGHT ANTI JOIN", group: "join" },
   left_semi: { label: "LEFT SEMI JOIN", group: "join" },
   right_semi: { label: "RIGHT SEMI JOIN", group: "join" },
+  exists: { label: "EXISTS", group: "join" },
+  not_exists: { label: "NOT EXISTS", group: "join" },
   self: { label: "SELF JOIN", group: "join" },
   union: { label: "UNION", group: "set" },
   union_all: { label: "UNION ALL", group: "set" },
@@ -65,29 +67,31 @@ export const JOIN_OPS = {
 
 export const DESCS = {
   inner:
-    "INNER JOIN — only rows where the key exists in BOTH tables. Duplicates multiply: M×N per shared key.",
+    "ℹ️ INNER JOIN — only rows where the key exists in BOTH tables. Duplicates multiply: M×N per shared key.",
   left: "LEFT JOIN — all rows from the left table; NULLs where no match in right.",
   right:
-    "RIGHT JOIN — all rows from the right table; NULLs where no match in left.",
-  full: "FULL OUTER JOIN — all rows from both tables; NULLs on whichever side has no match.",
+    "ℹ️ RIGHT JOIN — all rows from the right table; NULLs where no match in left.",
+  full: "ℹ️ FULL OUTER JOIN — all rows from both tables; NULLs on whichever side has no match.",
   cross:
-    "CROSS JOIN — every row in left paired with every row in right. Always M×N rows.",
+    "ℹ️ CROSS JOIN — every row in left paired with every row in right. Always M×N rows.",
   left_anti:
-    "LEFT ANTI JOIN — rows in the LEFT table that have NO match in the right table.",
+    "ℹ️ LEFT ANTI JOIN — rows in the LEFT table that have NO match in the right table.",
   right_anti:
-    "RIGHT ANTI JOIN — rows in the RIGHT table that have NO match in the left table.",
+    "ℹ️ RIGHT ANTI JOIN — rows in the RIGHT table that have NO match in the left table.",
   left_semi:
-    "LEFT SEMI JOIN — rows from the left table where a match EXISTS in the right (no right columns returned).",
+    "ℹ️ LEFT SEMI JOIN — rows from the left table where a match EXISTS in the right (no right columns returned).",
   right_semi:
-    "RIGHT SEMI JOIN — rows from the right table where a match EXISTS in the left (no left columns returned).",
-  self: "SELF JOIN — the table joined to itself. Each row is matched against other rows with the same key but a different position.",
-  union: "UNION — combines rows from both tables, removing duplicates.",
+    "ℹ️ RIGHT SEMI JOIN — rows from the right table where a match EXISTS in the left (no left columns returned).",
+  exists: "ℹ️ EXISTS — rows from the left table where at least one match exists in the right table. Standard SQL using a correlated subquery.",
+  not_exists: "ℹ️ NOT EXISTS — rows from the left table where no match exists in the right table. Standard SQL using a correlated subquery.",
+  self: "ℹ️ SELF JOIN — the table joined to itself. Each row is matched against other rows with the same key but a different position.",
+  union: "ℹ️ UNION — combines rows from both tables, removing duplicates.",
   union_all:
-    "UNION ALL — combines all rows from both tables including duplicates.",
+    "ℹ️ UNION ALL — combines all rows from both tables including duplicates.",
   except:
-    "EXCEPT — rows in the left table that do NOT appear in the right table.",
+    "ℹ️ EXCEPT — rows in the left table that do NOT appear in the right table.",
   intersect:
-    "INTERSECT — rows that appear in BOTH tables (distinct values only).",
+    "ℹ️ INTERSECT — rows that appear in BOTH tables (distinct values only).",
 };
 
 // ── Preset Datasets ──────────────────────────────────────────────────────────
@@ -177,6 +181,39 @@ export const PRESET_DATASETS = {
       },
     ],
   },
+  warehouse_products: {
+    tables: [
+      {
+        name: "warehouse_a",
+        columns: [
+          { id: "col_0", name: "product_id", type: "number", isKey: true },
+          { id: "col_1", name: "name", type: "string", isKey: false },
+          { id: "col_2", name: "quantity", type: "number", isKey: false },
+        ],
+        rows: [
+          { col_0: 1, col_1: "Laptop", col_2: 5 },
+          { col_0: 2, col_1: "Mouse", col_2: 15 },
+          { col_0: 3, col_1: "Keyboard", col_2: 8 },
+        ],
+        svgColId: "col_0",
+      },
+      {
+        name: "warehouse_b",
+        columns: [
+          { id: "col_0", name: "product_id", type: "number", isKey: true },
+          { id: "col_1", name: "name", type: "string", isKey: false },
+          { id: "col_2", name: "quantity", type: "number", isKey: false },
+        ],
+        rows: [
+          { col_0: 2, col_1: "Mouse", col_2: 15 },
+          { col_0: 3, col_1: "Keyboard", col_2: 6 },
+          { col_0: 4, col_1: "Monitor", col_2: 3 },
+        ],
+        svgColId: "col_0",
+      },
+    ],
+    joinConditions: [],
+  },
 };
 
 // ── Mutable app state ──────────────────────────────────────────────────────────
@@ -220,4 +257,5 @@ export const state = {
   currentOp: null,
   joinConditions: [],
   selectedPair: "0-1",
+  isSharedView: false,
 };

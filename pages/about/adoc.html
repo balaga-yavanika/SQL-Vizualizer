@@ -5,43 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- ─── SEO & Social ─────────────────────────────────────────── -->
-    <meta name="description" content="Documentation for Y-SQLVIZ SQL Visualizer. Learn how to use the tool effectively." />
-    <meta name="keywords" content="SQL documentation, SQL tutorial, SQL guide, SQL learning" />
+    <meta name="description" content="Learn about Y-SQLVIZ — an interactive SQL visualizer for mastering joins, execution order, and SQL concepts. Free, offline, no dependencies." />
+    <meta name="keywords" content="SQL visualizer, SQL learning, interactive tutorial, about Y-SQLVIZ, SQL tool" />
     <meta name="author" content="Y-SQLVIZ" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="theme-color" content="#121212" />
 
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://YOUR_URL/pages/about/adoc.html" />
+    <link rel="canonical" href="https://sqlviz.vercel.app/pages/about/adoc/" />
 
     <!-- Open Graph -->
-    <meta property="og:title" content="SQL Visualizer Documentation" />
-    <meta property="og:description" content="Complete documentation and guide for Y-SQLVIZ." />
+    <meta property="og:title" content="About Y-SQLVIZ: Interactive SQL Visualizer | YSQLVIZ" />
+    <meta property="og:description" content="Learn about Y-SQLVIZ — an interactive SQL visualizer for mastering joins, execution order, and SQL concepts. Free, offline, no dependencies." />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Y-SQLVIZ" />
-    <meta property="og:image" content="https://YOUR_URL/Assets/preview.jpg" />
+    <meta property="og:site_name" content="SQL Visualizer" />
+    <meta property="og:image" content="https://sqlviz.vercel.app/Assets/preview.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="SQL Visualizer Documentation" />
-    <meta property="og:url" content="https://YOUR_URL/pages/about/adoc.html" />
-    <meta property="og:locale" content="en_IN" />
+    <meta property="og:url" content="https://sqlviz.vercel.app/pages/about/adoc/" />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter/X -->
     <meta name="twitter:card" content="summary_large_image" />
+    <!-- Uncomment when Twitter account @Y_SQLVIZ is created and claimed:
     <meta name="twitter:site" content="@Y_SQLVIZ" />
     <meta name="twitter:creator" content="@Y_SQLVIZ" />
-    <meta name="twitter:title" content="SQL Visualizer Documentation" />
-    <meta name="twitter:description" content="Documentation for Y-SQLVIZ SQL Visualizer." />
-    <meta name="twitter:image" content="https://YOUR_URL/Assets/preview.jpg" />
+    -->
+    <meta name="twitter:title" content="About Y-SQLVIZ: Interactive SQL Visualizer | YSQLVIZ" />
+    <meta name="twitter:description" content="Learn about Y-SQLVIZ — interactive SQL visualizer for joins, execution order, and SQL concepts. Free, offline, no setup." />
+    <meta name="twitter:image" content="https://sqlviz.vercel.app/Assets/preview.jpg" />
     <meta name="twitter:image:alt" content="Documentation" />
 
     <!-- Profile -->
-    
+    <link rel="me" href="https://medium.com/@balaga-yavanika" />
 
     <!-- Structured Data (JSON-LD) -->
-    
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebApplication",
+            "name": "Y-SQLVIZ SQL Visualizer",
+            "description": "An interactive SQL visualizer for mastering joins, execution order, and SQL concepts. Free, offline, no dependencies.",
+            "url": "https://sqlviz.vercel.app/pages/about/adoc/",
+            "applicationCategory": "EducationalApplication",
+            "operatingSystem": "All",
+            "browserRequirements": "Requires JavaScript enabled; Modern browser recommended",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            }
+          },
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://sqlviz.vercel.app/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "About Y-SQLVIZ",
+                "item": "https://sqlviz.vercel.app/pages/about/adoc/"
+              }
+            ]
+          }
+        ]
+      }
+    </script>
 
-    <title>SQL Visualizer — Documentation</title>
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-vvt4KWwuNr51XfE5m+hzeNEGhiOfZzG97ccfqGsPwvE='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; object-src 'none'" />
+
+    <title>About Y-SQLVIZ: Interactive SQL Visualizer | YSQLVIZ</title>
 
     <!-- ─── Favicon ───────────────────────────────── -->
     <link rel="icon" href="/Assets/Favicon/favicon_io/favicon.ico" sizes="any" />
@@ -51,6 +93,9 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/Assets/Favicon/favicon_io/apple-touch-icon.png" />
 
     <!-- Font Awesome -->
+    <link rel="preload" href="/Assets/fonts/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/Assets/fonts/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/Assets/fonts/css/all.min.css" as="style" />
     <link rel="stylesheet" href="/Assets/fonts/css/all.min.css" />
 
     <!-- Global Navigation & Menu Styles -->
@@ -60,12 +105,14 @@
     <!-- ─── Google Fonts ─────────────────────────────── -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" media="print" onload="this.media = 'all'" />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" as="style" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" media="print" />
     <noscript>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" />
     </noscript>
 
     <!-- ─── Page-specific CSS ─────────────────────────── -->
+    <link rel="preload" href="/pages/about/adoc.css" as="style" />
     <link rel="stylesheet" href="/pages/about/adoc.css" />
 
     <!-- ==== Scripts ==== -->
@@ -80,12 +127,9 @@
       <div class="outer-wrapper">
         <article>
         <nav class="breadcrumb" aria-label="Breadcrumb" style="font-size: 0.7rem;">
-        <a><i class="fa-solid fa-arrow-left-long"></i></a>
-        <a href="#" onclick="history.back()" style="font-weight: 600;font-size: 0.8rem;">
-        Go Back&nbsp;</a>
-        <a href="/main.html" rel="prev"
-          ><i class="fa-solid fa-arrow-left-long"></i>&nbsp;<i class="fa-solid fa-house"></i
-        ></a>
+        <a href="/" id="go-back-btn" style="font-weight: 600;font-size: 0.8rem;">
+          <i class="fa-solid fa-arrow-left-long"></i> Go Back
+        </a>
       </nav>
     <div class="doc">
   <h6 class="doc-eyebrow">SQL Visualizer Documentation</h6>
@@ -99,6 +143,14 @@
     Started.
     <i class="fa-solid fa-thumbs-up"></i>
   </p>
+  <hr />
+
+  <h2>About Y-SQLVIZ</h2>
+
+  <p>
+    <strong>Y-SQLVIZ</strong> stands for <strong>Yavanika's SQL Visualizer</strong>. The "Y" is short for my first name, Yavanika. The domain <code>sqlviz.vercel.app</code> is the shortened version for simplicity and searchability, but the full brand name is Y-SQLVIZ.
+  </p>
+
   <hr />
 
   <h2>What It Is</h2>
@@ -223,8 +275,8 @@
     </div> -->
     <hr />
     <p class="about-role">
-      SQL VISUALIZER ©️&nbsp;Copyright © 2026 Yavanika Balaga. All rights
-      reserved.
+      SQL VISUALIZER ©️&nbsp;Copyright © 2026 Yavanika Balaga. Released under
+      the MIT License.
     </p>
   </div>
 </div>

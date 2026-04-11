@@ -4,9 +4,18 @@
   <div class="heading-part-top">
     <div>
       <div class="heading-label-per-page">[01]</div>
-      <h2 class="heading-text"><strong>Joins</strong> Visualizer</h2>
+      <h1 class="heading-text"><strong>SQL Joins</strong> Visualizer</h1>
       <p class="hero-sub">
-        A visual, step-by-step breakdown of working of Joins in SQL.
+        Master INNER, LEFT, RIGHT, OUTER, CROSS, and SELF joins with interactive visualizations.
+        <button
+          class="share-btn-subtle"
+          id="share-btn"
+          title="Share your work to others to explain joins visually (disabled until data is added)"
+          aria-label="Copy share link"
+          disabled
+        >
+          <i class="fa-solid fa-share-nodes"></i>
+        </button>
       </p>
     </div>
   </div>
@@ -23,7 +32,7 @@
       >
         <i class="fa-solid fa-times"></i>
       </button>
-      <h6>Before you start</h6>
+      <h2>Before you start</h2>
       <p>
         <strong>Start with preset sample data</strong> or add tables dynamically
         using the <strong>+ add table</strong> button. Create columns and sample
@@ -38,7 +47,23 @@
         <strong>View the generated SQL.</strong><br />
         Click <strong>Reset All</strong> to start over.
       </p>
-      <blockquote class="desc">
+      <p
+        style="
+          margin-top: var(--space-sm);
+          font-size: var(--text-fine);
+          color: var(--color-text-muted);
+        "
+      >
+        <!-- <i
+          class="fa-solid fa-triangle-exclamation"
+          style="color: var(--color-tertiary)"
+        ></i> -->
+        <strong> ⚠️ Anti &amp; Semi join SQL</strong> uses
+        <strong>Spark SQL</strong> syntax (<code>LEFT ANTI JOIN</code>,
+        <code>LEFT SEMI JOIN</code>) — not standard SQL. In PostgreSQL / MySQL,
+        use <code>NOT EXISTS</code> / <code>EXISTS</code> subqueries instead.
+      </p>
+      <blockquote>
         <i class="fa-solid fa-wand-magic-sparkles"></i>
         See results instantly!
         <i class="fa-solid fa-wand-magic-sparkles"></i>
@@ -50,7 +75,7 @@
 <!-- ── Preset Datasets ── -->
 <div class="preset-section">
   <div>
-    <label class="section-label-large"
+    <h2 class="section-label-large"
       >Quick Start
       <span
         class="tooltip-wrapper"
@@ -58,7 +83,7 @@
       >
         <!-- <i class="fa-solid fa-circle-info"></i> -->
       </span>
-    </label>
+    </h2>
   </div>
   <div class="preset-controls">
     <div class="custom-dropdown" id="preset-dropdown-wrapper">
@@ -77,9 +102,21 @@
         <button class="dropdown-item" data-value="students_courses">
           <i class="fa-solid fa-table-list"></i>&nbsp;Students + Courses
         </button>
+        <button class="dropdown-item" data-value="warehouse_products">
+          <i class="fa-solid fa-table-list"></i>&nbsp;Warehouse Products
+          <span
+            style="
+              font-size: 11px;
+              color: var(--color-primary);
+              opacity: 0.8;
+              margin-left: 4px;
+            "
+            >(SET operators)</span
+          >
+        </button>
       </div>
     </div>
-    <button class="preset-btn reset-btn" onclick="app.resetAllAndRender()">
+    <button class="preset-btn reset-btn" id="reset-all-btn">
       <i class="fa-solid fa-arrow-rotate-left"></i>&nbsp;&nbsp;Reset All
     </button>
   </div>
@@ -88,7 +125,7 @@
 <!-- ── Join Type & Set Operators (Side by Side) ── -->
 <div class="operations-container">
   <div class="operation-section">
-    <label class="section-label-large">Join type</label>
+    <h2 class="section-label-large">Join type</h2>
     <div class="custom-dropdown" id="join-type-dropdown-wrapper">
       <button
         class="dropdown-toggle"
@@ -105,7 +142,7 @@
   </div>
 
   <div class="operation-section">
-    <label class="section-label-large">Set operators</label>
+    <h2 class="section-label-large">Set operators</h2>
     <div class="custom-dropdown" id="set-op-dropdown-wrapper">
       <button
         class="dropdown-toggle"
@@ -122,20 +159,10 @@
   </div>
 </div>
 
-<!-- ── Legacy tabs (commented out for reference) ──
-          <div class="section-label-large">Join type</div>
-          <div class="tabs" id="join-tabs"></div>
-
-          <div class="section-label-large">Set operators</div>
-          <div class="tabs" id="set-tabs"></div>
-          ── End legacy tabs ── -->
-
-<blockquote class="desc" id="desc"></blockquote>
-
 <!-- ── Pair selector (3+ tables only) ── -->
-<div class="pair-selector" id="pair-row" style="display: none">
+<div class="join-pair-selector" id="pair-row" style="display: none">
   <label class="pair-selector-label">Which tables to join:</label>
-  <div class="custom-dropdown" id="pair-select-wrapper">
+  <div class="custom-dropdown" id="join-pair-select-wrapper">
     <button
       class="dropdown-toggle"
       id="pair-select-toggle"
@@ -161,6 +188,8 @@
   </small>
 </div>
 
+<blockquote class="desc" id="desc"></blockquote>
+
 <!-- ── Join Condition Panel ── -->
 <div class="join-condition-panel">
   <!-- ── Join Condition Editor ── -->
@@ -168,7 +197,7 @@
 
   <!-- ── Join Condition Summary ── -->
   <div class="join-condition-summary">
-    <span id="join-condition-summary"
+    <span id="join-condition-summary" aria-live="polite"
       >Current condition: No join condition set</span
     >
   </div>
@@ -176,36 +205,47 @@
 
 <!-- ── Tables ── -->
 <div class="tables-scroll-wrapper">
-  <div class="joins-tables-grid" id="tables-area">
-    <button class="add-tbl-btn" onclick="app.addTableAndRender()">
+  <div class="joins-tables-grid" id="tables-area" aria-label="Data tables">
+    <button class="add-tbl-btn" id="add-table-btn" aria-label="Add new table">
       + add table
     </button>
   </div>
 </div>
 
-<!-- ── Diagram Label ── -->
-<div class="diagram-label">
-  <i
-    class="fa-solid fa-circle-info"
-    title="Visual representation of the join condition connecting the selected columns between your two tables"
-  ></i>
-  <span>Diagram shows</span>
+<!-- ── Diagram Label & Column Selectors ── -->
+<div class="diagram-section-header">
+  <div class="diagram-label">
+    <i
+      class="fa-solid fa-circle-info"
+      title="Visual representation of the join condition connecting the selected columns between your two tables"
+    ></i>
+    <span>Diagram shows</span>
+  </div>
+  <div
+    id="diagram-col-selectors-container"
+    class="diagram-col-selectors-container"
+  ></div>
 </div>
 
 <!-- ── SVG wrapper ── -->
 <div class="diagram-scroll-wrapper">
   <div id="conn-wrapper" class="conn-wrapper">
-    <svg class="conn" id="conn-svg" viewBox="0 0 480 10"></svg>
+    <svg class="conn" id="conn-svg" viewBox="0 0 480 10" role="img" aria-label="Visual diagram showing join connections between tables"></svg>
+    <noscript>
+      <p style="margin: var(--space-sm) 0; color: var(--color-text-muted); font-size: var(--text-sm);">
+        <i class="fa-solid fa-triangle-exclamation"></i> Interactive diagram requires JavaScript. Enable it to visualize join connections.
+      </p>
+    </noscript>
   </div>
 </div>
 
 <!-- ── Result & SQL Container (Stacked) ── -->
 <div class="result-sql-container">
   <!-- ── Result Grid ── -->
-  <div class="result-section">
+  <div class="result-section" aria-label="Join result">
     <div class="result-label">
       <span class="result-text section-label-medium">Result</span>
-      <span class="count-badge" id="row-count">0 rows</span>
+      <span class="count-badge" id="row-count" aria-live="polite">0 rows</span>
     </div>
     <div class="result-scroll-wrapper">
       <div class="result-grid">
@@ -216,14 +256,15 @@
   </div>
 
   <!-- ── SQL Query Generator ── -->
-  <div id="sql-panel" class="code-block" style="display: none">
+  <div
+    id="sql-panel"
+    class="code-block"
+    style="display: none"
+    aria-label="Generated SQL query"
+  >
     <div class="code-header">
       <span class="code-lang">SQL</span>
-      <button
-        id="sql-copy-btn"
-        class="copy-btn"
-        onclick="window.copySqlButtonClicked()"
-      >
+      <button id="sql-copy-btn" class="copy-btn" aria-label="Copy SQL query">
         <i class="fa-regular fa-clipboard"></i> Copy
       </button>
     </div>
@@ -231,17 +272,14 @@
   </div>
 </div>
 
+<p class="related-link">Next: <a href="/pages/execorder/eo.html">Explore SQL Execution Order →</a></p>
+
 <!-- ─── Add Column Modal ─── -->
 <div id="col-modal" class="modal-backdrop" style="display: none">
   <div class="modal-box">
     <div class="modal-header">
-      <h4 class="modal-title">Add Column</h4>
-      <button
-        class="modal-close"
-        onclick="document.getElementById('col-modal').style.display = 'none'"
-      >
-        ×
-      </button>
+      <h3 class="modal-title">Add Column</h3>
+      <button class="modal-close" id="col-modal-close">×</button>
     </div>
     <div class="modal-body">
       <div class="modal-field">
@@ -252,6 +290,16 @@
           class="modal-input"
           placeholder="e.g., user_id"
         />
+        <span
+          id="col-modal-error"
+          class="modal-error"
+          style="
+            display: none;
+            color: #ff6060;
+            font-size: 12px;
+            margin-top: 4px;
+          "
+        ></span>
       </div>
 
       <div class="modal-field">
@@ -270,13 +318,14 @@
             id="col-modal-type-menu"
             style="display: none"
           >
-            <button class="dropdown-item" data-value="int">Integer</button>
+            <button class="dropdown-item" data-value="number">Integer</button>
             <button class="dropdown-item" data-value="string">String</button>
             <button class="dropdown-item" data-value="float">Float</button>
             <button class="dropdown-item" data-value="date">Date</button>
+            <button class="dropdown-item" data-value="boolean">Boolean</button>
           </div>
         </div>
-        <input type="hidden" id="col-modal-type-value" value="int" />
+        <input type="hidden" id="col-modal-type-value" value="number" />
       </div>
     </div>
     <div class="modal-footer">

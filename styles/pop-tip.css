@@ -1,6 +1,7 @@
 /* ============================================= */
-/* POPOVER / TOOLTIP                             */
+/* POPOVER / TOOLTIP                              */
 /* ============================================= */
+
 .how-to-container {
   position: relative;
   display: flex;
@@ -18,37 +19,39 @@
   border-radius: var(--radius-md);
   background: oklch(from var(--color-secondary) l c h / 0.1);
   color: var(--color-secondary);
-}
+  cursor: pointer;
 
-.btn-secondary:focus-visible {
-  outline: 2px solid var(--color-secondary);
-  outline-offset: 2px;
-}
-
-.btn-secondary:active {
-  transform: translateY(0);
-}
-
-@media (hover: hover) {
-  .btn-secondary:hover {
+  &:hover {
     background: oklch(from var(--color-secondary) l c h / 0.15);
     border-color: oklch(from var(--color-secondary) l c h / 0.85);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-secondary);
+    outline-offset: 2px;
+  }
+
+  &:active {
+    transform: scale(0.98);
   }
 }
 
 /* ── Popover panel ── */
 .how-to-popover {
+  --popover-width: 450px;
+  --popover-offset: -30px;
+
   position: absolute;
-  top: calc(100% - 30px);
-  right: 0;
-  width: 450px;
-  max-width: 90vw;
-  max-height: 80vh;
+  inset-block-start: calc(100% + var(--popover-offset));
+  inset-inline-end: 0;
+  inline-size: var(--popover-width);
+  max-inline-size: 90vw;
+  max-block-size: 80vh;
   overflow-y: auto;
-  background: #101919;
+  background: var(--color-bg-vdb);
   border: 1px solid oklch(from var(--color-secondary) l c h / 0.2);
   border-radius: var(--radius-md);
-  box-shadow: -18px 18px 50px #0f0f12;
+  box-shadow: -18px 18px 50px var(--color-bg-vdb-shade-4);
   z-index: 1000;
   animation: popoverIn 0.15s ease;
 }
@@ -71,74 +74,144 @@
 }
 
 .popover-title {
-  margin-block: 0 10px;
+  margin: 0 0 10px;
   color: var(--color-secondary);
   text-transform: uppercase;
+  font-size: var(--text-sm);
 }
 
 .popover-text p {
   color: oklch(from var(--color-secondary) calc(l - 0.1) calc(c - 0.04) h);
   font-size: var(--text-body-sm);
+  line-height: 1.5;
 }
 
 .popover-close {
+  --btn-size: 32px;
+
   position: absolute;
-  top: 8px;
-  right: 8px;
+  inset: 8px;
+  inline-size: var(--btn-size);
+  block-size: var(--btn-size);
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
   background: transparent;
   border: none;
-  border-radius: var(--radius-sm, 4px);
+  border-radius: var(--radius-sm);
   font-size: 24px;
   color: oklch(from var(--color-secondary) calc(l - 0.1) calc(c - 0.04) h);
   cursor: pointer;
-  transition: background 0.2s ease;
-}
 
-.popover-close:focus-visible {
-  outline: 2px solid var(--color-secondary);
-  outline-offset: 2px;
-}
-
-@media (hover: hover) {
-  .popover-close:hover {
+  &:hover {
     background: var(--color-sec-accent-elevated);
   }
-}
 
-/* ── Touch: larger tap targets ── */
-@media (pointer: coarse) {
-  .popover-close {
-    width: 40px;
-    height: 40px;
+  &:focus-visible {
+    outline: 2px solid var(--color-secondary);
+    outline-offset: 2px;
+  }
+
+  @media (pointer: coarse) {
+    --btn-size: 40px;
   }
 }
 
-/* ── Tablet (768px and below) ── */
+/* ── Tooltip ── */
+.tooltip-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: help;
+
+  &::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: calc(100% + 12px);
+    transform: translateY(-50%);
+    background: var(--color-bg-vdb);
+    border: 1px solid var(--color-sec-accent-elevated);
+    color: oklch(from var(--color-secondary) calc(l - 0.1) calc(c - 0.04) h);
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-tag);
+    max-inline-size: 200px;
+    word-wrap: break-word;
+    white-space: normal;
+    line-height: 1.4;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: calc(100% + 6px);
+    transform: translateY(-50%);
+    border-block-start: 4px solid transparent;
+    border-block-end: 4px solid transparent;
+    border-inline-start: 4px solid var(--color-sec-accent-elevated);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &:hover::before,
+  &:hover::after {
+    opacity: 1;
+  }
+
+  @media (pointer: coarse) {
+    &:focus-within::before,
+    &:focus-within::after {
+      opacity: 1;
+    }
+  }
+}
+
+/* ============================================= */
+/* RESPONSIVE                                    */
+/* ============================================= */
+
 @media (max-width: 768px) {
   .how-to-popover {
-    right: 16px;
-    left: 16px;
-    width: auto;
-    max-width: none;
+    inset-inline: 16px;
+    inline-size: auto;
+    max-inline-size: none;
+  }
+
+  .tooltip-wrapper[data-tooltip]::before {
+    inset-inline-start: 50%;
+    inset-block-start: auto;
+    inset-block-end: calc(100% + 12px);
+    transform: translateX(-50%);
+    max-inline-size: 180px;
+  }
+
+  .tooltip-wrapper[data-tooltip]::after {
+    inset-inline-start: 50%;
+    inset-block-start: auto;
+    inset-block-end: calc(100% + 6px);
+    transform: translateX(-50%);
+    border-inline-start: 0;
+    border-block-start: 4px solid var(--color-sec-accent-elevated);
+    border-block-end: 0;
+  }
+
+  .popover-content {
+    padding: var(--space-xl);
   }
 }
 
-/* ── Mobile (480px and below) ── */
 @media (max-width: 480px) {
   .how-to-popover {
     position: fixed;
-    top: auto;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    width: 100%;
-    max-height: 80vh;
+    inset: auto 0 0 0;
+    inline-size: 100%;
+    max-block-size: 80vh;
     border-radius: var(--radius-md) var(--radius-md) 0 0;
     animation: popoverSlideUp 0.2s ease;
   }
@@ -157,101 +230,10 @@
   .popover-content {
     padding: 20px 16px 16px;
   }
-}
 
-/* ── Tooltip (responsive positioning) ── */
-.tooltip-wrapper {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  cursor: help;
-}
-
-/* Default: tooltip on the right for larger screens */
-.tooltip-wrapper[data-tooltip]::before {
-  content: attr(data-tooltip);
-  position: absolute;
-  top: 50%;
-  left: calc(100% + 12px);
-  transform: translateY(-50%);
-  background: var(--color-bg-vdb);
-  border: 1px solid var(--color-sec-accent-elevated);
-  color: oklch(from var(--color-secondary) calc(l - 0.1) calc(c - 0.04) h);
-  padding: 8px 12px;
-  border-radius: var(--radius-sm);
-  font-size: var(--text-tag);
-  max-width: 200px;
-  word-wrap: break-word;
-  white-space: normal;
-  line-height: 1.4;
-  z-index: 100;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-}
-
-.tooltip-wrapper[data-tooltip]::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: calc(100% + 6px);
-  transform: translateY(-50%);
-  width: 0;
-  height: 0;
-  border-top: 4px solid transparent;
-  border-bottom: 4px solid transparent;
-  border-left: 4px solid var(--color-sec-accent-elevated);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-}
-
-/* Medium screens: reposition above if right position would overflow */
-@media (max-width: 768px) {
   .tooltip-wrapper[data-tooltip]::before {
-    left: 50%;
-    top: auto;
-    bottom: calc(100% + 12px);
-    transform: translateX(-50%);
-    max-width: 180px;
-  }
-
-  .tooltip-wrapper[data-tooltip]::after {
-    left: 50%;
-    top: auto;
-    bottom: calc(100% + 6px);
-    transform: translateX(-50%);
-    border-left: 0;
-    border-top: 4px solid var(--color-sec-accent-elevated);
-    border-right: 0;
-    border-bottom: 0;
-  }
-  .popover-content {
-    padding-inline: var(--space-xl);
-    padding-block: var(--space-xl);
-  }
-}
-
-/* Small screens: position above with less max-width */
-@media (max-width: 480px) {
-  .tooltip-wrapper[data-tooltip]::before {
-    max-width: min(150px, 90vw);
+    max-inline-size: min(150px, 90vw);
     font-size: var(--text-fine);
     padding: 6px 10px;
-  }
-}
-
-@media (hover: hover) {
-  .tooltip-wrapper[data-tooltip]:hover::before,
-  .tooltip-wrapper[data-tooltip]:hover::after {
-    opacity: 1;
-  }
-}
-
-/* ── Touch: show tooltip on focus ── */
-@media (pointer: coarse) {
-  .tooltip-wrapper[data-tooltip]:focus-within::before,
-  .tooltip-wrapper[data-tooltip]:focus-within::after {
-    opacity: 1;
   }
 }

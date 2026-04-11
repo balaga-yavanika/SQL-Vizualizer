@@ -16,6 +16,14 @@
 }
 
 /* ============================================= */
+/* HEADINGS – H2 SIZED LIKE H6 FOR HIERARCHY    */
+/* ============================================= */
+h2 {
+  font-size: var(--text-ui);
+  letter-spacing: var(--tracking-wide);
+}
+
+/* ============================================= */
 /* ALL OTHER STYLES IMPORTED FROM FEATURE FILES */
 /* ============================================= */
 /* • Preset datasets → joins-preset.css */

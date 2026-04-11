@@ -18,15 +18,17 @@
     <meta property="og:title" content="{{OG_TITLE}}" />
     <meta property="og:description" content="{{OG_DESCRIPTION}}" />
     <meta property="og:type" content="{{OG_TYPE}}" />
-    <meta property="og:site_name" content="Y-SQLVIZ" />
+    <meta property="og:site_name" content="SQL Visualizer" />
     {{OG_IMAGE}}
     <meta property="og:url" content="{{BASE_URL}}{{CANONICAL}}" />
-    <meta property="og:locale" content="en_IN" />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter/X -->
     <meta name="twitter:card" content="{{TWITTER_CARD}}" />
+    <!-- Uncomment when Twitter account @Y_SQLVIZ is created and claimed:
     <meta name="twitter:site" content="@Y_SQLVIZ" />
     <meta name="twitter:creator" content="@Y_SQLVIZ" />
+    -->
     <meta name="twitter:title" content="{{TWITTER_TITLE}}" />
     <meta name="twitter:description" content="{{TWITTER_DESCRIPTION}}" />
     {{TWITTER_IMAGE}}
@@ -36,6 +38,9 @@
 
     <!-- Structured Data (JSON-LD) -->
     {{JSONLD}}
+
+    <!-- Content Security Policy -->
+    {{CSP}}
 
     <title>{{TITLE}}</title>
 
@@ -47,6 +52,9 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/Assets/Favicon/favicon_io/apple-touch-icon.png" />
 
     <!-- Font Awesome -->
+    <link rel="preload" href="/Assets/fonts/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/Assets/fonts/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/Assets/fonts/css/all.min.css" as="style" />
     <link rel="stylesheet" href="/Assets/fonts/css/all.min.css" />
 
     <!-- Global Navigation & Menu Styles -->
@@ -56,7 +64,8 @@
     <!-- ─── Google Fonts ─────────────────────────────── -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" media="print" onload="this.media = 'all'" />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" as="style" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" media="print" />
     <noscript>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" />
     </noscript>

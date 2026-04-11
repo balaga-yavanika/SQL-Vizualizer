@@ -2,6 +2,8 @@
  * Reusable column modal handler
  * Usage: ModalHandler.setup(modalId, submitCallback, dataAttribute)
  */
+import { validateName } from "../core/utils.js";
+
 export const ModalHandler = {
   setup(modalId, submitCallback, dataAttribute = "ti") {
     const modal = document.getElementById(modalId);
@@ -13,10 +15,13 @@ export const ModalHandler = {
       document.getElementById(modalId + "-name").value = "";
       const typeInput = document.getElementById(modalId + "-type-value");
       if (typeInput) {
-        typeInput.value = "int";
+        typeInput.value = "number";
         const display = document.getElementById(modalId + "-type-display");
         if (display) display.textContent = "Integer";
       }
+      // Clear error display
+      const errEl = document.getElementById(modalId + "-error");
+      if (errEl) errEl.style.display = "none";
       modal.style.display = "flex";
       setTimeout(() => document.getElementById(modalId + "-name").focus(), 50);
     };
@@ -30,18 +35,27 @@ export const ModalHandler = {
     this.submit = () => {
       const nameInput = document.getElementById(modalId + "-name");
       const typeInput = document.getElementById(modalId + "-type-value");
-      const name = nameInput.value.trim();
-      const type = typeInput ? typeInput.value : "int";
+      const name = nameInput.value;
+      const type = typeInput ? typeInput.value : "number";
 
-      if (!name) {
+      const validation = validateName(name);
+      if (!validation.valid) {
+        const errEl = document.getElementById(modalId + "-error");
+        if (errEl) {
+          errEl.textContent = validation.error;
+          errEl.style.display = "block";
+        }
         nameInput.focus();
         return;
       }
 
+      // Clear error and hide
+      const errEl = document.getElementById(modalId + "-error");
+      if (errEl) errEl.style.display = "none";
       this.hide();
       submitCallback({
         dataValue: modal.dataset[dataAttribute],
-        name,
+        name: validation.value,
         type,
       });
     };

@@ -5,43 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- ─── SEO & Social ─────────────────────────────────────────── -->
-    <meta name="description" content="Version history and changelog for Y-SQLVIZ SQL Visualizer." />
-    <meta name="keywords" content="SQL visualizer updates, changelog, version history, release notes" />
+    <meta name="description" content="Track Y-SQLVIZ updates and improvements. View latest features, bug fixes, and enhancements to the SQL visualizer." />
+    <meta name="keywords" content="version history, changelog, updates, release notes, Y-SQLVIZ" />
     <meta name="author" content="Y-SQLVIZ" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="theme-color" content="#121212" />
 
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://YOUR_URL/pages/about/ver.html" />
+    <link rel="canonical" href="https://sqlviz.vercel.app/pages/about/ver/" />
 
     <!-- Open Graph -->
-    <meta property="og:title" content="SQL Visualizer — Version History" />
-    <meta property="og:description" content="Updates and changelog for Y-SQLVIZ." />
+    <meta property="og:title" content="Version Notes: Y-SQLVIZ Updates & Changelog | YSQLVIZ" />
+    <meta property="og:description" content="Track Y-SQLVIZ updates and improvements. View latest features, bug fixes, and enhancements to the SQL visualizer." />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Y-SQLVIZ" />
-    <meta property="og:image" content="https://YOUR_URL/Assets/preview.jpg" />
+    <meta property="og:site_name" content="SQL Visualizer" />
+    <meta property="og:image" content="https://sqlviz.vercel.app/Assets/preview.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="SQL Visualizer Version History" />
-    <meta property="og:url" content="https://YOUR_URL/pages/about/ver.html" />
-    <meta property="og:locale" content="en_IN" />
+    <meta property="og:url" content="https://sqlviz.vercel.app/pages/about/ver/" />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter/X -->
     <meta name="twitter:card" content="summary_large_image" />
+    <!-- Uncomment when Twitter account @Y_SQLVIZ is created and claimed:
     <meta name="twitter:site" content="@Y_SQLVIZ" />
     <meta name="twitter:creator" content="@Y_SQLVIZ" />
-    <meta name="twitter:title" content="SQL Visualizer Version History" />
-    <meta name="twitter:description" content="Latest updates and releases for Y-SQLVIZ." />
-    <meta name="twitter:image" content="https://YOUR_URL/Assets/preview.jpg" />
+    -->
+    <meta name="twitter:title" content="Version Notes: Y-SQLVIZ Updates & Changelog | YSQLVIZ" />
+    <meta name="twitter:description" content="Track Y-SQLVIZ updates and improvements. Latest features, bug fixes, and enhancements." />
+    <meta name="twitter:image" content="https://sqlviz.vercel.app/Assets/preview.jpg" />
     <meta name="twitter:image:alt" content="Version History" />
 
     <!-- Profile -->
-    
+    <link rel="me" href="https://medium.com/@balaga-yavanika" />
 
     <!-- Structured Data (JSON-LD) -->
-    
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "SoftwareApplication",
+            "name": "Y-SQLVIZ",
+            "description": "Interactive SQL visualizer for learning joins, execution order, and SQL concepts.",
+            "url": "https://sqlviz.vercel.app/pages/about/ver/",
+            "applicationCategory": "EducationalApplication",
+            "operatingSystem": "All",
+            "browserRequirements": "Requires JavaScript enabled; Modern browser recommended",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            }
+          }
+        ]
+      }
+    </script>
 
-    <title>SQL Visualizer — Version History</title>
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-vvt4KWwuNr51XfE5m+hzeNEGhiOfZzG97ccfqGsPwvE='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; object-src 'none'" />
+
+    <title>Version Notes: Y-SQLVIZ Updates & Changelog | YSQLVIZ</title>
 
     <!-- ─── Favicon ───────────────────────────────── -->
     <link rel="icon" href="/Assets/Favicon/favicon_io/favicon.ico" sizes="any" />
@@ -51,6 +76,9 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/Assets/Favicon/favicon_io/apple-touch-icon.png" />
 
     <!-- Font Awesome -->
+    <link rel="preload" href="/Assets/fonts/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/Assets/fonts/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/Assets/fonts/css/all.min.css" as="style" />
     <link rel="stylesheet" href="/Assets/fonts/css/all.min.css" />
 
     <!-- Global Navigation & Menu Styles -->
@@ -60,12 +88,14 @@
     <!-- ─── Google Fonts ─────────────────────────────── -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" media="print" onload="this.media = 'all'" />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" as="style" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" media="print" />
     <noscript>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" />
     </noscript>
 
     <!-- ─── Page-specific CSS ─────────────────────────── -->
+    <link rel="preload" href="/pages/about/ver.css" as="style" />
     <link rel="stylesheet" href="/pages/about/ver.css" />
 
     <!-- ==== Scripts ==== -->
@@ -80,12 +110,9 @@
       <div class="outer-wrapper">
         <article>
         <nav class="breadcrumb" aria-label="Breadcrumb" style="font-size: 0.7rem;">
-        <a><i class="fa-solid fa-arrow-left-long"></i></a>
-        <a href="#" onclick="history.back()" style="font-weight: 600;font-size: 0.8rem;">
-        Go Back&nbsp;</a>
-        <a href="/main.html" rel="prev"
-          ><i class="fa-solid fa-arrow-left-long"></i>&nbsp;<i class="fa-solid fa-house"></i
-        ></a>
+        <a href="/" id="go-back-btn" style="font-weight: 600;font-size: 0.8rem;">
+          <i class="fa-solid fa-arrow-left-long"></i> Go Back
+        </a>
       </nav>
     <div class="doc">
   <h6 class="doc-eyebrow">Version History</h6>
@@ -94,17 +121,27 @@
     A record of every release of SQL Visualizer — what changed, what was added,
     and what was fixed. Versions are listed most recent first.
   </p>
+  <!-- <hr /> -->
+  <blockquote>
+    For new feature suggestions,
+    <a
+      href="https://github.com/balaga-yavanika/SQL-Vizualizer/issues?q=is%3Aissue%20state%3Aopen%20label%3AVOTE"
+      target="_blank"
+      rel="noopener noreferrer"
+      >vote here</a
+    >
+  </blockquote>
   <hr />
   <div class="version-list">
     <!-- v1.3 -->
     <div class="version">
       <div class="version-header">
         <div>
-          <h4>v1.2</h4>
-          <h5 class="version-date">March 2026</h5>
+          <h4>v1.3</h4>
+          <h5 class="version-date">April 2026</h5>
           <h6 class="version-tag latest">Latest</h6>
         </div>
-        <div><small>Major Release - Late March</small></div>
+        <div><small>Major Release - Early April</small></div>
       </div>
       <p>
         A substantial overhaul across the board. The SQL engine was rewritten
@@ -147,9 +184,55 @@
     <div class="version">
       <div class="version-header">
         <div>
+          <h4>v1.2</h4>
+          <h5 class="version-date">March 2026</h5>
+          <!-- <h6 class="version-tag latest">Latest</h6> -->
+        </div>
+        <div><small>Major Release - Late March</small></div>
+      </div>
+      <p>
+        A substantial overhaul across the board. The SQL engine was rewritten
+        from scratch to handle joins and set operators reliably, the Generated
+        SQL panel was introduced with live output, and the Execution Order
+        visualizer was added as a new standalone page.<br />
+        The overall visual language was refreshed and the page structure
+        simplified throughout.
+      </p>
+      <ul>
+        <li>
+          Introduced the <code>Generated SQL</code> panel. A live code block
+          that reflects the current join configuration, with a one-click copy
+          button.
+        </li>
+        <li>
+          Rewrote the SQL engine to support <code>JOINS</code> and
+          <code>SET OPERATORS</code>
+        </li>
+        <li>
+          Added two pre-loaded sample datasets in pages
+          <span
+            ><a
+              href="/pages/joins/joins.html"
+              target="_top"
+              data-tooltip="Joins Visualizer"
+              >[01]</a
+            ></span
+          >
+          covering common patterns.
+        </li>
+        <li>New Execution Order page with an 12-step expandable timeline</li>
+        <li>Sidebar groups now labelled and separated by section</li>
+        <li>Refreshed typography and theme overall.</li>
+      </ul>
+    </div>
+    <hr />
+
+    <!-- v1.1 -->
+    <div class="version">
+      <div class="version-header">
+        <div>
           <h4>v1.1</h4>
           <h5 class="version-date">March 2026</h5>
-          <h6 class="version-tag latest">Latest</h6>
         </div>
         <div><small>minor Release - Early March</small></div>
       </div>
@@ -176,7 +259,7 @@
         <div>
           <h4>v1.0</h4>
           <h5 class="version-date">February 2026</h5>
-          <h6 class="version-tag latest">Latest</h6>
+          <h6 class="version-tag">Initial</h6>
         </div>
         <div><small>minor Release - Early February</small></div>
       </div>
@@ -197,8 +280,8 @@
     </div>
     <hr />
     <p class="about-role">
-      SQL VISUALIZER ©️&nbsp;Copyright © 2026 Yavanika Balaga. All rights
-      reserved.
+      SQL VISUALIZER ©️&nbsp;Copyright © 2026 Yavanika Balaga. Released under
+      the MIT License.
     </p>
   </div>
 </div>

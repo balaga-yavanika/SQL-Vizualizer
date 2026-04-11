@@ -1,10 +1,26 @@
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 *,
 *::before,
 *::after {
   transition:
-    background-color 0.7s ease,
-    color 0.7s ease,
-    border-color 0.3s ease;
+    background-color 0.5s ease,
+    background 0.5s ease,
+    color 0.5s ease,
+    opacity 0.5s ease,
+    border-color 0.5s ease,
+    box-shadow 0.5s ease,
+    outline-color 0.5s ease;
 }
 
 :root {
@@ -13,28 +29,22 @@
   /* ============================================= */
   /* ── BACKGROUNDS ── */
   /* #0f0f12 Very dark (mostly black) blue */
-  --color-bg-vdb: oklch(17% 0.006 285);
-  --color-bg-vdb-shade-1: #18181d;
-  --color-bg-vdb-shade-2: #212127;
-  --color-bg-vdb-shade-3: #33333d;
+  /* --color-bg-vdb: oklch(17% 0.006 285); */
+  --color-bg-vdb: #1a171b;
+  --color-bg-vdb-shade-1: oklch(25% 0.009 304);
+  --color-bg-vdb-shade-2: oklch(27% 0.009 317);
+  --color-bg-vdb-shade-3: oklch(32% 0.009 322);
   --color-bg-vdb-shade-4: #3c3c47;
 
-  /* #12110f Very dark (mostly black) orange [Brown tone] */
-  --color-bg-vdo: oklch(17.801% 0.00433 84.569);
-  --color-bg-vdo-shade-1: #1d1b18;
-  --color-bg-vdo-shade-1: #272521;
-  --color-bg-vdo-shade-1: #3d3933;
-
   /* ── BASE COLORS ── */
-  /* Primary */
-  --color-purple: oklch(60% 0.2 284);
-  /* Secondary */
-  --color-cyan: oklch(80% 0.1 181);
-  /* Tertiary */
-  --color-yellow: oklch(80% 0.2 88);
+  /* --color-purple: oklch(60% 0.2 284); */
+  --color-purple: oklch(68.601% 0.18154 292.175);
+  --color-green: oklch(83.615% 0.14213 130.74);
+  --color-cyan: oklch(83.809% 0.09525 205.71);
+  --color-yellow: oklch(89.392% 0.13858 90.472);
   /* Quaternary */
-  --color-red: oklch(60% 0.2 26);
-  --color-moderate-pink: oklch(55% 0.2 350);
+  --color-red: hsl(1, 71%, 55%);
+  --color-pink: hsl(345, 100%, 69%);
 
   --color-code: oklch(80% 0.1 181);
   --color-full-white: oklch(100% 0 0);
@@ -42,10 +52,10 @@
 
   /* PER PROJECT COLORS */
   --color-primary: var(--color-purple);
-  --color-secondary: var(--color-cyan);
-  --color-tertiary: var(--color-yellow);
+  --color-secondary: var(--color-yellow);
+  --color-tertiary: var(--color-cyan);
   --color-danger: var(--color-red);
-  --color-reset: var(--color-moderate-pink);
+  --color-reset: var(--color-pink);
 
   --color-pr-bold: oklch(
     from var(--color-primary) calc(l + 0.3) calc(c - 0.16) h
@@ -57,7 +67,9 @@
   --color-pr-border: oklch(from var(--color-primary) l c h / 0.2);
   --color-bg-border: var(--color-bg-vdb-shade-4);
   --color-text: oklch(from var(--color-primary) calc(l + 0.6) c h);
-  --color-text-muted: oklch(from var(--color-primary) calc(l + 0.15) calc(c - 0.05) h);
+  --color-text-muted: oklch(
+    from var(--color-primary) calc(l + 0.15) calc(c - 0.05) h
+  );
 
   /* ============================================= */
   /* TYPOGRAPHY — FONTS                            */
@@ -222,4 +234,50 @@
   --z-drawer-menu: 1000; /* drawer menu panel */
   --z-tooltip: 1100; /* tooltips (above modals) */
   --z-notification: 1200; /* notifications, alerts (top layer) */
+}
+
+/* ── LIGHT MODE ── */
+
+[data-theme="light"] {
+  /* ── BACKGROUNDS ── */
+  --color-bg-vdb: #faf9f7;
+  --color-bg-vdb-shade-1: #f3f1ee;
+  --color-bg-vdb-shade-2: #eceae6;
+  --color-bg-vdb-shade-3: #d4d0c8;
+  --color-bg-vdb-shade-4: #b8b4ac;
+
+  /* ── BASE COLORS ── */
+  --color-purple: hsl(248, 51%, 53%);
+  --color-green: #1e8a55;
+  --color-cyan: #167795;
+  --color-yellow: #b36a08;
+  --color-red: #d32f2f;
+  --color-pink: #d6336c;
+
+  --color-code: #f5f2f0;
+  --color-full-white: #ffffff;
+  --color-full-black: #1a1a1a;
+
+  /* ── DERIVED COLORS ── */
+  --color-primary: var(--color-purple);
+  --color-secondary: var(--color-yellow);
+  --color-tertiary: var(--color-cyan);
+  --color-danger: var(--color-red);
+  --color-reset: var(--color-pink);
+
+  --color-pr-bold: hsl(245, 50%, 31%);
+  --color-pr-para: hsl(244, 47%, 49%);
+  --color-pr-border: #e0ddf5;
+  --color-bg-border: var(--color-bg-vdb-shade-4);
+  --color-text: #2a2a2a;
+  --color-text-muted: #5c5c5c;
+
+  /* ── BUTTONS ── */
+  --button-accent-muted: #4a43b8;
+  --button-border: #a8a4d8;
+
+  /* ── MENU / OVERLAY ── */
+  --menu-accent-dark: #4538a8;
+  --menu-accent-lighter: #7a71d4;
+  --overlay-bg: rgb(0 0 0 / 0.4);
 }

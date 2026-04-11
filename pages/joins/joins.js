@@ -24,6 +24,7 @@ import {
   DESCS,
   PRESET_DATASETS,
   INITIAL_STATE,
+  DATA_TYPES,
 } from "../../js/core/state.js";
 import {
   rebuildPairSelect,
@@ -78,6 +79,7 @@ const renderCache = {
   lastPair: null,
   lastTablesCount: 0,
   lastConditions: null,
+  lastValidation: null,
 };
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -88,8 +90,40 @@ const renderCache = {
 const colModal = ModalHandler.setup(
   "col-modal",
   ({ dataValue, name, type }) => {
-    addColumn(parseInt(dataValue), name, type);
-    render();
+    try {
+      // Validate table index
+      const ti = parseInt(dataValue);
+      if (!Number.isInteger(ti) || ti < 0 || ti >= state.tables.length) {
+        showToast("❌ Invalid table selection", "error");
+        return;
+      }
+
+      // Validate column name
+      const validation = validateName(name);
+      if (!validation.valid) {
+        showToast(validation.error, "error");
+        return;
+      }
+
+      // Validate column type
+      if (!type || !DATA_TYPES[type]) {
+        showToast("❌ Invalid data type", "error");
+        return;
+      }
+
+      // Add column with error handling
+      const result = addColumn(ti, validation.value, type);
+      if (!result) {
+        showToast("❌ Failed to add column", "error");
+        return;
+      }
+
+      showToast("Column added");
+      render();
+    } catch (err) {
+      console.error("Error adding column:", err);
+      showToast("❌ Failed to add column", "error");
+    }
   },
 );
 
@@ -161,7 +195,7 @@ function buildJoinConditionEditor() {
         <span class="join-cond-label">${isFirst ? "ON" : "AND"}</span>
         ${isSelfJoin && isFirst ? `<span class="self-join-hint">${tableName}</span>` : ""}
 
-        <div class="custom-dropdown" id="join-left-col-wrapper-${idx}">
+        <div class="custom-dropdown join-condition-dropdown" id="join-left-col-wrapper-${idx}">
           <button class="dropdown-toggle" aria-expanded="false">
             <span>${leftColName}</span>
             <span class="dropdown-arrow">▼</span>
@@ -169,7 +203,7 @@ function buildJoinConditionEditor() {
           <div class="dropdown-menu" style="display: none">${leftColItems}</div>
         </div>
 
-        <div class="custom-dropdown" id="join-op-wrapper-${idx}">
+        <div class="custom-dropdown join-condition-dropdown" id="join-op-wrapper-${idx}">
           <button class="dropdown-toggle" aria-expanded="false">
             <span>${cond.op || "="}</span>
             <span class="dropdown-arrow">▼</span>
@@ -177,7 +211,7 @@ function buildJoinConditionEditor() {
           <div class="dropdown-menu" style="display: none">${opItems}</div>
         </div>
 
-        <div class="custom-dropdown" id="join-right-col-wrapper-${idx}">
+        <div class="custom-dropdown join-condition-dropdown" id="join-right-col-wrapper-${idx}">
           <button class="dropdown-toggle" aria-expanded="false">
             <span>${rightColName}</span>
             <span class="dropdown-arrow">▼</span>
@@ -244,10 +278,12 @@ function setupJoinConditionDropdowns() {
       // Check if last condition is complete
       const lastCond = state.joinConditions[state.joinConditions.length - 1];
       if (lastCond && (!lastCond.leftCol || !lastCond.rightCol)) {
-        const lTable = state.tables[lastCond.leftTableIdx]?.name || "Table";
-        const rTable = state.tables[lastCond.rightTableIdx]?.name || "Table";
+        const lTable = state.tables[lastCond.leftTable]?.name || "Table";
+        const rTable = state.tables[lastCond.rightTable]?.name || "Table";
+        const lColName = state.tables[lastCond.leftTable]?.columns.find(c => c.id === lastCond.leftCol)?.name || "?";
+        const rColName = state.tables[lastCond.rightTable]?.columns.find(c => c.id === lastCond.rightCol)?.name || "?";
         const incomplete = !lastCond.leftCol ? `${lTable} column` : `${rTable} column`;
-        showToast(`⚠️ Join condition incomplete\nCurrent: ${lTable}.${lastCond.leftCol?.name || "?"} = ${rTable}.${lastCond.rightCol?.name || "?"}\n\nComplete the ${incomplete} selection, or delete this condition first.`, "error");
+        showToast(`⚠️ Join condition incomplete\nCurrent: ${lTable}.${lColName} = ${rTable}.${rColName}\n\nComplete the ${incomplete} selection, or delete this condition first.`, "error");
         return;
       }
       addJoinCondition();
@@ -258,10 +294,22 @@ function setupJoinConditionDropdowns() {
   // Setup remove condition buttons - get index from data attribute, not forEach
   document.querySelectorAll(".remove-condition-btn").forEach((btn) => {
     btn.onclick = () => {
-      const idx = parseInt(btn.closest(".join-condition-row")?.getAttribute("data-cond-index"));
-      if (!isNaN(idx)) {
+      try {
+        const condRow = btn.closest(".join-condition-row");
+        if (!condRow) {
+          console.error("Could not find join-condition-row element");
+          return;
+        }
+        const idx = parseInt(condRow.getAttribute("data-cond-index"));
+        if (!Number.isInteger(idx) || idx < 0) {
+          console.error("Invalid condition index:", idx);
+          return;
+        }
         removeJoinCondition(idx);
         render();
+      } catch (err) {
+        console.error("Error removing join condition:", err);
+        showToast("❌ Failed to remove condition", "error");
       }
     };
   });
@@ -335,6 +383,9 @@ function initOperationDropdowns() {
       // Use the left table from the current pair for self-join
       const [leftIdx] = (state.selectedPair || "0-0").split("-").map(Number);
       state.selectedPair = `${leftIdx}-${leftIdx}`;
+    } else if (value === "cross") {
+      // Clear join conditions for CROSS JOIN (Cartesian product, no ON clause needed)
+      state.joinConditions = [];
     } else if (state.selectedPair && state.selectedPair.split("-")[0] === state.selectedPair.split("-")[1]) {
       // Reset pair from self-join to regular join if switching away from SELF JOIN
       // But only if 0-1 is valid (both tables exist)
@@ -343,6 +394,10 @@ function initOperationDropdowns() {
       } else if (state.tables.length === 1) {
         state.selectedPair = "0-0";  // Only one table, stay on it
       }
+    }
+    // Re-seed a blank condition when switching to a join that needs an ON clause
+    if (value !== "cross" && state.joinConditions.length === 0) {
+      addJoinCondition();
     }
     updateOperationDisplay();
     render();
@@ -447,7 +502,7 @@ function updateSharedViewBanner() {
           This data is read-only. Make a copy below to edit and explore on your own.
         </p>
       </div>
-      <button class="copy-btn" onclick="window.app.makeEditableCopy()">Make a Copy to Edit</button>
+      <button class="copy-btn" data-action="make-editable-copy">Make a Copy to Edit</button>
     `;
     banner.style.display = "flex";
 
@@ -514,9 +569,7 @@ function disableEditControls() {
     "#pair-select-toggle",
     "#preset-toggle",
     ".diagram-col-dropdown .dropdown-toggle",
-    "#join-left-col-wrapper .dropdown-toggle",
-    "#join-op-wrapper .dropdown-toggle",
-    "#join-right-col-wrapper .dropdown-toggle",
+    ".join-condition-dropdown .dropdown-toggle",
   ];
 
   dropdownToggles.forEach((selector) => {
@@ -526,6 +579,14 @@ function disableEditControls() {
       btn.style.pointerEvents = "none";
       btn.style.cursor = "not-allowed";
     });
+  });
+
+  // Disable join condition action buttons
+  document.querySelectorAll(".add-condition-btn, .remove-condition-btn").forEach((btn) => {
+    btn.disabled = true;
+    btn.style.opacity = "0.5";
+    btn.style.pointerEvents = "none";
+    btn.style.cursor = "not-allowed";
   });
 
   // Disable reset button
@@ -609,9 +670,7 @@ function enableEditControls() {
     "#pair-select-toggle",
     "#preset-toggle",
     ".diagram-col-dropdown .dropdown-toggle",
-    "#join-left-col-wrapper .dropdown-toggle",
-    "#join-op-wrapper .dropdown-toggle",
-    "#join-right-col-wrapper .dropdown-toggle",
+    ".join-condition-dropdown .dropdown-toggle",
   ];
 
   dropdownToggles.forEach((selector) => {
@@ -619,6 +678,12 @@ function enableEditControls() {
       btn.disabled = false;
       btn.removeAttribute("style");
     });
+  });
+
+  // Enable join condition action buttons
+  document.querySelectorAll(".add-condition-btn, .remove-condition-btn").forEach((btn) => {
+    btn.disabled = false;
+    btn.removeAttribute("style");
   });
 
   // Enable reset button
@@ -735,9 +800,11 @@ function setupSvgColSelectors() {
  * Main render function — orchestrates the entire UI update.
  * Called after any state change to reflect current state in the UI.
  * Renders: pair selector, join condition, description, tables, diagram, results, SQL
+ * Wrapped with error handling to keep app stable even if rendering fails.
  */
 export function render() {
-  rebuildPairSelect();
+  try {
+    rebuildPairSelect();
   
   // Re-setup pair selector dropdown after rebuilding menu items
   DropdownHandler.setup("join-pair-select-wrapper", (value) => {
@@ -761,34 +828,48 @@ export function render() {
     }
   });
   
+  const isSelfJoin = state.currentOp === "self";
   document.getElementById("pair-row").style.display =
-    state.tables.length >= 2 ? "flex" : "none";
+    (state.tables.length > 2 || (isSelfJoin && state.tables.length >= 1)) ? "flex" : "none";
 
-  // Only show join condition panel for join operations, not set operators
+  // Only show join condition panel for join operations (hide when no operation selected or set operators)
   const joinCondPanel = document.querySelector(".join-condition-panel");
   const isSetOperator = state.currentOp && JOIN_OPS[state.currentOp]?.group === "set";
 
   if (joinCondPanel) {
-    joinCondPanel.style.display = isSetOperator ? "none" : "block";
+    joinCondPanel.style.display = (isSetOperator || !state.currentOp) ? "none" : "block";
   }
 
-  // Validate SET OPERATORS compatibility
+  // Validate SET OPERATORS compatibility (cache result to avoid repeated validation on every render)
   if (isSetOperator) {
     const [li, ri] = getPair();
-    const validation = validateSetOperatorCompatibility(li, ri);
-    if (!validation.valid) {
-      showToast(`⚠️ ${validation.error}`, "error", 4000);
+    const validationKey = `${state.currentOp}-${li}-${ri}-${state.tables.length}`;
+    if (renderCache.lastValidation !== validationKey) {
+      renderCache.lastValidation = validationKey;
+      const validation = validateSetOperatorCompatibility(li, ri);
+      if (!validation.valid) {
+        showToast(`⚠️ ${validation.error}`, "error", 4000);
+      }
     }
+  } else {
+    renderCache.lastValidation = null;
   }
 
   const joinCondEditor = document.getElementById("join-cond-container");
   const isCrossJoin = state.currentOp === "cross";
+
   if (joinCondEditor) {
     // Only rebuild if join condition state has actually changed
     const [li, ri] = getPair();
     const currentPair = `${li}-${ri}`;
     // Check ALL conditions, not just the first one
-    const currentConds = JSON.parse(JSON.stringify(state.joinConditions));
+    let currentConds;
+    try {
+      currentConds = JSON.parse(JSON.stringify(state.joinConditions));
+    } catch (err) {
+      console.error("Error cloning conditions:", err);
+      currentConds = []; // Fallback to empty array
+    }
     const needsRebuild =
       renderCache.lastOp !== state.currentOp ||
       renderCache.lastPair !== currentPair ||
@@ -808,7 +889,8 @@ export function render() {
             <strong>⚠️ CROSS JOIN:</strong> Produces a Cartesian product and does not require an ON condition.
           </div>`;
         } else {
-          joinCondEditor.innerHTML = buildJoinConditionEditor();
+          const editorHTML = buildJoinConditionEditor();
+          joinCondEditor.innerHTML = editorHTML;
           setupJoinConditionDropdowns();
         }
       } else {
@@ -850,22 +932,288 @@ export function render() {
   let [li, ri] = getPair();
   if (state.currentOp === "self") ri = li;
   const { m1, m2 } = getMatchedIdx(rows);
-  renderTables(m1, m2, li, ri);
-  renderDiagramColSelectors();
-  setupSvgColSelectors();
-  renderConn();
-  renderResult();
-  renderSqlPanel();
-  updateOperationDisplay();
-  updateShareButtonVisibility();
-  updateSharedViewBanner();
+  // Wrap individual render calls with error handling to isolate failures
+  try {
+    renderTables(m1, m2, li, ri);
+  } catch (err) {
+    console.error("Error rendering tables:", err);
+    showToast("⚠️ Error rendering tables. Please refresh.", "error");
+  }
+
+  try {
+    renderDiagramColSelectors();
+    setupSvgColSelectors();
+  } catch (err) {
+    console.error("Error rendering diagram:", err);
+    showToast("⚠️ Error rendering diagram. Please refresh.", "error");
+  }
+
+  try {
+    renderConn();
+  } catch (err) {
+    console.error("Error rendering connections:", err);
+  }
+
+  try {
+    renderResult();
+  } catch (err) {
+    console.error("Error rendering results:", err);
+    showToast("⚠️ Error rendering results. Please refresh.", "error");
+  }
+
+  try {
+    renderSqlPanel();
+  } catch (err) {
+    console.error("Error rendering SQL:", err);
+  }
+
+  try {
+    updateOperationDisplay();
+    updateShareButtonVisibility();
+    updateSharedViewBanner();
+  } catch (err) {
+    console.error("Error updating UI state:", err);
+  }
+
+  } catch (err) {
+    console.error("[Critical] Render failed:", err);
+    showToast("❌ Critical render error. Please refresh the page.", "error");
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// PUBLIC API — Exposed via window.app
+// EVENT DELEGATION — Safe event handlers without inline handlers
 // ═══════════════════════════════════════════════════════════════════════════════
 
-window.app = {
+/**
+ * Setup event delegation for dynamically generated table elements.
+ * Uses event bubbling instead of inline handlers for better security and maintainability.
+ */
+function setupEventDelegation() {
+  const tablesArea = document.getElementById("tables-area");
+  if (!tablesArea) return;
+
+  // Column remove button
+  tablesArea.addEventListener("click", (e) => {
+    if (e.target.classList.contains("col-remove-btn")) {
+      try {
+        const ti = parseInt(e.target.dataset.ti);
+        const colId = e.target.dataset.colId;
+        if (!Number.isInteger(ti) || ti < 0 || !colId) {
+          console.error("Invalid column remove params:", { ti, colId });
+          showToast("❌ Invalid column reference", "error");
+          return;
+        }
+        window.ysqlvizApp.joins.removeColAndRender(ti, colId);
+      } catch (err) {
+        console.error("Error removing column:", err);
+        showToast("❌ Failed to remove column", "error");
+      }
+    }
+
+    // Add row button
+    if (e.target.classList.contains("add-row-btn")) {
+      try {
+        const ti = parseInt(e.target.dataset.ti);
+        window.ysqlvizApp.joins.addRowAndFocus(ti);
+      } catch (err) {
+        console.error("Error adding row:", err);
+        showToast("❌ Failed to add row", "error");
+      }
+    }
+
+    // Add column button
+    if (e.target.classList.contains("add-col-btn")) {
+      try {
+        const ti = parseInt(e.target.dataset.ti);
+        if (!Number.isInteger(ti) || ti < 0) {
+          console.error("Invalid table index for add column:", ti);
+          showToast("❌ Invalid table reference", "error");
+          return;
+        }
+        window.ysqlvizApp.joins.showColModal(ti);
+      } catch (err) {
+        console.error("Error showing column modal:", err);
+        showToast("❌ Failed to open column editor", "error");
+      }
+    }
+
+    // Delete row button
+    if (e.target.classList.contains("del-btn")) {
+      try {
+        const ti = parseInt(e.target.dataset.ti);
+        const ri = parseInt(e.target.dataset.ri);
+        if (!Number.isInteger(ti) || !Number.isInteger(ri) || ti < 0 || ri < 0) {
+          console.error("Invalid indices for delete row:", { ti, ri });
+          showToast("❌ Invalid row reference", "error");
+          return;
+        }
+        window.ysqlvizApp.joins.delRowAndRender(ti, ri);
+      } catch (err) {
+        console.error("Error deleting row:", err);
+        showToast("❌ Failed to delete row", "error");
+      }
+    }
+  });
+
+  // Cell input/change events (delegated)
+  tablesArea.addEventListener("input", (e) => {
+    if (e.target.classList.contains("cell-input")) {
+      try {
+        const ti = parseInt(e.target.dataset.ti);
+        const ri = parseInt(e.target.dataset.ri);
+        const colId = e.target.dataset.colId;
+        const isKey = e.target.dataset.isKey === "true";
+        const colType = e.target.dataset.colType;
+        if (!Number.isInteger(ti) || !Number.isInteger(ri) || !colId || !colType) {
+          console.error("Invalid cell input data attributes", { ti, ri, colId, colType });
+          return;
+        }
+        window.ysqlvizApp.joins.handleKeyInput(e, ti, ri, colId, isKey, colType);
+      } catch (err) {
+        console.error("Error handling cell input:", err);
+      }
+    }
+  }, true); // Use capture phase for input events
+
+  tablesArea.addEventListener("change", (e) => {
+    if (e.target.classList.contains("cell-input")) {
+      try {
+        const ti = parseInt(e.target.dataset.ti);
+        const ri = parseInt(e.target.dataset.ri);
+        const colId = e.target.dataset.colId;
+        const isKey = e.target.dataset.isKey === "true";
+        const colType = e.target.dataset.colType;
+        if (!Number.isInteger(ti) || !Number.isInteger(ri) || !colId || !colType) {
+          console.error("Invalid cell change data attributes", { ti, ri, colId, colType });
+          return;
+        }
+        window.ysqlvizApp.joins.handleKeyChange(e, ti, ri, colId, isKey, colType);
+      } catch (err) {
+        console.error("Error handling cell change:", err);
+        showToast("❌ Failed to update cell", "error");
+      }
+    }
+  });
+
+  // Checkbox change event
+  tablesArea.addEventListener("change", (e) => {
+    if (e.target.classList.contains("cell-checkbox")) {
+      try {
+        const ti = parseInt(e.target.dataset.ti);
+        const ri = parseInt(e.target.dataset.ri);
+        const colId = e.target.dataset.colId;
+        if (!Number.isInteger(ti) || !Number.isInteger(ri) || !colId) {
+          console.error("Invalid checkbox data attributes", { ti, ri, colId });
+          return;
+        }
+        window.ysqlvizApp.joins.updateValAndRefresh(ti, ri, colId, e.target.checked);
+      } catch (err) {
+        console.error("Error updating checkbox:", err);
+        showToast("❌ Failed to update cell", "error");
+      }
+    }
+  });
+
+  // Cell focus/keydown for escape handling
+  tablesArea.addEventListener("focus", (e) => {
+    if (e.target.classList.contains("cell-input")) {
+      e.target._originalValue = e.target.value;
+    }
+    // Table/column name contenteditable focus
+    if (e.target.classList.contains("table-name") || e.target.classList.contains("col-header-name")) {
+      e.target.dataset.originalValue = e.target.textContent;
+    }
+  }, true); // Use capture phase
+
+  // Table/column name contenteditable input
+  tablesArea.addEventListener("input", (e) => {
+    if (e.target.classList.contains("table-name")) {
+      try {
+        const ti = parseInt(e.target.dataset.ti);
+        window.ysqlvizApp.joins.handleTableRenameInput(e, ti);
+      } catch (err) {
+        console.error("Error handling table rename input:", err);
+      }
+    } else if (e.target.classList.contains("col-header-name")) {
+      try {
+        const ti = parseInt(e.target.dataset.ti);
+        const colId = e.target.dataset.colId;
+        window.ysqlvizApp.joins.handleColumnRenameInput(e, ti, colId);
+      } catch (err) {
+        console.error("Error handling column rename input:", err);
+      }
+    }
+  }, true); // Use capture phase
+
+  // Table/column name contenteditable blur
+  tablesArea.addEventListener("blur", (e) => {
+    if (e.target.classList.contains("table-name")) {
+      try {
+        const ti = parseInt(e.target.dataset.ti);
+        window.ysqlvizApp.joins.renameTableAndRender(ti, e.target.textContent);
+      } catch (err) {
+        console.error("Error renaming table:", err);
+      }
+    } else if (e.target.classList.contains("col-header-name")) {
+      try {
+        const ti = parseInt(e.target.dataset.ti);
+        const colId = e.target.dataset.colId;
+        window.ysqlvizApp.joins.renameColumnAndRender(ti, colId, e.target.textContent);
+      } catch (err) {
+        console.error("Error renaming column:", err);
+      }
+    }
+  }, true); // Use capture phase
+
+  // Table/column name contenteditable keydown
+  tablesArea.addEventListener("keydown", (e) => {
+    if (e.target.classList.contains("cell-input") && e.key === "Escape") {
+      e.target.value = e.target._originalValue || "";
+      e.target._escapePressed = true;
+      e.target.blur();
+      e.preventDefault();
+    }
+    // Table/column name contenteditable keydown
+    if (e.target.classList.contains("table-name") || e.target.classList.contains("col-header-name")) {
+      if (e.key === "Enter") {
+        e.target.blur();
+        e.preventDefault();
+      } else if (e.key === "Escape") {
+        e.target.textContent = e.target.dataset.originalValue || "";
+        e.target.blur();
+        e.preventDefault();
+      }
+    }
+  }, true); // Use capture phase
+
+  // Remove table button
+  tablesArea.addEventListener("click", (e) => {
+    if (e.target.classList.contains("remove-table-btn")) {
+      try {
+        const ti = parseInt(e.target.dataset.ti);
+        if (!Number.isInteger(ti) || ti < 0) {
+          console.error("Invalid table index for remove:", ti);
+          showToast("❌ Invalid table reference", "error");
+          return;
+        }
+        window.ysqlvizApp.joins.removeTableAndRender(ti);
+      } catch (err) {
+        console.error("Error removing table:", err);
+        showToast("❌ Failed to remove table", "error");
+      }
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// PUBLIC API — Exposed via window.ysqlvizApp.joins
+// ═══════════════════════════════════════════════════════════════════════════════
+
+// Initialize namespace if needed
+window.ysqlvizApp = window.ysqlvizApp || {};
+
+window.ysqlvizApp.joins = {
   render,
   showColModal: (ti) => {
     const nonKeyColumns = state.tables[ti].columns.filter((c) => !c.isKey).length;
@@ -881,53 +1229,43 @@ window.app = {
     if (err) err.style.display = "none";
   },
   handleColModalInput: (event) => {
-    const input = event.target;
-    let text = input.value;
-    let invalid = false;
-    let msg = "";
-    
-    // Check for spaces
-    if (/\s/.test(text)) {
-      msg = "Name cannot contain spaces";
-      invalid = true;
-      text = text.replace(/\s/g, "");
-    }
-    // Check for special chars or leading number
-    else if (/[^a-zA-Z0-9_]/.test(text)) {
-      msg = "Name must only use letters, numbers, underscores";
-      invalid = true;
-      text = text.replace(/[^a-zA-Z0-9_]/g, "");
-    }
-    // Check for leading number
-    else if (/^[0-9]/.test(text)) {
-      msg = "Name must start with a letter";
-      invalid = true;
-      text = text.replace(/^[0-9]+/, "");
-    }
-    // Check length limit
-    else if (text.length > LIMITS.MAX_NAME_LENGTH) {
-      msg = LIMIT_MESSAGES.NAME_LENGTH;
-      invalid = true;
-      text = text.substring(0, LIMITS.MAX_NAME_LENGTH);
-    }
-    
-    if (invalid) {
-      input.value = text;
+    try {
+      const input = event.target;
+      const text = input.value;
       const err = document.getElementById("col-modal-error");
-      if (err) {
-        err.textContent = msg;
-        err.style.display = "block";
+
+      if (!text) {
+        // Empty input - no error message until user tries to submit
+        if (err) err.style.display = "none";
+        return;
       }
-      // Move cursor to end
-      input.setSelectionRange(input.value.length, input.value.length);
-    } else {
-      const err = document.getElementById("col-modal-error");
-      if (err) err.style.display = "none";
+
+      // Use centralized validateName function
+      const validation = validateName(text);
+
+      if (!validation.valid) {
+        // Show error message but don't modify input
+        if (err) {
+          err.textContent = validation.error;
+          err.style.display = "block";
+        }
+      } else {
+        // Valid input - hide error
+        if (err) err.style.display = "none";
+      }
+    } catch (err) {
+      console.error("Error handling modal input:", err);
+      showToast("❌ Modal input error", "error");
     }
   },
   setSvgCol: (ti, colId) => {
-    setSvgColumn(ti, colId);
-    renderConn();
+    try {
+      setSvgColumn(ti, colId);
+      renderConn();
+    } catch (err) {
+      console.error("Error setting SVG column:", err);
+      showToast("❌ Failed to set diagram column", "error");
+    }
   },
   addTableAndRender: () => {
     if (state.tables.length >= LIMITS.MAX_TABLES) {
@@ -969,64 +1307,85 @@ window.app = {
     render();
   },
   updateValAndRefresh: (ti, ri, colId, val) => {
-    updateVal(ti, ri, colId, val);
-    renderConn();
-    renderResult();
+    try {
+      const result = updateVal(ti, ri, colId, val);
+      if (!result.valid) {
+        showToast(`❌ ${result.error || "Invalid value"}`, "error");
+        return;
+      }
+      renderConn();
+      renderResult();
+    } catch (err) {
+      console.error("Error updating value:", err);
+      showToast("❌ Failed to update cell", "error");
+    }
   },
   handleKeyInput: (event, ti, ri, colId, isKey, colType) => {
-    let val = event.target.value;
-    if (isKey) {
-      // For key columns: prevent negative numbers
-      if (val === "-" || val.startsWith("-")) {
-        event.target.value = val.replace(/-/g, "");
-        showToast("⚠️ ID cannot be negative\nIDs must be positive whole numbers (1, 2, 3...)\nNegative sign (-) removed.", "error");
+    try {
+      let val = event.target.value;
+      if (isKey) {
+        // For key columns: prevent negative numbers
+        if (val === "-" || val.startsWith("-")) {
+          event.target.value = val.replace(/-/g, "");
+          showToast("⚠️ ID cannot be negative\nIDs must be positive whole numbers (1, 2, 3...)\nNegative sign (-) removed.", "error");
+        }
       }
+      if (colType === "float") {
+        // For float columns: allow negative and decimal
+        // Just update value, validation happens on change
+      }
+      const result = updateVal(ti, ri, colId, event.target.value);
+      if (result.valid) {
+        renderConn();
+        renderResult();
+      }
+    } catch (err) {
+      console.error("Error handling key input:", err);
+      showToast("❌ Failed to process input", "error");
     }
-    if (colType === "float") {
-      // For float columns: allow negative and decimal
-      // Just update value, validation happens on change
-    }
-    updateVal(ti, ri, colId, event.target.value);
-    renderConn();
-    renderResult();
   },
   handleKeyChange: (event, ti, ri, colId, isKey, colType) => {
-    let val = event.target.value;
-    if (isKey) {
-      // For key columns: ensure positive integer, not empty
-      const num = parseInt(val);
-      if (isNaN(num) || num < 1) {
-        event.target.value = "1";
-        showToast(`⚠️ Invalid ID: "${val}"\n\nIDs must be positive whole numbers (1, 2, 3...).\nYou entered: ${val || "(empty)"}\nReset to: 1`, "error");
-        updateVal(ti, ri, colId, "1");
-      } else {
-        // Check for duplicate key in same table
-        const table = state.tables[ti];
-        const duplicateIndex = table.rows.findIndex((row, idx) => 
-          idx !== ri && String(row[colId]) === String(num)
-        );
-        if (duplicateIndex !== -1) {
+    try {
+      let val = event.target.value;
+      if (isKey) {
+        // For key columns: ensure positive integer, not empty
+        const num = parseInt(val);
+        if (isNaN(num) || num < 1) {
           event.target.value = "1";
-          showToast(`⚠️ Duplicate ID: ${num}\n\nID ${num} already exists in row ${duplicateIndex + 1}.\nEach row must have a unique ID in this table.\nReset to: 1`, "error");
+          showToast(`⚠️ Invalid ID: "${val}"\n\nIDs must be positive whole numbers (1, 2, 3...).\nYou entered: ${val || "(empty)"}\nReset to: 1`, "error");
           updateVal(ti, ri, colId, "1");
+        } else {
+          // Check for duplicate key in same table
+          const table = state.tables[ti];
+          const duplicateIndex = table.rows.findIndex((row, idx) =>
+            idx !== ri && String(row[colId]) === String(num)
+          );
+          if (duplicateIndex !== -1) {
+            event.target.value = "1";
+            showToast(`⚠️ Duplicate ID: ${num}\n\nID ${num} already exists in row ${duplicateIndex + 1}.\nEach row must have a unique ID in this table.\nReset to: 1`, "error");
+            updateVal(ti, ri, colId, "1");
+          } else {
+            updateVal(ti, ri, colId, String(num));
+          }
+        }
+      } else if (colType === "float") {
+        // For float columns: allow negative, ensure valid number
+        const num = parseFloat(val);
+        if (isNaN(num)) {
+          event.target.value = "";
+          updateVal(ti, ri, colId, "");
         } else {
           updateVal(ti, ri, colId, String(num));
         }
-      }
-    } else if (colType === "float") {
-      // For float columns: allow negative, ensure valid number
-      const num = parseFloat(val);
-      if (isNaN(num)) {
-        event.target.value = "";
-        updateVal(ti, ri, colId, "");
       } else {
-        updateVal(ti, ri, colId, String(num));
+        updateVal(ti, ri, colId, val);
       }
-    } else {
-      updateVal(ti, ri, colId, val);
+      renderConn();
+      renderResult();
+    } catch (err) {
+      console.error("Error handling key change:", err);
+      showToast("❌ Failed to process change", "error");
     }
-    renderConn();
-    renderResult();
   },
   renameTableAndRender: (ti, newName) => {
     const validation = validateName(newName);
@@ -1224,8 +1583,77 @@ function initModalTypeDropdown() {
  */
 function initPresetDropdown() {
   DropdownHandler.setup("preset-dropdown-wrapper", (value) => {
-    window.app.loadPresetAndRender(value);
+    window.ysqlvizApp.joins.loadPresetAndRender(value);
   });
+}
+
+/**
+ * Setup event listeners for buttons without inline handlers
+ */
+function setupButtonListeners() {
+  // Breadcrumb back button
+  const breadcrumbBack = document.querySelector(".breadcrumb-back");
+  if (breadcrumbBack) {
+    breadcrumbBack.addEventListener("click", (e) => {
+      e.preventDefault();
+      history.back();
+    });
+  }
+
+  // Share button
+  const shareBtn = document.getElementById("share-btn");
+  if (shareBtn) {
+    shareBtn.addEventListener("click", () => {
+      window.ysqlvizApp.joins.copyShareLink();
+    });
+  }
+
+  // Make editable copy button (delegated event listener for dynamic banner)
+  document.addEventListener("click", (e) => {
+    if (e.target.closest('[data-action="make-editable-copy"]')) {
+      window.ysqlvizApp.joins.makeEditableCopy();
+    }
+  });
+
+  // Reset all button
+  const resetAllBtn = document.getElementById("reset-all-btn");
+  if (resetAllBtn) {
+    resetAllBtn.addEventListener("click", () => {
+      window.ysqlvizApp.joins.resetAllAndRender();
+    });
+  }
+
+  // Add table button (from HTML, not generated)
+  const addTableBtn = document.getElementById("add-table-btn");
+  if (addTableBtn) {
+    addTableBtn.addEventListener("click", () => {
+      window.ysqlvizApp.joins.addTableAndRender();
+    });
+  }
+
+  // Modal close button
+  const colModalClose = document.getElementById("col-modal-close");
+  if (colModalClose) {
+    colModalClose.addEventListener("click", () => {
+      document.getElementById("col-modal").style.display = "none";
+    });
+  }
+
+  // Modal name input
+  const colModalName = document.getElementById("col-modal-name");
+  if (colModalName) {
+    colModalName.addEventListener("input", (e) => {
+      window.ysqlvizApp.joins.handleColModalInput(e);
+    });
+  }
+
+  // SQL copy button
+  const sqlCopyBtn = document.getElementById("sql-copy-btn");
+  if (sqlCopyBtn) {
+    sqlCopyBtn.addEventListener("click", () => {
+      window.copySqlButtonClicked();
+    });
+  }
 }
 
 // Initialize all components on page load
@@ -1235,6 +1663,8 @@ initOperationDropdowns();
 initPresetDropdown();
 initModalTypeDropdown();
 initKeyboardShortcuts();
+setupButtonListeners();
+setupEventDelegation();
 
 // Pair selector setup is done in render() after rebuildPairSelect()
 
