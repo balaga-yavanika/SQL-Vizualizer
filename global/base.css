@@ -163,7 +163,7 @@ ol {
 ul > li,
 ol > li {
   margin-bottom: var(--space-xs);
-  font-size: var(--text-body);
+  font-size: var(--text-body-sm);
 }
 
 ul ul,

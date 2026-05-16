@@ -4,7 +4,7 @@
   "keywords": "MIT license, privacy, terms, open source, Y-SQLVIZ",
   "author": "Y-SQLVIZ",
   "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
-  "csp": "default-src 'self'; script-src 'self' 'sha256-vvt4KWwuNr51XfE5m+hzeNEGhiOfZzG97ccfqGsPwvE='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; object-src 'none'",
+  "csp": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; object-src 'none'",
   "canonical": "/pages/about/privacy/",
   "og_title": "License & Terms: Y-SQLVIZ MIT License | YSQLVIZ",
   "og_description": "Y-SQLVIZ license, privacy policy, and terms of use. MIT Licensed open-source SQL visualizer. Free for educational and personal use.",

@@ -29,6 +29,7 @@ import {
 import {
   rebuildPairSelect,
   getMatchedIdx,
+  validRows,
   addTable,
   removeTable,
   addRow,
@@ -193,7 +194,7 @@ function buildJoinConditionEditor() {
     return `
       <div class="join-condition-row ${statusClass}" data-cond-index="${idx}">
         <span class="join-cond-label">${isFirst ? "ON" : "AND"}</span>
-        ${isSelfJoin && isFirst ? `<span class="self-join-hint">${tableName}</span>` : ""}
+        ${isSelfJoin ? `<span class="self-join-hint">${tableName}</span>` : ""}
 
         <div class="custom-dropdown join-condition-dropdown" id="join-left-col-wrapper-${idx}">
           <button class="dropdown-toggle" aria-expanded="false">
@@ -218,7 +219,7 @@ function buildJoinConditionEditor() {
           </button>
           <div class="dropdown-menu" style="display: none">${rightColItems}</div>
         </div>
-        ${isSelfJoin && isFirst ? `<span class="self-join-hint">${aliasName}</span>` : ""}
+        ${isSelfJoin ? `<span class="self-join-hint">${aliasName}</span>` : ""}
 
         <span class="condition-status ${statusClass}" title="${isComplete ? "Complete" : "Incomplete - select both columns"}">${statusIcon}</span>
 
@@ -274,7 +275,7 @@ function setupJoinConditionDropdowns() {
   // Setup add condition button with validation
   const addBtn = document.getElementById("add-condition-btn");
   if (addBtn) {
-    addBtn.onclick = () => {
+    addBtn.addEventListener("click", () => {
       // Check if last condition is complete
       const lastCond = state.joinConditions[state.joinConditions.length - 1];
       if (lastCond && (!lastCond.leftCol || !lastCond.rightCol)) {
@@ -288,12 +289,12 @@ function setupJoinConditionDropdowns() {
       }
       addJoinCondition();
       render();
-    };
+    });
   }
 
   // Setup remove condition buttons - get index from data attribute, not forEach
   document.querySelectorAll(".remove-condition-btn").forEach((btn) => {
-    btn.onclick = () => {
+    btn.addEventListener("click", () => {
       try {
         const condRow = btn.closest(".join-condition-row");
         if (!condRow) {
@@ -311,7 +312,7 @@ function setupJoinConditionDropdowns() {
         console.error("Error removing join condition:", err);
         showToast("❌ Failed to remove condition", "error");
       }
-    };
+    });
   });
 }
 
@@ -400,17 +401,24 @@ function initOperationDropdowns() {
       addJoinCondition();
     }
     updateOperationDisplay();
+    updateSelfJoinTip();
     render();
   });
 
   populateDropdownMenu("set-op-menu", "set");
   DropdownHandler.setup("set-op-dropdown-wrapper", (value) => {
     state.currentOp = value;
-    // Clear join conditions for SET operators (they don't use ON clauses)
     if (["union", "union_all", "except", "intersect"].includes(value)) {
       state.joinConditions = [];
+      const isWarehouse = state.tables[0]?.name === "warehouse_a" && state.tables[1]?.name === "warehouse_b";
+      if (!isWarehouse) {
+        showToast("ℹ️ Switched to Warehouse Products — best dataset for set operators", "success", 3000);
+        window.ysqlvizApp.joins.loadPresetAndRender("warehouse_products", true);
+        return;
+      }
     }
     updateOperationDisplay();
+    updateSelfJoinTip();
     render();
   });
 }
@@ -467,6 +475,33 @@ function updateOperationDisplay() {
       .forEach((item) => item.classList.remove("selected"));
   }
 }
+
+/**
+ * Shows/hides contextual tips for special join types (SELF, ANTI, SEMI, EXISTS).
+ * Each join type has specific guidance shown below the join condition panel.
+ */
+function updateSpecialJoinTips() {
+  const selfTip = document.getElementById("self-join-tip");
+  const antiTip = document.getElementById("anti-join-tip");
+  const semiTip = document.getElementById("semi-join-tip");
+  
+  // Hide all tips first
+  [selfTip, antiTip, semiTip].forEach(tip => {
+    if (tip) tip.style.display = "none";
+  });
+
+  // Show appropriate tip based on current operation
+  if (state.currentOp === "self" && selfTip) {
+    selfTip.style.display = "block";
+  } else if ((state.currentOp === "left_anti" || state.currentOp === "right_anti") && antiTip) {
+    antiTip.style.display = "block";
+  } else if ((state.currentOp === "left_semi" || state.currentOp === "right_semi" || state.currentOp === "exists" || state.currentOp === "not_exists") && semiTip) {
+    semiTip.style.display = "block";
+  }
+}
+
+// Keep old function name for backwards compatibility
+const updateSelfJoinTip = updateSpecialJoinTips;
 
 /**
  * Shows/hides the shared view banner and disables edit controls when in read-only mode.
@@ -802,39 +837,68 @@ function setupSvgColSelectors() {
  * Renders: pair selector, join condition, description, tables, diagram, results, SQL
  * Wrapped with error handling to keep app stable even if rendering fails.
  */
+let _pairSelectReady = false;
+let _pairSelectCb = null;
+
 export function render() {
   try {
     rebuildPairSelect();
   
-  // Re-setup pair selector dropdown after rebuilding menu items
-  DropdownHandler.setup("join-pair-select-wrapper", (value) => {
-    // Validate pair indices before updating
-    const [li, ri] = value.split("-").map(Number);
-    if (li >= 0 && li < state.tables.length && ri >= 0 && ri < state.tables.length) {
-      // Clear stale join conditions when pair changes (conditions reference old table indices)
-      if (state.selectedPair !== value) {
-        state.joinConditions = [];
-      }
-      state.selectedPair = value;
-      render();
-    } else {
-      // Invalid pair selection - provide context-aware error message
-      const tableCount = state.tables.length;
-      if (tableCount < 2) {
-        showToast(`⚠️ Can't pair tables - only ${tableCount} table exists.\n\nAdd another table using "+ add table", or use Self-Join (join a table to itself).`, "error");
+  // Setup pair selector dropdown once (DropdownHandler handles cleanup if re-registered)
+  if (!_pairSelectReady) {
+    _pairSelectReady = true;
+    _pairSelectCb = (value) => {
+      const [li, ri] = value.split("-").map(Number);
+      if (li >= 0 && li < state.tables.length && ri >= 0 && ri < state.tables.length) {
+        if (state.selectedPair !== value) {
+          state.joinConditions = [];
+          addJoinCondition();
+        }
+        state.selectedPair = value;
+        render();
       } else {
-        showToast(`⚠️ Invalid pair: ${li}-${ri}. Valid tables: 0-${tableCount - 1}.\n\nSelect two different tables, or use Self-Join.`, "error");
+        const tableCount = state.tables.length;
+        if (tableCount < 2) {
+          showToast(`⚠️ Can't pair tables - only ${tableCount} table exists.\n\nAdd another table using "+ add table", or use Self-Join (join a table to itself).`, "error");
+        } else {
+          showToast(`⚠️ Invalid pair: ${li}-${ri}. Valid tables: 0-${tableCount - 1}.\n\nSelect two different tables, or use Self-Join.`, "error");
+        }
       }
-    }
-  });
+    };
+    DropdownHandler.setup("join-pair-select-wrapper", _pairSelectCb);
+  }
   
   const isSelfJoin = state.currentOp === "self";
-  document.getElementById("pair-row").style.display =
-    (state.tables.length > 2 || (isSelfJoin && state.tables.length >= 1)) ? "flex" : "none";
+
+  // For self join: show only when there are 2+ tables (need a choice)
+  // For regular joins: show when there are 3+ tables (2-table joins don't need a selector)
+  const showPairRow = isSelfJoin ? state.tables.length >= 2 : state.tables.length > 2;
+  document.getElementById("pair-row").style.display = showPairRow ? "flex" : "none";
+
+  // Swap label and hint text for self join
+  const pairLabel = document.getElementById("pair-selector-label");
+  const pairHint = document.getElementById("pair-selector-hint");
+  const pairToggle = document.getElementById("pair-select-toggle");
+  if (pairLabel) pairLabel.textContent = isSelfJoin ? "Self-join table:" : "Which tables to join:";
+  if (pairHint) pairHint.style.display = isSelfJoin ? "none" : "block";
+  if (pairToggle) pairToggle.title = isSelfJoin
+    ? "Select which table to join with itself"
+    : "Select which two tables to join. Arrow shows left table → right table.";
+
+  // Show/hide SELF JOIN tip
+  updateSelfJoinTip();
 
   // Only show join condition panel for join operations (hide when no operation selected or set operators)
   const joinCondPanel = document.querySelector(".join-condition-panel");
   const isSetOperator = state.currentOp && JOIN_OPS[state.currentOp]?.group === "set";
+
+  // Show diagram section for joins (placeholder when no data, actual diagram when data exists)
+  // Hide for set operators. For FULL OUTER, hide header but keep SVG visible (shows message)
+  const isFullOuter = state.currentOp === "full";
+  const diagramHeader = document.querySelector(".diagram-section-header");
+  const diagramScrollWrapper = document.querySelector(".diagram-scroll-wrapper");
+  if (diagramHeader) diagramHeader.style.display = (isSetOperator || isFullOuter) ? "none" : "";
+  if (diagramScrollWrapper) diagramScrollWrapper.style.display = isSetOperator ? "none" : "";
 
   if (joinCondPanel) {
     joinCondPanel.style.display = (isSetOperator || !state.currentOp) ? "none" : "block";
@@ -931,7 +995,17 @@ export function render() {
   const rows = computeResult(state.currentOp);
   let [li, ri] = getPair();
   if (state.currentOp === "self") ri = li;
-  const { m1, m2 } = getMatchedIdx(rows);
+
+  // For UNION/UNION ALL: highlight ALL valid rows on both sides, including duplicates,
+  // so users can see which right-side rows were deduplicated out of the result.
+  // For all other ops: derive highlighted rows from the result set itself.
+  let m1, m2;
+  if (state.currentOp === "union" || state.currentOp === "union_all") {
+    m1 = new Set(validRows(li).map(x => x.i));
+    m2 = new Set(validRows(ri).map(x => x.i));
+  } else {
+    ({ m1, m2 } = getMatchedIdx(rows, li, ri));
+  }
   // Wrap individual render calls with error handling to isolate failures
   try {
     renderTables(m1, m2, li, ri);
@@ -941,8 +1015,11 @@ export function render() {
   }
 
   try {
-    renderDiagramColSelectors();
-    setupSvgColSelectors();
+    // Only render diagram column selectors for join operations (not set operators)
+    if (!isSetOperator) {
+      renderDiagramColSelectors();
+      setupSvgColSelectors();
+    }
   } catch (err) {
     console.error("Error rendering diagram:", err);
     showToast("⚠️ Error rendering diagram. Please refresh.", "error");
@@ -952,6 +1029,22 @@ export function render() {
     renderConn();
   } catch (err) {
     console.error("Error rendering connections:", err);
+  }
+
+  // Show CROSS JOIN warning if results > 10
+  const crossJoinWarning = document.getElementById("cross-join-warning");
+  const crossJoinCount = document.getElementById("cross-join-count");
+  if (crossJoinWarning && crossJoinCount) {
+    if (state.currentOp === "cross") {
+      if (rows.length > 10) {
+        crossJoinCount.textContent = rows.length;
+        crossJoinWarning.style.display = "flex";
+      } else {
+        crossJoinWarning.style.display = "none";
+      }
+    } else {
+      crossJoinWarning.style.display = "none";
+    }
   }
 
   try {
@@ -1269,6 +1362,7 @@ window.ysqlvizApp.joins = {
   },
   addTableAndRender: () => {
     if (state.tables.length >= LIMITS.MAX_TABLES) {
+      showToast(`Maximum of ${LIMITS.MAX_TABLES} tables reached`, "error");
       return;
     }
     const result = addTable();
@@ -1276,7 +1370,9 @@ window.ysqlvizApp.joins = {
       showToast("Table added");
       render();
     } else {
-      showToast("Add data to the previous table first");
+      const prevIdx = state.tables.length - 1;
+      const prevName = state.tables[prevIdx]?.name || `table ${prevIdx + 1}`;
+      showToast(`Add data to "${prevName}" first before adding a new table`, "error");
     }
   },
   removeTableAndRender: (ti) => {
@@ -1361,9 +1457,16 @@ window.ysqlvizApp.joins = {
             idx !== ri && String(row[colId]) === String(num)
           );
           if (duplicateIndex !== -1) {
-            event.target.value = "1";
-            showToast(`⚠️ Duplicate ID: ${num}\n\nID ${num} already exists in row ${duplicateIndex + 1}.\nEach row must have a unique ID in this table.\nReset to: 1`, "error");
-            updateVal(ti, ri, colId, "1");
+            // Find the first available positive integer
+            const usedKeys = new Set();
+            table.rows.forEach((row, idx) => {
+              if (idx !== ri) usedKeys.add(String(row[colId]));
+            });
+            let newVal = 1;
+            while (usedKeys.has(String(newVal))) newVal++;
+            event.target.value = String(newVal);
+            showToast(`⚠️ Duplicate ID: ${num}\n\nID ${num} already exists in row ${duplicateIndex + 1}.\nEach row must have a unique ID in this table.\nReset to: ${newVal}`, "error");
+            updateVal(ti, ri, colId, String(newVal));
           } else {
             updateVal(ti, ri, colId, String(num));
           }
@@ -1516,15 +1619,25 @@ window.ysqlvizApp.joins = {
     }
   },
   updateJoinCondition,
-  loadPresetAndRender: (presetName) => {
+  loadPresetAndRender: (presetName, isAutoSwitch = false) => {
     if (PRESET_DATASETS[presetName]) {
-      loadPreset(PRESET_DATASETS[presetName]);
-      // Auto-select UNION for warehouse_products dataset (optimized for set operators)
-      if (presetName === "warehouse_products") {
-        state.currentOp = "union";
-        showToast("ℹ️ Warehouse Products dataset works best with SET operators", "success", 5000);
-      } else {
-        state.currentOp = "inner";
+      loadPreset(PRESET_DATASETS[presetName], isAutoSwitch);
+      const presetDisplay = document.getElementById("preset-display");
+      if (presetDisplay) {
+        const presetLabels = {
+          users_orders: "Users + Orders",
+          students_courses: "Students + Courses",
+          warehouse_products: "Warehouse Products"
+        };
+        presetDisplay.textContent = presetLabels[presetName] || presetName;
+      }
+      if (!isAutoSwitch) {
+        if (presetName === "warehouse_products") {
+          state.currentOp = "union";
+          showToast("ℹ️ Warehouse Products dataset works best with SET operators", "success", 5000);
+        } else {
+          state.currentOp = "inner";
+        }
       }
       render();
     }
@@ -1543,6 +1656,10 @@ window.ysqlvizApp.joins = {
     state.joinConditions = [];
     state.selectedPair = "0-1";
     DropdownHandler.resetAll();
+    const presetDisplay = document.getElementById("preset-display");
+    if (presetDisplay) {
+      presetDisplay.textContent = "Select a dataset...";
+    }
     stopBellAnimation();
     showToast("Reset complete");
     render();
@@ -1604,7 +1721,9 @@ function setupButtonListeners() {
   const shareBtn = document.getElementById("share-btn");
   if (shareBtn) {
     shareBtn.addEventListener("click", () => {
-      window.ysqlvizApp.joins.copyShareLink();
+      if (!shareBtn.disabled) {
+        window.ysqlvizApp.joins.copyShareLink();
+      }
     });
   }
 
@@ -1671,3 +1790,21 @@ setupEventDelegation();
 // Parse URL params on load to restore state (for shared links)
 parseUrlParams();
 render();
+
+// Back to top button
+const backToTopBtn = document.querySelector('.back-to-top');
+if (backToTopBtn) {
+  const toggleBackToTop = () => {
+    if (window.scrollY > 300) {
+      backToTopBtn.classList.add('visible');
+    } else {
+      backToTopBtn.classList.remove('visible');
+    }
+  };
+  window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  toggleBackToTop();
+  backToTopBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}

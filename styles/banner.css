@@ -20,7 +20,7 @@
     color: var(--color-tertiary);
   }
 
-  & h6 {
+  & h2 {
     margin: 0 0 var(--space-sm);
     color: var(--color-primary);
     text-transform: uppercase;
@@ -28,8 +28,36 @@
     letter-spacing: 0.05em;
   }
 
+  & ul {
+    margin: 0;
+    padding-inline-start: var(--space-lg);
+    line-height: 1.7;
+  }
+
   &.hidden {
     display: none;
+  }
+}
+
+.before-start-note {
+  margin-block-start: var(--space-md);
+  font-size: var(--text-fine);
+  color: var(--color-text-muted);
+}
+
+.before-start-link {
+  margin-block-start: var(--space-sm);
+  font-size: var(--text-fine);
+  color: var(--color-primary);
+
+  & a {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+
+    &:hover {
+      opacity: 0.8;
+    }
   }
 }
 
@@ -80,5 +108,83 @@
   .banner-close-btn {
     --btn-size: 28px;
     inset: var(--space-2xs) var(--space-2xs) auto auto;
+  }
+}
+
+/* ============================================= */
+/* MINI BANNER (persistent after close)          */
+/* ============================================= */
+.mini-banner {
+  padding: var(--space-sm) var(--space-md);
+  background: oklch(from var(--color-primary) l c h / 0.08);
+  border: 1px solid oklch(from var(--color-primary) l c h / 0.2);
+  border-radius: var(--radius-md);
+  text-align: center;
+  margin-block-start: var(--space-sm);
+}
+
+.mini-banner-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-primary);
+  text-decoration: none;
+  font-size: var(--text-sm);
+  font-weight: 500;
+
+  &:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  & i {
+    font-size: 14px;
+  }
+}
+
+/* ============================================= */
+/* TUTORIAL PROMO LINK IN QUICK START            */
+/* ============================================= */
+.preset-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.tutorial-promo-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  background: oklch(from var(--color-tertiary) l c h / 0.1);
+  color: var(--color-tertiary);
+  text-decoration: none;
+  font-size: var(--text-fine);
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  border: 1px solid oklch(from var(--color-tertiary) l c h / 0.2);
+  transition: background 0.15s, border-color 0.15s;
+
+  &:hover {
+    background: oklch(from var(--color-tertiary) l c h / 0.15);
+    border-color: var(--color-tertiary);
+  }
+
+  & i {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .preset-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tutorial-promo-link {
+    width: 100%;
+    justify-content: center;
   }
 }

@@ -15,8 +15,8 @@ export function initKeyboardShortcuts() {
       }
     }
 
-    // Ctrl+N: Add new table
-    if (e.ctrlKey && e.key === "n" && !isInput && !isModalOpen) {
+    // Ctrl+Shift+N: Add new table (Shift avoids overriding browser's Ctrl+N "New Window")
+    if (e.ctrlKey && e.shiftKey && e.key === "n" && !isInput && !isModalOpen) {
       e.preventDefault();
       if (window.ysqlvizApp?.joins?.addTableAndRender) {
         window.ysqlvizApp.joins.addTableAndRender();
@@ -36,14 +36,4 @@ export function initKeyboardShortcuts() {
       document.getElementById("col-modal").style.display = "none";
     }
   });
-
-  // Show hint on first load
-  if (!localStorage.getItem("shown-shortcuts-hint")) {
-    setTimeout(() => {
-      if (window.ysqlvizApp?.joins?.showToast) {
-        window.ysqlvizApp.joins.showToast("⌨️ Ctrl+Enter: Add row | Ctrl+N: Add table | Ctrl+Shift+R: Reset", "success", 6000);
-      }
-    }, 1500);
-    localStorage.setItem("shown-shortcuts-hint", "true");
-  }
 }

@@ -4,7 +4,7 @@
   "keywords": "SQL joins, join visualization, learn SQL, interactive tutorial, SQL join types, visualizer tool",
   "author": "Y-SQLVIZ",
   "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
-  "csp": "default-src 'self'; script-src 'self' 'sha256-vvt4KWwuNr51XfE5m+hzeNEGhiOfZzG97ccfqGsPwvE='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; object-src 'none'",
+  "csp": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; object-src 'none'",
   "canonical": "/pages/joins/joins.html",
   "priority": "0.9",
   "og_title": "SQL Joins Visualizer: INNER, LEFT, RIGHT, OUTER | YSQLVIZ",

@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Window Functions — SQL Visualizer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #121212;
+    --bg2: #1a1a1a;
+    --bg3: #222;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #e8e6e0;
+    --text2: #9c9a92;
+    --text3: #5f5e5a;
+    --blue: #378ADD;
+    --blue-dim: rgba(55,138,221,0.12);
+    --blue-border: rgba(55,138,221,0.35);
+    --teal: #1D9E75;
+    --teal-dim: rgba(29,158,117,0.12);
+    --teal-border: rgba(29,158,117,0.3);
+    --amber: #EF9F27;
+    --amber-dim: rgba(239,159,39,0.15);
+    --amber-border: rgba(239,159,39,0.35);
+    --coral: #D85A30;
+    --coral-dim: rgba(216,90,48,0.12);
+    --green: #639922;
+    --green-dim: rgba(99,153,34,0.15);
+    --purple: #7F77DD;
+    --purple-dim: rgba(127,119,221,0.12);
+    --mono: 'Space Mono', monospace;
+    --sans: 'Space Grotesk', system-ui, sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 2rem 1.5rem 4rem;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  /* ── Header ── */
+  .page-header { margin-bottom: 2rem; }
+  .page-header h1 { font-size: 28px; font-weight: 600; letter-spacing: -0.5px; color: var(--text); margin-bottom: 6px; }
+  .page-header p { color: var(--text2); font-size: 14px; max-width: 600px; line-height: 1.6; }
+
+  /* ── SQL banner ── */
+  .sql-banner {
+    background: var(--bg2); border: 0.5px solid var(--border2); border-radius: 10px;
+    padding: 12px 16px; margin: 1.25rem 0 1.75rem;
+    font-family: var(--mono); font-size: 12px; color: var(--text2); line-height: 1.9;
+  }
+  .k  { color: var(--blue); }
+  .fn { color: var(--amber); }
+  .ov { color: var(--purple); }
+  .cm { color: var(--text3); font-style: italic; }
+
+  /* ── Tabs ── */
+  .tabs { display: flex; gap: 4px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .tab {
+    padding: 6px 14px; border: 0.5px solid var(--border2); border-radius: 8px;
+    font-size: 12px; font-family: var(--sans); font-weight: 500;
+    background: transparent; color: var(--text2); cursor: pointer; transition: all .15s;
+  }
+  .tab:hover { background: var(--bg3); color: var(--text); }
+  .tab.active { background: var(--blue-dim); color: var(--blue); border-color: var(--blue-border); }
+
+  /* ── Sub-tabs ── */
+  .sub-tabs-row {
+    display: flex; align-items: center; gap: 0; margin-bottom: 1.25rem; flex-wrap: wrap;
+    background: var(--bg2); border: 0.5px solid var(--border); border-radius: 8px;
+    padding: 5px 10px; width: fit-content; max-width: 100%;
+  }
+  .sub-tabs-label {
+    font-size: 10px; color: var(--text3); text-transform: uppercase;
+    letter-spacing: .08em; white-space: nowrap; padding-right: 10px;
+    border-right: 0.5px solid var(--border2); margin-right: 10px;
+  }
+  .sub-tabs { display: flex; gap: 3px; flex-wrap: wrap; }
+  .sub-tab {
+    padding: 3px 10px; border: 0.5px solid transparent; border-radius: 5px;
+    font-size: 11px; font-family: var(--mono); background: transparent; color: var(--text3);
+    cursor: pointer; transition: all .12s;
+  }
+  .sub-tab:hover { background: var(--bg3); color: var(--text2); border-color: var(--border); }
+  .sub-tab.active { background: var(--amber-dim); color: var(--amber); border-color: var(--amber-border); }
+
+  /* ── Content fade ── */
+  #content { animation: fadeIn .2s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+  /* sub-panel fade — used when switching sub-tabs without full re-render */
+  .sub-fade { animation: subFade .15s ease both; }
+  @keyframes subFade { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
+  /* ── Desc panel ── */
+  .desc-panel {
+    background: var(--bg2); border: 0.5px solid var(--border2); border-radius: 10px;
+    padding: 1rem 1.25rem; margin-bottom: 1.25rem;
+  }
+  .desc-panel h3 { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+  .desc-panel p  { font-size: 13px; color: var(--text2); line-height: 1.65; margin-bottom: 10px; }
+  .desc-panel p:last-child { margin-bottom: 0; }
+
+  /* ── SQL mini ── */
+  .sql-mini {
+    font-family: var(--mono); font-size: 12px; background: var(--bg3);
+    border: 0.5px solid var(--border); border-radius: 8px;
+    padding: 10px 14px; color: var(--text2); white-space: pre-wrap; line-height: 1.9;
+  }
+
+  /* ── Use-case strip ── */
+  .use-strip {
+    display: flex; align-items: baseline; gap: 6px; margin-top: 8px;
+    font-size: 12px; color: var(--text2); line-height: 1.5;
+  }
+  .use-strip-label {
+    font-size: 10px; font-weight: 500; color: var(--teal); text-transform: uppercase;
+    letter-spacing: .07em; white-space: nowrap; padding: 2px 7px;
+    background: var(--teal-dim); border: 0.5px solid var(--teal-border);
+    border-radius: 4px; flex-shrink: 0;
+  }
+
+  /* ── Note box ── */
+  .note {
+    display: flex; gap: 10px; align-items: flex-start;
+    background: var(--blue-dim); border: 0.5px solid var(--blue-border); border-radius: 8px;
+    padding: 10px 14px; margin-top: 10px; font-size: 12px; color: var(--text2); line-height: 1.6;
+  }
+  .note-icon { color: var(--blue); font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+  .note.warn { background: var(--amber-dim); border-color: var(--amber-border); }
+  .note.warn .note-icon { color: var(--amber); }
+
+  /* ── Layout ── */
+  .layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 680px) { .layout { grid-template-columns: 1fr; } }
+  .layout-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+  @media (max-width: 700px) { .layout-3 { grid-template-columns: 1fr; } }
+
+  /* ── Panel ── */
+  .panel {
+    background: var(--bg2); border: 0.5px solid var(--border);
+    border-radius: 10px; padding: 1rem; overflow-x: auto;
+  }
+  .diag-panel {
+    background: var(--bg2); border: 0.5px solid var(--border);
+    border-radius: 10px; padding: 1rem; overflow: hidden;
+  }
+  .panel-title {
+    font-size: 11px; font-weight: 500; color: var(--text3);
+    text-transform: uppercase; letter-spacing: .06em; margin-bottom: 12px;
+  }
+
+  /* ── Table ── */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th {
+    text-align: left; padding: 5px 8px; font-size: 11px; font-weight: 500;
+    color: var(--text3); border-bottom: 0.5px solid var(--border);
+    text-transform: uppercase; letter-spacing: .04em; white-space: nowrap;
+  }
+  td {
+    padding: 7px 8px; border-bottom: 0.5px solid var(--border);
+    color: var(--text); vertical-align: middle;
+  }
+  tr:last-child td { border-bottom: none; }
+  .result-val { font-family: var(--mono); font-size: 13px; font-weight: 700; color: var(--blue); }
+  .null-val   { font-family: var(--mono); color: var(--text3); font-size: 12px; }
+
+  /* ── Partition colouring ── */
+  .partition-legend { display: flex; gap: 14px; margin-bottom: 10px; flex-wrap: wrap; align-items: center; }
+  .leg-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text3); }
+  .leg-dot  { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .leg-bar  { width: 3px; height: 12px; border-radius: 1px; flex-shrink: 0; }
+
+  .partition-A td:first-child { border-left: 2.5px solid var(--blue); }
+  .partition-B td:first-child { border-left: 2.5px solid var(--teal); }
+  .partition-C td:first-child { border-left: 2.5px solid var(--amber); }
+
+  /* ── Frame row states ── */
+  .current-row td      { background: rgba(239,159,39,.09) !important; }
+  .frame-highlight td  { background: rgba(99,153,34,.08)  !important; }
+
+  /* ── Badges ── */
+  .badge { display:inline-block; font-size:11px; padding:2px 8px; border-radius:20px; font-weight:500; }
+  .badge-blue  { background:var(--blue-dim);  color:var(--blue);  border:0.5px solid var(--blue-border); }
+  .badge-teal  { background:var(--teal-dim);  color:var(--teal);  border:0.5px solid var(--teal-border); }
+  .badge-amber { background:var(--amber-dim); color:var(--amber); border:0.5px solid var(--amber-border); }
+  .badge-green { background:var(--green-dim); color:var(--green); border:0.5px solid rgba(99,153,34,.3); }
+  .badge-coral { background:var(--coral-dim); color:var(--coral); border:0.5px solid rgba(216,90,48,.3); }
+
+  /* ── Frame controls ── */
+  .frame-controls {
+    display: flex; align-items: center; gap: 14px; margin: 0 0 1.25rem;
+    flex-wrap: wrap; background: var(--bg2); border: 0.5px solid var(--border);
+    border-radius: 10px; padding: 12px 16px;
+  }
+  .frame-controls label { font-size: 12px; color: var(--text3); white-space: nowrap; }
+  .frame-controls input[type=range] { width: 80px; accent-color: var(--blue); }
+  .frame-controls .val { font-size: 13px; font-family: var(--mono); color: var(--text); min-width: 14px; }
+  .ctrl-sep { width: 0.5px; height: 20px; background: var(--border2); flex-shrink: 0; }
+
+  /* ── Preset buttons (frame tab) ── */
+  .presets { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1rem; }
+  .preset-btn {
+    padding: 4px 12px; border: 0.5px solid var(--border2); border-radius: 6px;
+    font-size: 11px; font-family: var(--mono); background: transparent; color: var(--text2);
+    cursor: pointer; transition: all .15s;
+  }
+  .preset-btn:hover { background: var(--bg3); color: var(--text); }
+  .preset-btn.active { background: var(--teal-dim); color: var(--teal); border-color: var(--teal-border); }
+
+  /* ── Frame legend ── */
+  .frame-legend { display: flex; gap: 14px; margin-bottom: 10px; flex-wrap: wrap; }
+  .frame-legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text3); }
+  .frame-swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  /* ── Toggle (partition on/off) ── */
+  .toggle-row { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
+  .toggle-label { font-size: 12px; color: var(--text2); }
+  .toggle-track {
+    position: relative; display: inline-block; width: 34px; height: 18px;
+    background: var(--border2); border-radius: 9px; cursor: pointer; transition: background .2s; flex-shrink: 0;
+  }
+  .toggle-track.on { background: var(--blue); }
+  .toggle-thumb {
+    position: absolute; top: 2px; left: 2px; width: 14px; height: 14px;
+    background: #fff; border-radius: 50%; transition: transform .2s; pointer-events: none;
+  }
+  .toggle-track.on .toggle-thumb { transform: translateX(16px); }
+  .toggle-code { font-family: var(--mono); font-size: 11px; color: var(--text3); }
+
+  /* ── ROWS vs RANGE comparison table ── */
+  .compare-table table { font-size: 12px; }
+  .compare-table th { font-size: 10px; }
+  .compare-table .rows-col { color: var(--blue); font-family: var(--mono); }
+  .compare-table .range-col { color: var(--amber); font-family: var(--mono); }
+  .diff-row td { background: rgba(239,159,39,.07) !important; }
+  .diff-row td:first-child { border-left: 2.5px solid var(--amber) !important; }
+
+  /* ── Partition filter ── */
+  .partition-filter-chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 10px; border-radius: 20px; font-size: 11px; cursor: pointer;
+    border: 0.5px solid var(--border2); background: transparent; color: var(--text2);
+    font-family: var(--sans); transition: all .15s;
+  }
+  .partition-filter-chip:hover { background: var(--bg3); }
+  .partition-filter-chip.active { border-color: transparent; }
+  .partition-filter-chip .chip-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .show-all-btn {
+    padding: 3px 10px; border-radius: 20px; font-size: 11px; cursor: pointer;
+    border: 0.5px solid var(--border); background: transparent; color: var(--text3);
+    font-family: var(--sans); transition: all .15s; margin-left: 2px;
+  }
+  .show-all-btn:hover { color: var(--text2); border-color: var(--border2); }
+  /* dimmed rows when a partition is filtered */
+  tr.row-dim td { opacity: .28; }
+  tr.row-dim td:first-child { border-left-color: transparent; }
+  /* clickable table rows in offset tab */
+  .offset-table tr { cursor: pointer; transition: background .12s; }
+  .offset-table tr:hover td { background: rgba(255,255,255,.03); }
+  .offset-table tr.offset-current td { background: rgba(239,159,39,.09) !important; }
+  /* ranking global-window note */
+  .global-note {
+    display: flex; gap: 8px; align-items: flex-start; padding: 8px 12px;
+    background: var(--purple-dim); border: 0.5px solid rgba(127,119,221,.3);
+    border-radius: 8px; margin-top: 10px; font-size: 12px; color: var(--text2); line-height: 1.6;
+  }
+  .global-note-icon { color: var(--purple); flex-shrink: 0; }
+
+  /* ── Frame sparkline ── */
+  .sparkline-wrap {
+    margin-bottom: 1rem; background: var(--bg2); border: 0.5px solid var(--border);
+    border-radius: 10px; padding: .75rem 1rem;
+  }
+  .sparkline-title {
+    font-size: 10px; font-weight: 500; color: var(--text3); text-transform: uppercase;
+    letter-spacing: .06em; margin-bottom: 8px;
+  }
+  .sparkline-bars {
+    display: flex; align-items: flex-end; gap: 4px; height: 52px;
+  }
+  .spark-col { display: flex; flex-direction: column; align-items: center; gap: 3px; flex: 1; min-width: 0; }
+  .spark-bar {
+    width: 100%; border-radius: 3px 3px 0 0;
+    background: var(--bg3); border: 0.5px solid var(--border2);
+    transition: background .15s, border-color .15s, height .2s ease;
+  }
+  .spark-bar.in-frame  { background: rgba(99,153,34,.35);  border-color: rgba(99,153,34,.5); }
+  .spark-bar.is-current { background: rgba(239,159,39,.55); border-color: rgba(239,159,39,.7); }
+  .spark-label { font-size: 10px; color: var(--text3); white-space: nowrap; }
+  .spark-val   { font-size: 9px; font-family: var(--mono); color: var(--text3); }
+
+  /* ── Keyboard focus on sub-tab buttons ── */
+  .sub-tab:focus-visible {
+    outline: 2px solid var(--amber); outline-offset: 1px; border-radius: 5px;
+  }
+  .tab:focus-visible {
+    outline: 2px solid var(--blue); outline-offset: 2px;
+  }
+
+  /* ── SVG base ── */
+  svg text { font-family: var(--sans); }
+  /* SVGs inside diag-panel clip to their container on mobile */
+  .diag-panel svg { max-width: 100%; display: block; overflow: hidden; }
+  /* standalone SVGs (ranking diagrams) never clip content */
+  .diag-panel { overflow: hidden; }
+  /* tables scroll on small screens without breaking layout */
+  .panel { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  @media (max-width: 480px) {
+    .layout { gap: .75rem; }
+    .sub-tabs-row { width: 100%; }
+    .frame-controls { gap: 8px; padding: 10px 12px; }
+    .frame-controls input[type=range] { width: 60px; }
+    table { font-size: 12px; }
+    td, th { padding: 5px 6px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Window functions</h1>
+  <p>Like GROUP BY — but rows are never collapsed. Every row keeps its own data while gaining access to aggregate values, ranks, and comparisons across related rows.</p>
+</div>
+
+<div class="sql-banner"><span class="cm">-- GROUP BY collapses rows. Window functions don't.</span>
+<span class="k">SELECT</span> name, dept, salary,
+  <span class="fn">AVG</span>(salary) <span class="ov">OVER</span> (<span class="k">PARTITION BY</span> dept) <span class="k">AS</span> dept_avg,
+  salary - <span class="fn">AVG</span>(salary) <span class="ov">OVER</span> (<span class="k">PARTITION BY</span> dept) <span class="k">AS</span> diff_from_avg
+<span class="k">FROM</span> employees;</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('aggregate',this)">Aggregate</button>
+  <button class="tab" onclick="switchTab('ranking',this)">Ranking</button>
+  <button class="tab" onclick="switchTab('offset',this)">Offset — LAG / LEAD</button>
+  <button class="tab" onclick="switchTab('value',this)">Value — FIRST / LAST / NTH</button>
+  <button class="tab" onclick="switchTab('frame',this)">Window frames</button>
+</div>
+
+<div id="content"></div>
+
+<script>
+/* ═══════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   CONFIG — swap datasets here to change domain
+═══════════════════════════════════════════ */
+const CONFIG = {
+  /* Employee salary data — used by Ranking and Aggregate tabs */
+  employees: [
+    {id:1,name:'Alice', dept:'Eng',  salary:120},
+    {id:2,name:'Bob',   dept:'Eng',  salary:95},
+    {id:3,name:'Carol', dept:'Eng',  salary:95},
+    {id:4,name:'Dan',   dept:'Sales',salary:80},
+    {id:5,name:'Eve',   dept:'Sales',salary:110},
+    {id:6,name:'Frank', dept:'Sales',salary:80},
+    {id:7,name:'Grace', dept:'HR',   salary:90},
+    {id:8,name:'Hank',  dept:'HR',   salary:75},
+  ],
+  /* Monthly revenue data — used by Offset (LAG/LEAD) tab */
+  salesData: [
+    {month:'Jan',revenue:80},{month:'Feb',revenue:95},{month:'Mar',revenue:88},
+    {month:'Apr',revenue:110},{month:'May',revenue:125},{month:'Jun',revenue:115},
+  ],
+  /* Monthly sales data — used by Window Frames tab */
+  frameData: [
+    {month:'Jan',sales:40},{month:'Feb',sales:65},{month:'Mar',sales:55},
+    {month:'Apr',sales:80},{month:'May',sales:95},{month:'Jun',sales:70},
+  ],
+  /* Quarterly sales data — used by Value (FIRST/LAST/NTH) tab */
+  quarterlyData: [
+    {month:'Jan',sales:40,q:'Q1'},{month:'Feb',sales:65,q:'Q1'},{month:'Mar',sales:55,q:'Q1'},
+    {month:'Apr',sales:80,q:'Q2'},{month:'May',sales:95,q:'Q2'},{month:'Jun',sales:70,q:'Q2'},
+  ],
+};
+
+/* Convenience aliases — all render/compute functions read these */
+const employees  = CONFIG.employees;
+const salesData  = CONFIG.salesData;
+const frameData  = CONFIG.frameData;
+
+const deptColor     = {Eng:'partition-A', Sales:'partition-B', HR:'partition-C'};
+const deptHex       = {Eng:'#378ADD', Sales:'#1D9E75', HR:'#EF9F27'};
+const deptBadgeCls  = {Eng:'badge-blue', Sales:'badge-teal', HR:'badge-amber'};
+const deptBadge = d => `<span class="badge ${deptBadgeCls[d]}">${d}</span>`;
+
+/* ── Partition filter state (shared across ranking + aggregate tabs) ── */
+let activePartition = null; // null = show all
+
+/* Sub-tab switch helper — fades content div then re-renders */
+function switchContent(renderFn) {
+  const el = document.getElementById('content');
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(3px)';
+  el.style.transition = 'opacity .1s ease, transform .1s ease';
+  setTimeout(() => {
+    el.innerHTML = renderFn();
+    el.style.opacity = '1';
+    el.style.transform = 'none';
+  }, 100);
+}
+
+function filterPartition(dept) {
+  activePartition = (activePartition === dept) ? null : dept;
+  if (currentTab === 'ranking')   switchContent(() => renderRanking(currentRankFn));
+  if (currentTab === 'aggregate') switchContent(() => renderAggregate(currentAggFn));
+}
+
+function clearPartitionFilter() {
+  activePartition = null;
+  if (currentTab === 'ranking')   switchContent(() => renderRanking(currentRankFn));
+  if (currentTab === 'aggregate') switchContent(() => renderAggregate(currentAggFn));
+}
+
+/* ═══════════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════════ */
+function groupByDept(rows) {
+  const depts = [...new Set(rows.map(r => r.dept))];
+  return depts.map(d => rows.filter(r => r.dept === d).sort((a,b) => b.salary - a.salary));
+}
+
+/* ═══════════════════════════════════════════
+   TAB 1 — RANKING
+═══════════════════════════════════════════ */
+function computeRanking(fn) {
+  const result = [];
+  groupByDept(employees).forEach(group => {
+    const n = group.length;
+    let rank = 1, denseRank = 1;
+    group.forEach((r, i) => {
+      if (i > 0 && group[i].salary < group[i-1].salary) { rank = i + 1; denseRank++; }
+      let val;
+      switch(fn) {
+        case 'ROW_NUMBER':  val = i + 1; break;
+        case 'RANK':        val = rank; break;
+        case 'DENSE_RANK':  val = denseRank; break;
+        case 'NTILE': {
+          const buckets = Math.min(4, n);
+          val = Math.min(Math.ceil((i + 1) * buckets / n), buckets);
+          break;
+        }
+        case 'PERCENT_RANK':
+          val = n === 1 ? '0.00' : ((rank - 1) / (n - 1)).toFixed(2);
+          break;
+        case 'CUME_DIST':
+          // CUME_DIST = (number of rows with value <= current) / total rows in partition
+          // For ties: all tied rows share the same CUME_DIST = highest position / n
+          val = (group.filter((_,j) => group[j].salary >= group[i].salary).length / n).toFixed(2);
+          break;
+      }
+      result.push({...r, val});
+    });
+  });
+  return result;
+}
+
+/* Global ranking — no PARTITION BY, ranks span all employees sorted by salary DESC */
+function computeRankingGlobal(fn) {
+  const sorted = [...employees].sort((a,b) => b.salary - a.salary);
+  const n = sorted.length;
+  let rank = 1, denseRank = 1;
+  return sorted.map((r, i) => {
+    if (i > 0 && sorted[i].salary < sorted[i-1].salary) { rank = i + 1; denseRank++; }
+    let val;
+    switch(fn) {
+      case 'ROW_NUMBER':  val = i + 1; break;
+      case 'RANK':        val = rank; break;
+      case 'DENSE_RANK':  val = denseRank; break;
+      case 'NTILE': {
+        const buckets = Math.min(4, n);
+        val = Math.min(Math.ceil((i + 1) * buckets / n), buckets);
+        break;
+      }
+      case 'PERCENT_RANK':
+        val = n === 1 ? '0.00' : ((rank - 1) / (n - 1)).toFixed(2);
+        break;
+      case 'CUME_DIST':
+        val = (sorted.filter((_,j) => sorted[j].salary >= sorted[i].salary).length / n).toFixed(2);
+        break;
+    }
+    return {...r, val};
+  });
+}
+
+function rankingDiagram(fn) {
+  const s = `width:100%;font-family:var(--sans)`;
+
+  if (fn === 'ROW_NUMBER') return `
+<svg style="${s}" viewBox="0 0 300 178">
+  <text x="10" y="18" font-size="12" fill="#9c9a92">Each row gets a unique sequential number</text>
+  ${[{s:'120k',r:1,fc:'rgba(55,138,221,.15)',sc:'#378ADD'},{s:'95k',r:2,fc:'rgba(29,158,117,.15)',sc:'#1D9E75'},{s:'95k',r:3,fc:'rgba(29,158,117,.15)',sc:'#1D9E75'}].map((row,i)=>`
+  <rect x="10" y="${38+i*44}" width="88" height="30" rx="5" fill="${row.fc}" stroke="${row.sc}" stroke-width=".5"/>
+  <text x="54" y="${57+i*44}" text-anchor="middle" font-size="12" fill="#e8e6e0">${row.s}</text>
+  <rect x="148" y="${38+i*44}" width="32" height="30" rx="5" fill="rgba(55,138,221,.2)" stroke="#378ADD" stroke-width=".5"/>
+  <text x="164" y="${57+i*44}" text-anchor="middle" font-size="14" font-weight="600" fill="#378ADD">${row.r}</text>
+  `).join('')}
+  <text x="10" y="174" font-size="11" fill="#9c9a92">Both 95k rows get different numbers (2 and 3)</text>
+</svg>`;
+
+  if (fn === 'RANK') return `
+<svg style="${s}" viewBox="0 0 300 210">
+  <defs><marker id="arrR" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#5f5e5a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+  <rect x="10" y="10" width="110" height="30" rx="5" fill="rgba(55,138,221,.15)" stroke="#378ADD" stroke-width=".5"/>
+  <text x="65" y="29" text-anchor="middle" font-size="12" fill="#e8e6e0">120k → rank 1</text>
+  <rect x="10" y="52" width="110" height="30" rx="5" fill="rgba(29,158,117,.15)" stroke="#1D9E75" stroke-width=".5"/>
+  <text x="65" y="71" text-anchor="middle" font-size="12" fill="#e8e6e0">95k → rank 2</text>
+  <rect x="10" y="94" width="110" height="30" rx="5" fill="rgba(29,158,117,.15)" stroke="#1D9E75" stroke-width=".5"/>
+  <text x="65" y="113" text-anchor="middle" font-size="12" fill="#e8e6e0">95k → rank 2</text>
+  <line x1="122" y1="67" x2="142" y2="67" stroke="#5f5e5a" stroke-width=".8"/>
+  <line x1="122" y1="109" x2="142" y2="109" stroke="#5f5e5a" stroke-width=".8"/>
+  <line x1="142" y1="67" x2="142" y2="109" stroke="#5f5e5a" stroke-width=".8"/>
+  <text x="148" y="92" font-size="11" fill="#9c9a92">tie</text>
+  <rect x="10" y="148" width="110" height="30" rx="5" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.1)" stroke-width=".5"/>
+  <text x="65" y="167" text-anchor="middle" font-size="12" fill="#9c9a92">next → rank 4</text>
+  <line x1="65" y1="124" x2="65" y2="146" stroke="#5f5e5a" stroke-width=".8" marker-end="url(#arrR)"/>
+  <text x="128" y="162" font-size="11" fill="#D85A30">rank 3 is skipped</text>
+</svg>`;
+
+  if (fn === 'DENSE_RANK') return `
+<svg style="${s}" viewBox="0 0 300 210">
+  <defs><marker id="arrD" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#5f5e5a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+  <rect x="10" y="10" width="110" height="30" rx="5" fill="rgba(55,138,221,.15)" stroke="#378ADD" stroke-width=".5"/>
+  <text x="65" y="29" text-anchor="middle" font-size="12" fill="#e8e6e0">120k → rank 1</text>
+  <rect x="10" y="52" width="110" height="30" rx="5" fill="rgba(29,158,117,.15)" stroke="#1D9E75" stroke-width=".5"/>
+  <text x="65" y="71" text-anchor="middle" font-size="12" fill="#e8e6e0">95k → rank 2</text>
+  <rect x="10" y="94" width="110" height="30" rx="5" fill="rgba(29,158,117,.15)" stroke="#1D9E75" stroke-width=".5"/>
+  <text x="65" y="113" text-anchor="middle" font-size="12" fill="#e8e6e0">95k → rank 2</text>
+  <line x1="122" y1="67" x2="142" y2="67" stroke="#5f5e5a" stroke-width=".8"/>
+  <line x1="122" y1="109" x2="142" y2="109" stroke="#5f5e5a" stroke-width=".8"/>
+  <line x1="142" y1="67" x2="142" y2="109" stroke="#5f5e5a" stroke-width=".8"/>
+  <text x="148" y="92" font-size="11" fill="#9c9a92">tie</text>
+  <rect x="10" y="148" width="110" height="30" rx="5" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.1)" stroke-width=".5"/>
+  <text x="65" y="167" text-anchor="middle" font-size="12" fill="#9c9a92">next → rank 3</text>
+  <line x1="65" y1="124" x2="65" y2="146" stroke="#5f5e5a" stroke-width=".8" marker-end="url(#arrD)"/>
+  <text x="128" y="162" font-size="11" fill="#639922">no gap — 2 → 3</text>
+</svg>`;
+
+  if (fn === 'NTILE') return `
+<svg style="${s}" viewBox="0 0 300 206">
+  <text x="10" y="16" font-size="12" fill="#9c9a92">NTILE(4) on a 3-row partition → max 3 buckets</text>
+  <text x="10" y="32" font-size="11" fill="#5f5e5a">Effective buckets = min(N, partition row count)</text>
+  ${[{s:'120k',b:1,fc:'rgba(55,138,221,.15)',sc:'#378ADD',tc:'#378ADD'},
+     {s:'95k', b:2,fc:'rgba(29,158,117,.15)',sc:'#1D9E75',tc:'#1D9E75'},
+     {s:'95k', b:3,fc:'rgba(239,159,39,.12)',sc:'#EF9F27',tc:'#EF9F27'}].map((row,i)=>`
+  <rect x="10" y="${48+i*46}" width="82" height="30" rx="5" fill="${row.fc}" stroke="${row.sc}" stroke-width=".5"/>
+  <text x="51" y="${67+i*46}" text-anchor="middle" font-size="12" fill="#e8e6e0">${row.s}</text>
+  <text x="108" y="${67+i*46}" font-size="11" fill="#5f5e5a">bucket</text>
+  <rect x="148" y="${48+i*46}" width="28" height="30" rx="5" fill="${row.fc}" stroke="${row.sc}" stroke-width=".5"/>
+  <text x="162" y="${67+i*46}" text-anchor="middle" font-size="14" font-weight="600" fill="${row.tc}">${row.b}</text>
+  `).join('')}
+  <text x="10" y="196" font-size="11" fill="#5f5e5a">Eng has 3 rows → buckets 1, 2, 3 only (bucket 4 never appears)</text>
+</svg>`;
+
+  if (fn === 'PERCENT_RANK') {
+    /* Use actual Eng partition: Alice 120k, Bob 95k, Carol 95k
+       rank-1/(n-1): Alice=0/2=0.00, Bob=1/2=0.50, Carol=1/2=0.50 */
+    const rows = [
+      {s:'Alice 120k', r:'0.00', rank:1, w:0,    note:'highest → always 0.00'},
+      {s:'Bob   95k',  r:'0.50', rank:2, w:0.5,  note:'tied: (2−1)/(3−1)'},
+      {s:'Carol 95k',  r:'0.50', rank:2, w:0.5,  note:'tied: same rank → same value'},
+    ];
+    return `
+<svg style="${s}" viewBox="0 0 300 218">
+  <text x="10" y="16" font-size="12" fill="#9c9a92">(rank − 1) / (partition rows − 1)</text>
+  <text x="10" y="30" font-size="11" fill="#5f5e5a">Eng partition (3 rows, sorted by salary DESC)</text>
+  ${rows.map((row,i)=>`
+  <rect x="10" y="${46+i*54}" width="104" height="30" rx="5" fill="rgba(55,138,221,.12)" stroke="#378ADD" stroke-width=".5"/>
+  <text x="62"  y="${65+i*54}" text-anchor="middle" font-size="11" fill="#e8e6e0">${row.s}</text>
+  <rect x="122" y="${52+i*54}" width="120" height="8" rx="4" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.08)" stroke-width=".5"/>
+  ${row.w>0?`<rect x="122" y="${52+i*54}" width="${row.w*120}" height="8" rx="4" fill="rgba(55,138,221,.45)"/>`:''}
+  <text x="248" y="${62+i*54}" font-size="12" fill="#378ADD" font-weight="600">${row.r}</text>
+  <text x="10"  y="${84+i*54}" font-size="10" fill="#5f5e5a">${row.note}</text>
+  `).join('')}
+  <text x="10" y="212" font-size="11" fill="#5f5e5a">Tied rows share the same PERCENT_RANK value</text>
+</svg>`;
+  }
+  if (fn === 'CUME_DIST') {
+    // Eng: Alice 120k, Bob 95k, Carol 95k (n=3)
+    // CUME_DIST = rows_with_val_gte_current / n
+    // Alice 120k: only Alice >= 120k → 1/3 = 0.33
+    // Bob 95k: Alice+Bob+Carol >= 95k → 3/3 = 1.00
+    // Carol 95k: same → 1.00
+    const cdRows = [
+      {s:'Alice 120k', v:'0.33', w:0.33, note:'1 row ≥ 120k → 1/3'},
+      {s:'Bob   95k',  v:'1.00', w:1.00, note:'3 rows ≥ 95k  → 3/3'},
+      {s:'Carol 95k',  v:'1.00', w:1.00, note:'tied → same result'},
+    ];
+    return `
+<svg style="${s}" viewBox="0 0 300 218">
+  <text x="10" y="16" font-size="12" fill="#9c9a92">rows with value ≥ current / partition size</text>
+  <text x="10" y="30" font-size="11" fill="#5f5e5a">Eng partition (3 rows, sorted salary DESC)</text>
+  ${cdRows.map((row,i)=>`
+  <rect x="10" y="${46+i*54}" width="104" height="30" rx="5" fill="rgba(55,138,221,.12)" stroke="#378ADD" stroke-width=".5"/>
+  <text x="62"  y="${65+i*54}" text-anchor="middle" font-size="11" fill="#e8e6e0">${row.s}</text>
+  <rect x="122" y="${52+i*54}" width="120" height="8" rx="4" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.08)" stroke-width=".5"/>
+  <rect x="122" y="${52+i*54}" width="${row.w*120}" height="8" rx="4" fill="rgba(55,138,221,.45)"/>
+  <text x="248" y="${62+i*54}" font-size="12" fill="#378ADD" font-weight="600">${row.v}</text>
+  <text x="10"  y="${84+i*54}" font-size="10" fill="#5f5e5a">${row.note}</text>
+  `).join('')}
+  <text x="10" y="212" font-size="11" fill="#5f5e5a">Always ends at 1.00. Never 0.00 (unlike PERCENT_RANK).</text>
+</svg>`;
+  }
+
+  return '';
+}
+
+function renderRanking(fn) {
+  const descs = {
+    ROW_NUMBER: {
+      title:'ROW_NUMBER()',
+      desc:'Assigns a unique sequential integer to every row in the partition. Tied salaries still get different numbers — which tied row gets which number depends on the database unless a tiebreaker column is added to ORDER BY.',
+      sql:`<span class="fn">ROW_NUMBER</span>() <span class="ov">OVER</span> (<span class="k">PARTITION BY</span> dept <span class="k">ORDER BY</span> salary <span class="k">DESC</span>) <span class="k">AS</span> row_num`,
+      sqlGlobal:`<span class="fn">ROW_NUMBER</span>() <span class="ov">OVER</span> (<span class="k">ORDER BY</span> salary <span class="k">DESC</span>) <span class="k">AS</span> row_num`,
+      use:'Paginating results — e.g. keep only the highest-paid employee per department.',
+    },
+    RANK: {
+      title:'RANK()',
+      desc:'Tied rows share the same rank. The next rank after a tie skips ahead by the number of tied rows. Two rows at rank 2 means the next distinct salary gets rank 4 — rank 3 is skipped entirely.',
+      sql:`<span class="fn">RANK</span>() <span class="ov">OVER</span> (<span class="k">PARTITION BY</span> dept <span class="k">ORDER BY</span> salary <span class="k">DESC</span>) <span class="k">AS</span> rnk`,
+      sqlGlobal:`<span class="fn">RANK</span>() <span class="ov">OVER</span> (<span class="k">ORDER BY</span> salary <span class="k">DESC</span>) <span class="k">AS</span> rnk`,
+      use:'Sports leaderboards and competition standings where ties should share the same position.',
+    },
+    DENSE_RANK: {
+      title:'DENSE_RANK()',
+      desc:'Like RANK — tied rows share the same number — but with no gaps in the sequence. Two rows at rank 2 means the next distinct salary is rank 3, not 4.',
+      sql:`<span class="fn">DENSE_RANK</span>() <span class="ov">OVER</span> (<span class="k">PARTITION BY</span> dept <span class="k">ORDER BY</span> salary <span class="k">DESC</span>) <span class="k">AS</span> dense_rnk`,
+      sqlGlobal:`<span class="fn">DENSE_RANK</span>() <span class="ov">OVER</span> (<span class="k">ORDER BY</span> salary <span class="k">DESC</span>) <span class="k">AS</span> dense_rnk`,
+      use:'Medal tables and tier systems where skipping numbers (Bronze = 3rd, not 4th) is confusing.',
+    },
+    NTILE: {
+      title:'NTILE(4)',
+      desc:'Divides each partition into N roughly equal buckets. When N exceeds the row count, the effective bucket count is capped at the number of rows — a 3-row partition with NTILE(4) produces buckets 1, 2, 3 only.',
+      sql:`<span class="fn">NTILE</span>(4) <span class="ov">OVER</span> (<span class="k">PARTITION BY</span> dept <span class="k">ORDER BY</span> salary <span class="k">DESC</span>) <span class="k">AS</span> quartile`,
+      sqlGlobal:`<span class="fn">NTILE</span>(4) <span class="ov">OVER</span> (<span class="k">ORDER BY</span> salary <span class="k">DESC</span>) <span class="k">AS</span> quartile`,
+      use:'Segmenting customers into top/mid/low quartiles for targeted marketing campaigns.',
+    },
+    PERCENT_RANK: {
+      title:'PERCENT_RANK()',
+      desc:'Returns a value from 0.00 to 1.00 representing relative standing. The top-ranked row is always 0.00; the bottom is always 1.00. Tied rows share the same PERCENT_RANK. Formula: (rank − 1) / (partition rows − 1).',
+      sql:`<span class="fn">PERCENT_RANK</span>() <span class="ov">OVER</span> (<span class="k">PARTITION BY</span> dept <span class="k">ORDER BY</span> salary <span class="k">DESC</span>) <span class="k">AS</span> pct_rnk`,
+      sqlGlobal:`<span class="fn">PERCENT_RANK</span>() <span class="ov">OVER</span> (<span class="k">ORDER BY</span> salary <span class="k">DESC</span>) <span class="k">AS</span> pct_rnk`,
+      use:'Score distributions and percentile reporting — "you scored better than 80% of candidates".',
+    },
+    CUME_DIST: {
+      title:'CUME_DIST()',
+      desc:'Returns the cumulative distribution — the fraction of partition rows whose value is less than or equal to the current row\'s value. Always between 0 (exclusive) and 1 (inclusive). Unlike PERCENT_RANK, the highest-ranked row is never 0.',
+      sql:`<span class="fn">CUME_DIST</span>() <span class="ov">OVER</span> (<span class="k">PARTITION BY</span> dept <span class="k">ORDER BY</span> salary <span class="k">DESC</span>) <span class="k">AS</span> cume_dist`,
+      sqlGlobal:`<span class="fn">CUME_DIST</span>() <span class="ov">OVER</span> (<span class="k">ORDER BY</span> salary <span class="k">DESC</span>) <span class="k">AS</span> cume_dist`,
+      use:'Finding the top 20% of performers: WHERE CUME_DIST() OVER (...) <= 0.2.',
+    },
+  };
+
+  /* Decision guide — return early before accessing descs['GUIDE'] which doesn't exist */
+  if (fn === 'GUIDE') return `
+<div class="desc-panel">
+  <h3>Which ranking function should I use?</h3>
+  <p style="margin-bottom:12px">All five ranking functions are computed per-partition, ordered by the same column. The difference is entirely in how they handle ties and what the resulting number means.</p>
+  <table>
+    <thead><tr><th>Function</th><th>Ties get</th><th>Gaps after tie?</th><th>Range</th><th>Best for</th></tr></thead>
+    <tbody>
+      <tr><td><span style="font-family:var(--mono);color:var(--amber);font-size:12px">ROW_NUMBER</span></td><td>Different numbers</td><td>n/a</td><td>1 … n</td><td>Deduplication, pagination</td></tr>
+      <tr><td><span style="font-family:var(--mono);color:var(--amber);font-size:12px">RANK</span></td><td>Same number</td><td>Yes</td><td>1 … n</td><td>Sports standings, competitions</td></tr>
+      <tr><td><span style="font-family:var(--mono);color:var(--amber);font-size:12px">DENSE_RANK</span></td><td>Same number</td><td>No</td><td>1 … distinct values</td><td>Tier/medal systems</td></tr>
+      <tr><td><span style="font-family:var(--mono);color:var(--amber);font-size:12px">PERCENT_RANK</span></td><td>Same value</td><td>n/a</td><td>0.00 … 1.00</td><td>Percentile reporting</td></tr>
+      <tr><td><span style="font-family:var(--mono);color:var(--amber);font-size:12px">CUME_DIST</span></td><td>Same value</td><td>n/a</td><td>&gt;0 … 1.00</td><td>Top-N% filtering</td></tr>
+    </tbody>
+  </table>
+  <div class="note" style="margin-top:12px">
+    <span class="note-icon">ℹ</span>
+    <span><strong style="font-weight:500;color:var(--text)">Key distinction:</strong> PERCENT_RANK uses <em>rank position</em> (starts at 0.00), while CUME_DIST uses <em>row count</em> (never reaches 0.00). With no ties they differ; with ties CUME_DIST groups tied rows at the <em>top</em> boundary of their group.</span>
+  </div>
+</div>
+<div class="sub-tabs-row">
+  <span class="sub-tabs-label">function</span>
+  <div class="sub-tabs">
+    ${['ROW_NUMBER','RANK','DENSE_RANK','NTILE','PERCENT_RANK','CUME_DIST','GUIDE'].map(f=>
+      `<button class="sub-tab${f==='GUIDE'?' active':''}" onclick="switchRankFn('${f}')">${f==='GUIDE'?'choose?':f}</button>`
+    ).join('')}
+  </div>
+</div>`;
+
+  /* Global-window mode: compute without partition so ranks span all employees */
+  const rows = rankingPartitioned ? computeRanking(fn) : computeRankingGlobal(fn);
+  const d = descs[fn];
+  const colHeader = {ROW_NUMBER:'Row #', RANK:'Rank', DENSE_RANK:'Dense rank', NTILE:'Bucket', PERCENT_RANK:'Pct rank', CUME_DIST:'Cume dist'}[fn];
+  const ap = activePartition;
+
+  return `
+<div class="desc-panel">
+  <h3>${d.title}</h3>
+  <p>${d.desc}</p>
+  <div class="sql-mini"><span class="k">SELECT</span> name, dept, salary,
+  ${rankingPartitioned ? d.sql : d.sqlGlobal}
+<span class="k">FROM</span> employees;</div>
+  ${d.use ? `<div class="use-strip"><span class="use-strip-label">Use when</span>${d.use}</div>` : ''}
+  ${!rankingPartitioned ? `<div class="global-note"><span class="global-note-icon">→</span><span>Without <strong style="font-weight:500;color:var(--text)">PARTITION BY</strong>, the window spans all 8 employees. Ranks are assigned globally across departments, not per team.</span></div>` : ''}
+</div>
+<div class="sub-tabs-row">
+  <span class="sub-tabs-label">function</span>
+  <div class="sub-tabs">
+    ${['ROW_NUMBER','RANK','DENSE_RANK','NTILE','PERCENT_RANK','CUME_DIST','GUIDE'].map(f=>`
+      <button class="sub-tab${f===fn?' active':''}" onclick="switchRankFn('${f}')">${f==='GUIDE'?'choose?':f}</button>
+    `).join('')}
+  </div>
+</div>
+<div class="toggle-row">
+  <div class="toggle-track${rankingPartitioned?' on':''}" onclick="rankingPartitioned=!rankingPartitioned;switchContent(()=>renderRanking(currentRankFn))">
+    <div class="toggle-thumb"></div>
+  </div>
+  <span class="toggle-label">
+    PARTITION BY dept
+    <span class="toggle-code">${rankingPartitioned?'— ranks reset per department':'— removed, ranks span all employees'}</span>
+  </span>
+</div>
+<div class="layout">
+  <div class="panel">
+    <div class="panel-title">
+      Result — ${rankingPartitioned ? 'click a department to isolate its partition' : 'all employees in one window'}
+    </div>
+    <div class="partition-legend">
+      ${rankingPartitioned ? Object.entries(deptHex).map(([dep,c])=>`
+        <button class="partition-filter-chip${ap===dep?' active':''}"
+          style="${ap===dep?`background:${c}22;border-color:${c};color:${c}`:''}"
+          onclick="filterPartition('${dep}')">
+          <span class="chip-dot" style="background:${c}"></span>${dep}
+        </button>
+      `).join('') + (ap ? `<button class="show-all-btn" onclick="clearPartitionFilter()">show all</button>` : '')
+      : `<span style="font-size:11px;color:var(--text3)">Single window — no partitions</span>`}
+    </div>
+    <table>
+      <thead><tr><th>Name</th><th>Dept</th><th>Salary</th><th>${colHeader}</th></tr></thead>
+      <tbody>
+        ${rows.map(r=>`<tr class="${rankingPartitioned?deptColor[r.dept]:''} ${ap && r.dept!==ap ? 'row-dim' : ''}">
+          <td>${r.name}</td><td>${deptBadge(r.dept)}</td><td>${r.salary}k</td>
+          <td class="result-val">${r.val}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>
+  <div class="diag-panel">
+    <div class="panel-title">How ${fn} works</div>
+    ${rankingDiagram(fn)}
+  </div>
+</div>`;
+}
+
+/* ═══════════════════════════════════════════
+   TAB 2 — AGGREGATE
+═══════════════════════════════════════════ */
+let aggPartitioned = true;
+
+function computeAggregate(fn, partitioned) {
+  const depts = [...new Set(employees.map(r => r.dept))];
+  if (partitioned) {
+    const agg = {};
+    depts.forEach(dept => {
+      const sals = employees.filter(r => r.dept === dept).map(r => r.salary);
+      agg[dept] = {
+        SUM: sals.reduce((a,b)=>a+b,0),
+        AVG: Math.round(sals.reduce((a,b)=>a+b,0)/sals.length),
+        MIN: Math.min(...sals), MAX: Math.max(...sals), COUNT: sals.length,
+      };
+    });
+    return employees.map(r => ({...r, val: agg[r.dept][fn]}));
+  } else {
+    const all = employees.map(r => r.salary);
+    const globalVal = {
+      SUM: all.reduce((a,b)=>a+b,0),
+      AVG: Math.round(all.reduce((a,b)=>a+b,0)/all.length),
+      MIN: Math.min(...all), MAX: Math.max(...all), COUNT: all.length,
+    }[fn];
+    return employees.map(r => ({...r, val: globalVal}));
+  }
+}
+
+function renderAggregate(fn) {
+  const descs = {
+    SUM:  {title:'SUM()',  desc:'Totals the column across the partition. Without PARTITION BY, it totals across the entire result set.', sql:(p)=>p?`<span class="fn">SUM</span>(salary) <span class="ov">OVER</span> (<span class="k">PARTITION BY</span> dept)`:`<span class="fn">SUM</span>(salary) <span class="ov">OVER</span> ()`, suffix:'k', use:'Running totals and department budget rollups alongside individual row data.'},
+    AVG:  {title:'AVG()',  desc:'Mean of the column across the partition. Useful for comparing each row against its group average.', sql:(p)=>p?`<span class="fn">AVG</span>(salary) <span class="ov">OVER</span> (<span class="k">PARTITION BY</span> dept)`:`<span class="fn">AVG</span>(salary) <span class="ov">OVER</span> ()`, suffix:'k', use:'Flagging employees paid above or below their team average in a single query.'},
+    MIN:  {title:'MIN()',  desc:'The minimum value in the partition, repeated on every row — ideal for computing the gap to the floor.', sql:(p)=>p?`<span class="fn">MIN</span>(salary) <span class="ov">OVER</span> (<span class="k">PARTITION BY</span> dept)`:`<span class="fn">MIN</span>(salary) <span class="ov">OVER</span> ()`, suffix:'k', use:'Computing salary gap to the lowest-paid peer: salary - MIN() OVER (PARTITION BY dept).'},
+    MAX:  {title:'MAX()',  desc:'The maximum value in the partition on every row — perfect for measuring distance from the top.', sql:(p)=>p?`<span class="fn">MAX</span>(salary) <span class="ov">OVER</span> (<span class="k">PARTITION BY</span> dept)`:`<span class="fn">MAX</span>(salary) <span class="ov">OVER</span> ()`, suffix:'k', use:'Showing each product\'s price alongside the most expensive item in its category.'},
+    COUNT:{title:'COUNT()',desc:'How many rows are in the partition. Every member of a 3-person team sees 3. No ORDER BY needed.', sql:(p)=>p?`<span class="fn">COUNT</span>(*) <span class="ov">OVER</span> (<span class="k">PARTITION BY</span> dept)`:`<span class="fn">COUNT</span>(*) <span class="ov">OVER</span> ()`, suffix:'', use:'Adding team size to every employee row without a separate subquery or JOIN.'},
+  };
+  const p = aggPartitioned;
+  const ap = activePartition;
+  const rows = computeAggregate(fn, p);
+  const d = descs[fn];
+  const colHeader = `${fn}${fn==='COUNT'?'(*)':'(salary)'} ${p?'per dept':'global'}`;
+  return `
+<div class="desc-panel">
+  <h3>${d.title} <span class="ov">OVER</span> (${p?'<span class="k">PARTITION BY</span> dept':'<span style="color:var(--text3)">no partition</span>'})</h3>
+  <p>${d.desc}</p>
+  <div class="sql-mini"><span class="k">SELECT</span> name, dept, salary,
+  ${d.sql(p)} <span class="k">AS</span> result
+<span class="k">FROM</span> employees;</div>
+  ${d.use ? `<div class="use-strip"><span class="use-strip-label">Use when</span>${d.use}</div>` : ''}
+  ${fn==='SUM'&&p ? `<div class="note" style="margin-top:10px">
+    <span class="note-icon">↔</span>
+    <span><strong style="font-weight:500;color:var(--text)">vs GROUP BY:</strong> <code style="font-family:var(--mono);font-size:11px">GROUP BY dept</code> would return 3 rows (one per dept) and lose individual employee names. The window function returns all 8 rows and adds the dept total to each one — no data lost, no JOIN needed.</span>
+  </div>` : ''}
+</div>
+<div class="sub-tabs-row">
+  <span class="sub-tabs-label">function</span>
+  <div class="sub-tabs">
+    ${['SUM','AVG','MIN','MAX','COUNT'].map(f=>`
+      <button class="sub-tab${f===fn?' active':''}" onclick="switchAggFn('${f}')">${f}</button>
+    `).join('')}
+  </div>
+</div>
+<div class="toggle-row">
+  <div class="toggle-track${p?' on':''}" id="agg-toggle" onclick="togglePartition()">
+    <div class="toggle-thumb"></div>
+  </div>
+  <span class="toggle-label">
+    PARTITION BY dept
+    <span class="toggle-code">${p?'— results grouped per department':'— removed, one window over all rows'}</span>
+  </span>
+</div>
+<div class="panel">
+  <div class="panel-title">Result — all rows preserved, aggregate added as extra column</div>
+  <div class="partition-legend">
+    ${p ? Object.entries(deptHex).map(([dep,c])=>`
+      <button class="partition-filter-chip${ap===dep?' active':''}"
+        style="${ap===dep?`background:${c}22;border-color:${c};color:${c}`:''}"
+        onclick="filterPartition('${dep}')">
+        <span class="chip-dot" style="background:${c}"></span>${dep}
+      </button>
+    `).join('') + (ap ? `<button class="show-all-btn" onclick="clearPartitionFilter()">show all</button>` : '')
+    : `<span style="font-size:11px;color:var(--text3)">No PARTITION BY — single window spans all 8 rows</span>`}
+  </div>
+  <table>
+    <thead><tr>
+      <th>Name</th><th>Dept</th><th>Salary</th><th>${colHeader}</th>
+    </tr></thead>
+    <tbody>
+      ${rows.map(r=>`<tr class="${p?deptColor[r.dept]:''} ${ap && r.dept!==ap ? 'row-dim' : ''}">
+        <td>${r.name}</td><td>${deptBadge(r.dept)}</td><td>${r.salary}k</td>
+        <td class="result-val">${r.val}${d.suffix}</td>
+      </tr>`).join('')}
+    </tbody>
+  </table>
+</div>`;
+}
+
+function togglePartition() {
+  aggPartitioned = !aggPartitioned;
+  activePartition = null;
+  switchContent(() => renderAggregate(currentAggFn));
+}
+
+/* ═══════════════════════════════════════════
+   TAB 3 — OFFSET
+═══════════════════════════════════════════ */
+let offsetCurrentRow = 2; // 0-indexed, default Mar
+
+/* Surgical DOM patch for offset row click — avoids full re-render flash */
+function patchOffsetRow(newRow, fn) {
+  offsetCurrentRow = newRow;
+  const n = salesData.length;
+
+  /* 1. Update table row highlights */
+  document.querySelectorAll('.offset-table tr').forEach((tr, i) => {
+    tr.classList.toggle('offset-current', i === newRow);
+    const monthCell = tr.cells[0];
+    if (!monthCell) return;
+    const month = salesData[i].month;
+    monthCell.innerHTML = month + (i === newRow
+      ? ' <span style="color:var(--amber);font-size:10px">◉</span>' : '');
+  });
+
+  /* 2. Re-render only the SVG diagram */
+  const cur = newRow;
+  const diagStart  = Math.max(0, Math.min(cur - 1, n - 4));
+  const diagRows   = salesData.slice(diagStart, diagStart + 4);
+  const curInDiag  = cur - diagStart;
+  const arrowCol   = fn === 'LAG' ? '#378ADD' : '#1D9E75';
+  const targetInDiag = fn === 'LAG' ? curInDiag - 1 : curInDiag + 1;
+  const curY       = 18 + curInDiag * 46 + 16;
+  const targetY    = 18 + targetInDiag * 46 + 16;
+  const hasTarget  = targetInDiag >= 0 && targetInDiag < diagRows.length;
+  const arrowPath  = hasTarget
+    ? 'M108 ' + curY + ' C165 ' + curY + ' 165 ' + targetY + ' 110 ' + targetY : '';
+  const arrowLabelY = hasTarget ? Math.round((curY + targetY) / 2) + 4 : 0;
+  const arrowText  = fn === 'LAG' ? 'LAG(1) — 1 row back' : 'LEAD(1) — 1 row ahead';
+  const nullNote   = fn === 'LAG' ? 'First row — no predecessor → NULL' : 'Last row — no successor → NULL';
+  const svgH       = 18 + diagRows.length * 46 + 10;
+
+  const diagPanel = document.querySelector('.diag-panel');
+  if (diagPanel) {
+    diagPanel.querySelector('.panel-title').textContent =
+      'Row pointer — ' + salesData[cur].month + ' is current';
+    diagPanel.innerHTML = '<div class="panel-title">Row pointer — ' + salesData[cur].month + ' is current</div>' +
+      '<svg style="width:100%;font-family:var(--sans)" viewBox="0 0 260 ' + svgH + '">' +
+      '<defs><marker id="arOff" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">' +
+      '<path d="M2 1L8 5L2 9" fill="none" stroke="' + arrowCol + '" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '</marker></defs>' +
+      diagRows.map((r, i) =>
+        '<rect x="10" y="' + (18+i*46) + '" width="94" height="32" rx="6"' +
+        ' fill="' + (i===curInDiag?'rgba(239,159,39,.15)':'rgba(255,255,255,.04)') + '"' +
+        ' stroke="' + (i===curInDiag?'#EF9F27':'rgba(255,255,255,.1)') + '"' +
+        ' stroke-width="' + (i===curInDiag?'1':'.5') + '"/>' +
+        '<text x="57" y="' + (38+i*46) + '" text-anchor="middle" font-size="12"' +
+        ' fill="' + (i===curInDiag?'#EF9F27':'#9c9a92') + '">' +
+        r.month + (i===curInDiag?' ← current':'') + '</text>'
+      ).join('') +
+      (hasTarget
+        ? '<path d="' + arrowPath + '" fill="none" stroke="' + arrowCol + '" stroke-width="1.5" marker-end="url(#arOff)"/>' +
+          '<text x="118" y="' + arrowLabelY + '" font-size="10" fill="' + arrowCol + '">' + arrowText + '</text>'
+        : '<text x="10" y="' + (18 + curInDiag * 46 + 48) + '" font-size="10" fill="#9c9a92">' + nullNote + '</text>') +
+      '</svg>';
+  }
+}
+
+function renderOffset(fn) {
+  const descs = {
+    LAG: {
+      title:'LAG(col, N)',
+      desc:'Accesses the value N rows before the current row within the window order. The first N rows have no predecessor, so they return NULL.',
+      sql:`<span class="fn">LAG</span>(revenue, 1) <span class="ov">OVER</span> (<span class="k">ORDER BY</span> month) <span class="k">AS</span> prev_month`,
+      use:'Month-over-month comparisons, detecting value drops, or computing change from prior period.',
+    },
+    LEAD: {
+      title:'LEAD(col, N)',
+      desc:'Accesses the value N rows after the current row. The last N rows have no successor and return NULL. A default value can be supplied as a third argument instead of NULL.',
+      sql:`<span class="fn">LEAD</span>(revenue, 1) <span class="ov">OVER</span> (<span class="k">ORDER BY</span> month) <span class="k">AS</span> next_month`,
+      use:'Forecasting comparisons, session gap analysis, or flagging rows before a significant event.',
+    },
+    DEFAULT: {
+      title:'LAG / LEAD with a default value',
+      desc:'The optional third argument replaces NULL when there is no predecessor or successor row. Useful when downstream calculations would break on NULL — e.g. computing a ratio against the previous period.',
+      sql:`<span class="fn">LAG</span>(revenue, 1, <strong style="color:var(--green)">0</strong>) <span class="ov">OVER</span> (<span class="k">ORDER BY</span> month) <span class="k">AS</span> prev_month`,
+      use:'Ensuring division-safe comparisons: revenue / LAG(revenue,1,revenue) never divides by zero.',
+    },
+  };
+  const d = descs[fn];
+  const cur = offsetCurrentRow;
+  const n = salesData.length;
+
+  /* DEFAULT sub-tab — show LAG with 0 as default vs NULL */
+  if (fn === 'DEFAULT') {
+    const defRows = salesData.map((r,i) => ({
+      ...r,
+      withNull:    i===0 ? null : salesData[i-1].revenue,
+      withDefault: i===0 ? 0    : salesData[i-1].revenue,
+    }));
+    return `
+<div class="desc-panel">
+  <h3>${d.title}</h3>
+  <p>${d.desc}</p>
+  <div class="sql-mini"><span class="cm">-- Without default: first row → NULL</span>
+<span class="fn">LAG</span>(revenue, 1) <span class="ov">OVER</span> (<span class="k">ORDER BY</span> month)
+
+<span class="cm">-- With default: first row → 0 instead of NULL</span>
+<span class="fn">LAG</span>(revenue, 1, <span style="color:var(--green)">0</span>) <span class="ov">OVER</span> (<span class="k">ORDER BY</span> month)</div>
+  <div class="use-strip"><span class="use-strip-label">Use when</span>${d.use}</div>
+</div>
+<div class="sub-tabs-row">
+  <span class="sub-tabs-label">function</span>
+  <div class="sub-tabs">
+    ${['LAG','LEAD','DEFAULT'].map(f=>`
+      <button class="sub-tab${f===fn?' active':''}" onclick="switchOffFn('${f}')">${f==='DEFAULT'?'default value':f}</button>
+    `).join('')}
+  </div>
+</div>
+<div class="panel">
+  <div class="panel-title">LAG(revenue, 1) vs LAG(revenue, 1, 0) — first row comparison</div>
+  <table>
+    <thead><tr><th>Month</th><th>Revenue</th><th>LAG — no default</th><th>LAG(…, 0) — with default</th></tr></thead>
+    <tbody>
+      ${defRows.map((r,i)=>`<tr${i===0?' class="current-row"':''}>
+        <td>${r.month}${i===0?' <span style="color:var(--amber);font-size:10px">◉ first row</span>':''}</td>
+        <td>${r.revenue}k</td>
+        <td>${r.withNull===null?'<span class="null-val">NULL</span>':`<span class="result-val">${r.withNull}k</span>`}</td>
+        <td><span class="result-val" style="color:${i===0?'var(--green)':'var(--blue)'};">${i===0?'0k (default)':r.withDefault+'k'}</span></td>
+      </tr>`).join('')}
+    </tbody>
+  </table>
+  <div class="note" style="margin-top:10px">
+    <span class="note-icon">ℹ</span>
+    <span>The default value can be any expression — a literal (<code style="font-family:var(--mono);font-size:11px">0</code>), the current row's value (<code style="font-family:var(--mono);font-size:11px">revenue</code>), or a constant like the overall average. It is <em>not</em> the same as COALESCE — the default applies before the result is returned, not after.</span>
+  </div>
+</div>`;
+  }
+
+  const rows = salesData.map((r,i) => ({
+    ...r,
+    offset: fn==='LAG' ? (i===0 ? null : salesData[i-1].revenue) : (i===n-1 ? null : salesData[i+1].revenue),
+    diff:   fn==='LAG' ? (i===0 ? null : r.revenue-salesData[i-1].revenue) : (i===n-1 ? null : salesData[i+1].revenue-r.revenue),
+  }));
+
+  const colLabel  = fn==='LAG' ? 'Prev month' : 'Next month';
+  const arrowCol  = fn==='LAG' ? '#378ADD' : '#1D9E75';
+
+  /* Diagram: show 4 rows centred on current row, clamped to data bounds */
+  const diagStart = Math.max(0, Math.min(cur - 1, n - 4));
+  const diagRows  = salesData.slice(diagStart, diagStart + 4);
+  const curInDiag = cur - diagStart; // index of current row within the 4 shown
+
+  /* Arrow: from current row to target row in the diagram */
+  const targetInDiag = fn==='LAG' ? curInDiag - 1 : curInDiag + 1;
+  const curY    = 18 + curInDiag * 46 + 16;  // vertical centre of current row box
+  const targetY = 18 + targetInDiag * 46 + 16;
+  const hasTarget = targetInDiag >= 0 && targetInDiag < diagRows.length;
+  const arrowPath = hasTarget
+    ? (fn==='LAG'
+        ? `M108 ${curY} C165 ${curY} 165 ${targetY} 110 ${targetY}`
+        : `M108 ${curY} C165 ${curY} 165 ${targetY} 110 ${targetY}`)
+    : '';
+  const arrowLabelY = hasTarget ? Math.round((curY + targetY) / 2) + 4 : 0;
+  const arrowText = fn==='LAG' ? 'LAG(1) — 1 row back' : 'LEAD(1) — 1 row ahead';
+  const nullNote  = fn==='LAG' ? 'First row — no predecessor → NULL' : 'Last row — no successor → NULL';
+
+  return `
+<div class="desc-panel">
+  <h3>${d.title}</h3>
+  <p>${d.desc}</p>
+  <div class="sql-mini"><span class="k">SELECT</span> month, revenue,
+  ${d.sql}
+<span class="k">FROM</span> monthly_sales;</div>
+  ${d.use ? `<div class="use-strip"><span class="use-strip-label">Use when</span>${d.use}</div>` : ''}
+</div>
+<div class="sub-tabs-row">
+  <span class="sub-tabs-label">function</span>
+  <div class="sub-tabs">
+    ${['LAG','LEAD','DEFAULT'].map(f=>`
+      <button class="sub-tab${f===fn?' active':''}" onclick="switchOffFn('${f}')">${f==='DEFAULT'?'default value':f}</button>
+    `).join('')}
+  </div>
+</div>
+<p style="font-size:12px;color:var(--text3);margin-bottom:.75rem">Click any row to make it the current row — the diagram updates live.</p>
+<div class="layout">
+  <div class="panel">
+    <div class="panel-title">Monthly revenue</div>
+    <table class="offset-table">
+      <thead><tr><th>Month</th><th>Revenue</th><th>${colLabel}</th><th>Δ</th></tr></thead>
+      <tbody>
+        ${rows.map((r,i)=>`<tr class="${i===cur?'offset-current':''}" onclick="patchOffsetRow(${i},'${fn}')">
+          <td>${r.month}${i===cur?' <span style="color:var(--amber);font-size:10px">◉</span>':''}</td>
+          <td>${r.revenue}k</td>
+          <td>${r.offset===null?'<span class="null-val">NULL</span>':`<span class="result-val">${r.offset}k</span>`}</td>
+          <td>${r.diff===null?'':
+            `<span style="color:${r.diff>=0?'#639922':'#D85A30'};font-family:var(--mono);font-size:12px;font-weight:700">${r.diff>=0?'+':''}${r.diff}k</span>`}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>
+  <div class="diag-panel">
+    <div class="panel-title">Row pointer — ${salesData[cur].month} is current</div>
+    <svg style="width:100%;font-family:var(--sans)" viewBox="0 0 260 ${18 + diagRows.length * 46 + 10}">
+      <defs><marker id="arOff" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="${arrowCol}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+      ${diagRows.map((r,i)=>`
+        <rect x="10" y="${18+i*46}" width="94" height="32" rx="6"
+          fill="${i===curInDiag?'rgba(239,159,39,.15)':'rgba(255,255,255,.04)'}"
+          stroke="${i===curInDiag?'#EF9F27':'rgba(255,255,255,.1)'}" stroke-width="${i===curInDiag?'1':'.5'}"/>
+        <text x="57" y="${38+i*46}" text-anchor="middle" font-size="12" fill="${i===curInDiag?'#EF9F27':'#9c9a92'}">${r.month}${i===curInDiag?' ← current':''}</text>
+      `).join('')}
+      ${hasTarget ? `<path d="${arrowPath}" fill="none" stroke="${arrowCol}" stroke-width="1.5" marker-end="url(#arOff)"/>
+      <text x="118" y="${arrowLabelY}" font-size="10" fill="${arrowCol}">${arrowText}</text>` : ''}
+      ${!hasTarget ? `<text x="10" y="${18 + curInDiag * 46 + 48}" font-size="10" fill="#9c9a92">${nullNote}</text>` : ''}
+    </svg>
+  </div>
+</div>`;
+}
+
+/* ═══════════════════════════════════════════
+   TAB 4 — WINDOW FRAMES
+═══════════════════════════════════════════ */
+let frameState = {currentRow:2, preceding:1, following:1, mode:'rows', frameType:'custom'};
+
+const presets = [
+  {key:'custom',      label:'Custom',                prec:1,  foll:1,  note:''},
+  {key:'unbounded',   label:'UNBOUNDED PRECEDING',   prec:99, foll:0,  note:'Running total from start of partition to current row. The most common default.'},
+  {key:'full',        label:'UNBOUNDED … UNBOUNDED', prec:99, foll:99, note:'The entire partition. Equivalent to omitting the frame clause entirely for non-ORDER BY windows.'},
+  {key:'following1',  label:'1 PRECEDING / 1 FOLLOWING', prec:1, foll:1, note:'Sliding 3-row window centred on current row.'},
+];
+
+function renderFrameSparkline(s, e, currentRow) {
+  const el = document.getElementById('frame-sparkline');
+  if (!el) return;
+  const maxSales = Math.max(...frameData.map(r=>r.sales));
+  el.innerHTML = frameData.map((r,i) => {
+    const inFrame   = i>=s && i<=e;
+    const isCurrent = i===currentRow;
+    const heightPct = Math.round((r.sales / maxSales) * 100);
+    const barCls    = isCurrent ? 'spark-bar is-current' : inFrame ? 'spark-bar in-frame' : 'spark-bar';
+    return `<div class="spark-col">
+      <div class="${barCls}" style="height:${heightPct}%;"></div>
+      <div class="spark-label">${r.month}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderFrame() {
+  const {currentRow, preceding, following, mode} = frameState;
+  const n = frameData.length;
+  const effPrec = Math.min(preceding, currentRow);
+  const effFoll = Math.min(following, n-1-currentRow);
+  const s = currentRow - effPrec;
+  const e = currentRow + effFoll;
+  const frameRows  = frameData.slice(s, e+1);
+  const avg = Math.round(frameRows.reduce((a,b)=>a+b.sales,0)/frameRows.length);
+
+  const tableBody = document.getElementById('frame-table-body');
+  if (!tableBody) return;
+  tableBody.innerHTML = frameData.map((r,i)=>{
+    const inFrame   = i>=s && i<=e;
+    const isCurrent = i===currentRow;
+    const cls       = isCurrent?'current-row':inFrame?'frame-highlight':'';
+    const status    = isCurrent
+      ? `<span style="color:#EF9F27">◉ current</span>`
+      : inFrame
+        ? `<span style="color:#639922">✓ in frame</span>`
+        : `<span style="color:#5f5e5a">—</span>`;
+    const result = isCurrent ? `<span class="result-val">${avg}k</span>` : '';
+    return `<tr class="${cls}"><td>${r.month}</td><td>${r.sales}k</td><td>${status}</td><td>${result}</td></tr>`;
+  }).join('');
+
+  const precLabel = preceding>=99?'UNBOUNDED':preceding;
+  const follLabel = following>=99?'UNBOUNDED':following;
+  const sqlEl = document.getElementById('frame-sql-live');
+  if (sqlEl) sqlEl.innerHTML =
+    `<span class="fn">AVG</span>(sales) <span class="ov">OVER</span> (\n  <span class="k">ORDER BY</span> month\n  <span class="k">${mode.toUpperCase()} BETWEEN</span> <strong style="color:#e8e6e0">${precLabel} PRECEDING</strong> <span class="k">AND</span> <strong style="color:#e8e6e0">${follLabel} FOLLOWING</strong>\n) = <span style="color:#378ADD;font-weight:700">${avg}k</span>`;
+
+  renderFrameSparkline(s, e, currentRow);
+}
+
+function applyPreset(key) {
+  const p = presets.find(x=>x.key===key);
+  frameState.preceding = p.prec;
+  frameState.following = p.foll;
+  frameState.frameType = key;
+  /* sync sliders */
+  const ps = document.getElementById('sl-prec');
+  const fs = document.getElementById('sl-foll');
+  if (ps) { ps.value = Math.min(p.prec,5); document.getElementById('prec-out').textContent = p.prec>=99?'∞':p.prec; }
+  if (fs) { fs.value = Math.min(p.foll,5); document.getElementById('foll-out').textContent = p.foll>=99?'∞':p.foll; }
+  document.querySelectorAll('.preset-btn').forEach(b=>b.classList.toggle('active', b.dataset.key===key));
+  const note = document.getElementById('preset-note');
+  if (note) note.textContent = p.note;
+  renderFrame();
+}
+
+function initFrame() {
+  frameState = {currentRow:2, preceding:1, following:1, mode:'rows', frameType:'custom'};
+  return `
+<div class="desc-panel">
+  <h3>Window frames — ROWS BETWEEN … AND …</h3>
+  <p>The frame clause narrows the rows included in each aggregate calculation. Without it, most databases default to <code style="font-family:var(--mono);font-size:12px;color:#9c9a92">ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code> when ORDER BY is present. Use the controls below to build intuition.</p>
+</div>
+
+<div class="sub-tabs-row" style="margin-bottom:.75rem">
+  <span class="sub-tabs-label">view</span>
+  <div class="sub-tabs">
+    <button class="sub-tab active" onclick="showFrameSection('rows-between',this)">ROWS BETWEEN</button>
+    <button class="sub-tab" onclick="showFrameSection('rows-vs-range',this)">ROWS vs RANGE</button>
+    <button class="sub-tab" onclick="showFrameSection('unbounded',this)">UNBOUNDED</button>
+  </div>
+</div>
+
+<div id="frame-section-rows-between">
+  <div class="sparkline-wrap">
+    <div class="sparkline-title">Monthly sales — frame highlighted</div>
+    <div class="sparkline-bars" id="frame-sparkline"></div>
+    <div style="display:flex;gap:12px;margin-top:6px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text3)"><div style="width:10px;height:10px;border-radius:2px;background:rgba(239,159,39,.55);border:0.5px solid rgba(239,159,39,.7)"></div>Current row</div>
+      <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text3)"><div style="width:10px;height:10px;border-radius:2px;background:rgba(99,153,34,.35);border:0.5px solid rgba(99,153,34,.5)"></div>In frame</div>
+      <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text3)"><div style="width:10px;height:10px;border-radius:2px;background:var(--bg3);border:0.5px solid var(--border2)"></div>Outside frame</div>
+    </div>
+  </div>
+  <div style="margin-bottom:.75rem">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap">
+      <span class="sub-tabs-label">presets</span>
+      <div class="presets" style="margin:0">
+        ${presets.map(p=>`<button class="preset-btn${p.key==='custom'?' active':''}" data-key="${p.key}" onclick="applyPreset('${p.key}')">${p.label}</button>`).join('')}
+      </div>
+    </div>
+    <div id="preset-note" style="font-size:12px;color:var(--text3);min-height:16px;padding-left:2px"></div>
+  </div>
+
+  <div class="frame-controls">
+    <label>Preceding</label>
+    <input id="sl-prec" type="range" min="0" max="5" value="1"
+      oninput="frameState.preceding=+this.value;frameState.frameType='custom';document.getElementById('prec-out').textContent=this.value;document.querySelectorAll('.preset-btn').forEach(b=>b.classList.toggle('active',b.dataset.key==='custom'));renderFrame()">
+    <span class="val" id="prec-out">1</span>
+    <div class="ctrl-sep"></div>
+    <label>Following</label>
+    <input id="sl-foll" type="range" min="0" max="5" value="1"
+      oninput="frameState.following=+this.value;frameState.frameType='custom';document.getElementById('foll-out').textContent=this.value;document.querySelectorAll('.preset-btn').forEach(b=>b.classList.toggle('active',b.dataset.key==='custom'));renderFrame()">
+    <span class="val" id="foll-out">1</span>
+    <div class="ctrl-sep"></div>
+    <label>Current row</label>
+    <input type="range" min="0" max="5" value="2"
+      oninput="frameState.currentRow=+this.value;document.getElementById('curr-out').textContent='row '+(+this.value+1);renderFrame()">
+    <span class="val" id="curr-out">row 3</span>
+  </div>
+
+  <div class="sql-mini" id="frame-sql-live" style="margin-bottom:1rem"></div>
+
+  <div class="panel">
+    <div class="panel-title">Monthly sales — rolling average</div>
+    <div class="frame-legend">
+      <div class="frame-legend-item"><div class="frame-swatch" style="background:rgba(239,159,39,.25);border:1px solid rgba(239,159,39,.4)"></div><span>Current row</span></div>
+      <div class="frame-legend-item"><div class="frame-swatch" style="background:rgba(99,153,34,.18);border:1px solid rgba(99,153,34,.3)"></div><span>In frame</span></div>
+      <div class="frame-legend-item"><div class="frame-swatch" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)"></div><span>Outside frame</span></div>
+    </div>
+    <table>
+      <thead><tr><th>Month</th><th>Sales</th><th>Frame status</th><th>AVG result</th></tr></thead>
+      <tbody id="frame-table-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<div id="frame-section-rows-vs-range" style="display:none">
+  <div class="desc-panel">
+    <h3>ROWS vs RANGE — the key difference</h3>
+    <p><strong style="font-weight:500;color:var(--text)">ROWS</strong> counts physical rows relative to the current position. <strong style="font-weight:500;color:var(--text)">RANGE</strong> includes all rows with the same ORDER BY value as the frame boundary — meaning tied rows are pulled in automatically.</p>
+    <p>This distinction only matters when there are ties in the ORDER BY column. With no ties, ROWS and RANGE produce identical results.</p>
+    <div class="note warn">
+      <span class="note-icon">⚠</span>
+      <span>The default frame when ORDER BY is present is <code style="font-family:var(--mono);font-size:11px">RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code> — not ROWS. This surprises many developers because <em>RANGE</em> expands the frame to include all ties at the boundary.</span>
+    </div>
+  </div>
+  <div class="layout" style="margin-bottom:1rem">
+    <div class="panel">
+      <div class="panel-title">Scenario — sales with ties in the date column</div>
+      <table>
+        <thead><tr><th>Day</th><th>Sales</th><th>ROWS SUM</th><th>RANGE SUM</th></tr></thead>
+        <tbody>
+          ${(()=>{
+            /* Three rows on Jan 3 create a tie — ROWS and RANGE differ */
+            /* RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW:
+               For Jan 3 rows, "CURRENT ROW" in RANGE mode expands the boundary
+               to include ALL rows with the same ORDER BY value (Jan 3).
+               So every Jan 3 row sees: Jan1+Jan2+Jan3a+Jan3b+Jan3c = 10+20+15+25+35 = 105 */
+            const rows2 = [
+              {day:'Jan 1',s:10,rows:10, range:10},
+              {day:'Jan 2',s:20,rows:30, range:30},
+              {day:'Jan 3',s:15,rows:45, range:105}, /* RANGE expands to all Jan 3 rows */
+              {day:'Jan 3',s:25,rows:70, range:105}, /* same ORDER BY value → same result */
+              {day:'Jan 3',s:35,rows:105,range:105}, /* same ORDER BY value → same result */
+              {day:'Jan 4',s:12,rows:117,range:117},
+            ];
+            return rows2.map((r,i)=>`<tr${i>=2&&i<=4?' class="diff-row"':''}>
+              <td>${r.day}</td><td>${r.s}</td>
+              <td class="result-val">${r.rows}</td>
+              <td style="color:${i>=2&&i<=4?'var(--amber)':'var(--blue)'};font-family:var(--mono);font-size:13px;font-weight:700">${r.range}</td>
+            </tr>`).join('');
+          })()}
+        </tbody>
+      </table>
+      <div style="margin-top:10px;font-size:11px;color:var(--text3)">Highlighted rows share the same ORDER BY value (Jan 3). RANGE expands the boundary to include all of them before computing.</div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Side-by-side SQL</div>
+      <div class="sql-mini" style="margin-bottom:10px"><span class="cm">-- ROWS: physical row count</span>
+<span class="fn">SUM</span>(sales) <span class="ov">OVER</span> (
+  <span class="k">ORDER BY</span> day
+  <span class="k">ROWS BETWEEN</span> UNBOUNDED PRECEDING
+  <span class="k">AND</span> CURRENT ROW
+)</div>
+      <div class="sql-mini"><span class="cm">-- RANGE: value-based boundary</span>
+<span class="fn">SUM</span>(sales) <span class="ov">OVER</span> (
+  <span class="k">ORDER BY</span> day
+  <span class="k">RANGE BETWEEN</span> UNBOUNDED PRECEDING
+  <span class="k">AND</span> CURRENT ROW
+)
+<span class="cm">-- Default when you write OVER (ORDER BY day)</span></div>
+      <div class="note" style="margin-top:10px">
+        <span class="note-icon">ℹ</span>
+        <span>RANGE also supports value offsets in some databases: <code style="font-family:var(--mono);font-size:11px">RANGE BETWEEN INTERVAL '7' DAY PRECEDING AND CURRENT ROW</code> for date columns.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="frame-section-unbounded" style="display:none">
+  <div class="desc-panel">
+    <h3>UNBOUNDED PRECEDING and UNBOUNDED FOLLOWING</h3>
+    <p><code style="font-family:var(--mono);font-size:12px;color:#9c9a92">UNBOUNDED PRECEDING</code> means the frame starts at the very first row of the partition — regardless of where the current row is. Combined with <code style="font-family:var(--mono);font-size:12px;color:#9c9a92">CURRENT ROW</code> this produces a running total.</p>
+    <p><code style="font-family:var(--mono);font-size:12px;color:#9c9a92">UNBOUNDED FOLLOWING</code> means the frame ends at the very last row of the partition. Combined with <code style="font-family:var(--mono);font-size:12px;color:#9c9a92">CURRENT ROW</code> this gives a reverse running total.</p>
+  </div>
+  <div class="layout-3">
+    ${[
+      {label:'Running total',  prec:'UNBOUNDED PRECEDING', foll:'CURRENT ROW',          color:'var(--blue)',  sql:`<span class="fn">SUM</span>(sales) <span class="ov">OVER</span> (\n  <span class="k">ORDER BY</span> month\n  <span class="k">ROWS BETWEEN</span> UNBOUNDED PRECEDING\n  <span class="k">AND</span> CURRENT ROW\n)`, vals:[40,105,160,240,335,405]},
+      {label:'Partition total',prec:'UNBOUNDED PRECEDING', foll:'UNBOUNDED FOLLOWING',  color:'var(--teal)',  sql:`<span class="fn">SUM</span>(sales) <span class="ov">OVER</span> (\n  <span class="k">ORDER BY</span> month\n  <span class="k">ROWS BETWEEN</span> UNBOUNDED PRECEDING\n  <span class="k">AND</span> UNBOUNDED FOLLOWING\n)`, vals:[405,405,405,405,405,405]},
+      {label:'Reverse running',prec:'CURRENT ROW',         foll:'UNBOUNDED FOLLOWING',  color:'var(--amber)', sql:`<span class="fn">SUM</span>(sales) <span class="ov">OVER</span> (\n  <span class="k">ORDER BY</span> month\n  <span class="k">ROWS BETWEEN</span> CURRENT ROW\n  <span class="k">AND</span> UNBOUNDED FOLLOWING\n)`, vals:[405,365,300,245,165,70]},
+    ].map(card=>`
+    <div class="panel">
+      <div class="panel-title">${card.label}</div>
+      <div class="sql-mini" style="font-size:11px;margin-bottom:10px">${card.sql}</div>
+      <table>
+        <thead><tr><th>Month</th><th>Sales</th><th>Result</th></tr></thead>
+        <tbody>
+          ${frameData.map((r,i)=>`<tr>
+            <td>${r.month}</td><td>${r.sales}k</td>
+            <td style="font-family:var(--mono);font-size:13px;font-weight:700;color:${card.color}">${card.vals[i]}k</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`).join('')}
+  </div>
+</div>`;
+}
+
+function showFrameSection(section, btn) {
+  ['rows-between','rows-vs-range','unbounded'].forEach(id=>{
+    document.getElementById('frame-section-'+id).style.display = id===section?'':'none';
+  });
+  document.querySelectorAll('#content .sub-tabs .sub-tab').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  if(section==='rows-between') renderFrame();
+}
+
+/* ═══════════════════════════════════════════
+   TAB 4 — VALUE FUNCTIONS
+═══════════════════════════════════════════ */
+function computeValue(fn, nthN) {
+  const quarters = CONFIG.quarterlyData;
+  const grouped = {};
+  quarters.forEach(r => { (grouped[r.q]=grouped[r.q]||[]).push(r); });
+  return quarters.map(r => {
+    const g = grouped[r.q];
+    const idx = g.indexOf(r);
+    let val;
+    if (fn === 'FIRST_VALUE') val = g[0].sales;
+    else if (fn === 'LAST_VALUE')  val = g[g.length-1].sales;
+    else { // NTH_VALUE — return null if N exceeds partition size
+      val = nthN <= g.length ? g[nthN-1].sales : null;
+    }
+    return {...r, val, gLen: g.length, gIdx: idx};
+  });
+}
+
+function renderValue(fn) {
+  const descs = {
+    FIRST_VALUE: {
+      title:'FIRST_VALUE(col)',
+      desc:'Returns the value of the expression from the first row of the window frame. By default the frame is RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW — so the first row of the partition is always returned.',
+      sql:`<span class="fn">FIRST_VALUE</span>(sales) <span class="ov">OVER</span> (\n  <span class="k">PARTITION BY</span> quarter\n  <span class="k">ORDER BY</span> month\n  <span class="k">ROWS BETWEEN</span> UNBOUNDED PRECEDING <span class="k">AND</span> UNBOUNDED FOLLOWING\n) <span class="k">AS</span> first_in_quarter`,
+      use:'Comparing every row to the quarter opener — e.g. sales vs first day of month.',
+    },
+    LAST_VALUE: {
+      title:'LAST_VALUE(col)',
+      desc:'Returns the value from the last row of the window frame. Requires an explicit ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING frame — the default frame stops at the current row, so without it LAST_VALUE just returns the current row\'s own value.',
+      sql:`<span class="fn">LAST_VALUE</span>(sales) <span class="ov">OVER</span> (\n  <span class="k">PARTITION BY</span> quarter\n  <span class="k">ORDER BY</span> month\n  <span class="k">ROWS BETWEEN</span> UNBOUNDED PRECEDING <span class="k">AND</span> UNBOUNDED FOLLOWING\n) <span class="k">AS</span> last_in_quarter`,
+      use:'Comparing every row to the quarter closer — e.g. did this month beat the final month\'s sales?',
+    },
+    NTH_VALUE: {
+      title:`NTH_VALUE(col, ${nthN})`,
+      desc:`Returns the value from the Nth row of the window frame. Like LAST_VALUE, it needs an explicit full-partition frame or it may return NULL for rows before the Nth position. NTH_VALUE(col, 1) is equivalent to FIRST_VALUE.`,
+      sql:`<span class="fn">NTH_VALUE</span>(sales, <strong style="color:var(--green)">${nthN}</strong>) <span class="ov">OVER</span> (\n  <span class="k">PARTITION BY</span> quarter\n  <span class="k">ORDER BY</span> month\n  <span class="k">ROWS BETWEEN</span> UNBOUNDED PRECEDING <span class="k">AND</span> UNBOUNDED FOLLOWING\n) <span class="k">AS</span> nth_in_quarter`,
+      use:'Extracting the 2nd-highest, 3rd-best, or any ordinal position within a group.',
+    },
+  };
+
+  const d = descs[fn];
+  const rows = computeValue(fn, nthN);
+  const qColors = {Q1:'var(--blue)', Q2:'var(--teal)'};
+  const qDimClasses = {Q1:'partition-A', Q2:'partition-B'};
+
+  const nthControl = fn==='NTH_VALUE' ? `
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;font-size:12px;color:var(--text2)">
+  <label style="color:var(--text3)">N =</label>
+  <input type="range" min="1" max="3" value="${nthN}" style="width:80px;accent-color:var(--blue)"
+    oninput="nthN=+this.value;document.getElementById('nth-out').textContent=this.value;switchContent(()=>renderValue('NTH_VALUE'))">
+  <span id="nth-out" style="font-family:var(--mono);font-weight:500;color:var(--text)">${nthN}</span>
+  <span style="color:var(--text3)">(1 = FIRST_VALUE, 3 = LAST_VALUE for this data)</span>
+</div>` : '';
+
+  /* Frame warning for LAST_VALUE and NTH_VALUE */
+  const frameWarn = (fn==='LAST_VALUE'||fn==='NTH_VALUE') ? `
+<div class="note warn" style="margin-top:10px">
+  <span class="note-icon">⚠</span>
+  <span><strong style="font-weight:500;color:var(--text)">Frame required:</strong> Without <code style="font-family:var(--mono);font-size:11px">ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING</code>, the default frame ends at the current row — so ${fn==='LAST_VALUE'?'LAST_VALUE returns the current row\'s own value rather than the partition\'s last':'NTH_VALUE returns NULL for rows before position N'}.</span>
+</div>` : '';
+
+  return `
+<div class="desc-panel">
+  <h3>${d.title}</h3>
+  <p>${d.desc}</p>
+  <div class="sql-mini"><span class="k">SELECT</span> month, quarter, sales,
+  ${d.sql}
+<span class="k">FROM</span> quarterly_sales;</div>
+  <div class="use-strip"><span class="use-strip-label">Use when</span>${d.use}</div>
+  ${frameWarn}
+</div>
+<div class="sub-tabs-row">
+  <span class="sub-tabs-label">function</span>
+  <div class="sub-tabs">
+    ${['FIRST_VALUE','LAST_VALUE','NTH_VALUE'].map(f=>`
+      <button class="sub-tab${f===fn?' active':''}" onclick="currentValueFn='${f}';switchContent(()=>renderValue('${f}'))">${f}</button>
+    `).join('')}
+  </div>
+</div>
+${nthControl}
+<div class="panel">
+  <div class="panel-title">Result — quarterly sales, value function applied per quarter</div>
+  <div class="partition-legend">
+    <button class="partition-filter-chip" style="background:rgba(55,138,221,.15);border-color:#378ADD;color:#378ADD"><span class="chip-dot" style="background:#378ADD"></span>Q1</button>
+    <button class="partition-filter-chip" style="background:rgba(29,158,117,.15);border-color:#1D9E75;color:#1D9E75"><span class="chip-dot" style="background:#1D9E75"></span>Q2</button>
+    <span style="font-size:11px;color:var(--text3);margin-left:4px">= partition (quarter)</span>
+  </div>
+  <table>
+    <thead><tr>
+      <th>Month</th><th>Quarter</th><th>Sales</th>
+      <th>${fn==='NTH_VALUE'?'NTH_VALUE(sales, '+nthN+')':fn==='FIRST_VALUE'?'FIRST_VALUE(sales)':'LAST_VALUE(sales)'}</th>
+    </tr></thead>
+    <tbody>
+      ${rows.map(r=>`<tr class="${qDimClasses[r.q]}">
+        <td>${r.month}</td>
+        <td><span class="badge ${r.q==='Q1'?'badge-blue':'badge-teal'}">${r.q}</span></td>
+        <td>${r.sales}k</td>
+        <td>${r.val===null?'<span class="null-val">NULL</span>':'<span class="result-val">'+r.val+'k</span>'}</td>
+      </tr>`).join('')}
+    </tbody>
+  </table>
+</div>
+<div class="desc-panel" style="margin-top:1rem">
+  <h3 style="font-size:13px;margin-bottom:8px">How the frame clause changes everything</h3>
+  <div class="layout" style="gap:.75rem">
+    <div>
+      <div class="panel-title">With full frame (correct)</div>
+      <div class="sql-mini" style="font-size:11px"><span class="fn">LAST_VALUE</span>(sales) <span class="ov">OVER</span> (
+  <span class="k">PARTITION BY</span> quarter
+  <span class="k">ORDER BY</span> month
+  <span class="k">ROWS BETWEEN</span> UNBOUNDED PRECEDING
+  <span class="k">AND</span> UNBOUNDED FOLLOWING
+)</div>
+      <p style="font-size:12px;color:var(--text3);margin-top:6px">Jan → 55k (Mar's value, last in Q1)</p>
+    </div>
+    <div>
+      <div class="panel-title">Without explicit frame (trap!)</div>
+      <div class="sql-mini" style="font-size:11px"><span class="fn">LAST_VALUE</span>(sales) <span class="ov">OVER</span> (
+  <span class="k">PARTITION BY</span> quarter
+  <span class="k">ORDER BY</span> month
+  <span class="cm">-- defaults to CURRENT ROW boundary</span>
+)</div>
+      <p style="font-size:12px;color:var(--coral);margin-top:6px">Jan → 40k (its own value — wrong!)</p>
+    </div>
+  </div>
+</div>`;
+}
+
+/* ═══════════════════════════════════════════
+   ROUTER
+═══════════════════════════════════════════ */
+let currentTab    = 'aggregate';
+let currentRankFn = 'RANK';
+let currentAggFn  = 'SUM';
+let currentOffFn  = 'LAG';
+let currentValueFn = 'FIRST_VALUE';
+let rankingPartitioned = true;  // true = PARTITION BY dept on, false = global window
+let nthN = 2;                   // NTH_VALUE N parameter
+
+function switchTab(name, btn) {
+  document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  currentTab = name;
+  /* persist active tab in URL hash — gracefully skip in sandboxed iframes */
+  try { history.replaceState(null, '', '#' + name); }
+  catch(_) { try { location.hash = name; } catch(__) {} }
+  /* reset per-tab transient state */
+  activePartition = null;
+  if (name === 'offset') offsetCurrentRow = 2;
+  if (name === 'ranking') rankingPartitioned = true;
+  if (name === 'value') { currentValueFn = 'FIRST_VALUE'; nthN = 2; }
+
+  const el = document.getElementById('content');
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(5px)';
+  el.style.transition = 'opacity .15s ease, transform .15s ease';
+
+  setTimeout(() => {
+    /* Scroll to top so new content is always visible, especially on mobile */
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (name === 'ranking') {
+      el.innerHTML = renderRanking(currentRankFn);
+    } else if (name === 'aggregate') {
+      el.innerHTML = renderAggregate(currentAggFn);
+    } else if (name === 'offset') {
+      el.innerHTML = renderOffset(currentOffFn);
+    } else if (name === 'value') {
+      el.innerHTML = renderValue(currentValueFn);
+    } else if (name === 'frame') {
+      el.innerHTML = initFrame();
+      renderFrame();
+    }
+    el.style.opacity = '1';
+    el.style.transform = 'none';
+  }, 120);
+}
+
+function switchRankFn(fn) { currentRankFn=fn; switchContent(()=>renderRanking(fn)); }
+function switchAggFn(fn)  { currentAggFn=fn;  switchContent(()=>renderAggregate(fn)); }
+function switchOffFn(fn)  { currentOffFn=fn;  switchContent(()=>renderOffset(fn)); }
+
+/* ── Hash routing — restore tab from URL on load, handle back/forward ── */
+const VALID_TABS = new Set(['aggregate','ranking','offset','value','frame']);
+
+function initFromHash() {
+  let hash = '';
+  try { hash = location.hash.slice(1); } catch(_) {}
+  const tab = VALID_TABS.has(hash) ? hash : 'aggregate';
+  /* Activate the matching tab button without re-writing history */
+  const btn = [...document.querySelectorAll('.tabs .tab')]
+    .find(b => b.getAttribute('onclick').includes("'" + tab + "'"));
+  switchTab(tab, btn || null);
+}
+
+try { window.addEventListener('hashchange', initFromHash); } catch(_) {}
+initFromHash();
+
+/* ── Keyboard navigation ── */
+document.addEventListener('keydown', function(e) {
+  /* Ignore when typing in an input */
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+  /* Escape — clear partition filter */
+  if (e.key === 'Escape' && activePartition) {
+    clearPartitionFilter();
+    return;
+  }
+
+  /* ArrowLeft / ArrowRight — cycle sub-tabs */
+  if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+  e.preventDefault();
+
+  const subTabBtns = [...document.querySelectorAll('#content .sub-tabs .sub-tab')];
+  if (subTabBtns.length === 0) return;
+  const activeIdx = subTabBtns.findIndex(b => b.classList.contains('active'));
+  if (activeIdx === -1) return;
+
+  const dir   = e.key === 'ArrowRight' ? 1 : -1;
+  const next  = (activeIdx + dir + subTabBtns.length) % subTabBtns.length;
+  subTabBtns[next].click();
+  subTabBtns[next].focus();
+});
+</script>
+</body>
+</html>

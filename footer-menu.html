@@ -1,0 +1,243 @@
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+/>
+
+<style>
+  :root {
+    /* ── COLORS ── */
+    --color-bg-vdb: #1a171b;
+    --color-bg-vdb-shade-2: oklch(27% 0.009 317);
+    --color-bg-vdb-shade-3: oklch(32% 0.009 322);
+    --color-bg-vdb-shade-4: #3c3c47;
+    --color-purple: oklch(68.601% 0.18154 292.175);
+    --color-yellow: oklch(89.392% 0.13858 90.472);
+    --color-primary: var(--color-purple);
+    --color-secondary: var(--color-yellow);
+    --color-pr-para: oklch(
+      from var(--color-primary) calc(l + 0.1) calc(c - 0.16) h
+    );
+    --color-bg-border: var(--color-bg-vdb-shade-4);
+
+    /* ── TYPOGRAPHY ── */
+    --font-main: "Space Grotesk", sans-serif;
+    --font-mono: "Space Mono", monospace;
+    --text-tag: clamp(0.65rem, 0.8vw, 0.75rem);
+    --text-ui: clamp(0.7rem, 1vw, 1rem);
+
+    /* ── SPACING ── */
+    --space-sm: clamp(0.75rem, 1.5vw, 1rem);
+    --space-2xl: clamp(3rem, 6vw, 5rem);
+
+    /* ── Z-INDEX ── */
+    --z-footer-menu: 100;
+  }
+
+  /* Light mode */
+  [data-theme="light"] {
+    --color-bg-vdb: #faf9f7;
+    --color-bg-vdb-shade-2: #eceae6;
+    --color-bg-vdb-shade-3: #d4d0c8;
+    --color-bg-vdb-shade-4: #b8b4ac;
+    --color-purple: hsl(248, 51%, 53%);
+    --color-yellow: #b36a08;
+    --color-primary: var(--color-purple);
+    --color-secondary: var(--color-yellow);
+    --color-pr-para: hsl(244, 47%, 49%);
+    --color-bg-border: var(--color-bg-vdb-shade-4);
+  }
+
+  * {
+    transition: background-color 0.5s ease, color 0.5s ease,
+      border-color 0.5s ease, box-shadow 0.5s ease;
+  }
+
+  /* Navigation */
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-sm) var(--space-2xl);
+    border-bottom: 1px solid var(--color-bg-border);
+    position: relative;
+  }
+
+  .nav.bottom {
+    border-top: 1px solid var(--color-bg-border);
+    border-bottom: none;
+  }
+
+  /* Links */
+  .nav a {
+    font-family: var(--font-mono);
+    font-size: var(--text-tag);
+    color: oklch(from var(--color-pr-para) calc(l - 0.2) a b);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  .nav a:hover {
+    color: oklch(from var(--color-primary) calc(l + 0.1) c h);
+  }
+
+  nav span a {
+    position: relative;
+    color: var(--color-secondary);
+    font-size: var(--text-ui);
+  }
+
+  /* Menu Toggle Button */
+  .menu-toggle-btn {
+    display: block;
+  }
+
+  .menu-toggle-btn:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* Footer Menu */
+  .footer-menu {
+    position: absolute;
+    top: 100%;
+    right: var(--space-2xl);
+    background: var(--color-bg-vdb-shade-2);
+    border: 1px solid var(--color-bg-vdb-shade-3);
+    border-radius: 4px;
+    padding: 8px 0;
+    z-index: var(--z-footer-menu);
+    min-width: 200px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .footer-menu.hidden {
+    display: none;
+  }
+
+  .footer-link {
+    display: block;
+    padding: 8px 16px;
+    color: var(--color-pr-para);
+    text-decoration: none;
+    font-size: 0.875rem;
+    border-bottom: 1px solid var(--color-bg-vdb-shade-3);
+    cursor: pointer;
+  }
+
+  .footer-link:last-child {
+    border-bottom: none;
+  }
+
+  .footer-link:hover {
+    background: var(--color-bg-vdb-shade-3);
+    color: var(--color-secondary);
+  }
+
+  .footer-link i {
+    margin-right: 8px;
+    width: 16px;
+    display: inline-block;
+  }
+
+  .footer-link.line {
+    border-bottom: 1px solid var(--color-bg-vdb-shade-3);
+  }
+
+  @media (max-width: 768px) {
+    .menu-toggle-btn {
+      display: none;
+    }
+
+    .footer-menu {
+      display: none !important;
+    }
+  }
+</style>
+
+<!-- Footer Menu Button -->
+<nav class="nav bottom">
+  <span>
+    <a
+      href="#"
+      id="menu-toggle"
+      class="menu-toggle-btn"
+      rel="noopener noreferrer"
+      >[
+      <i class="fa-solid fa-question"></i>
+      ]</a
+    >
+  </span>
+</nav>
+
+<!-- Desktop Footer Menu -->
+<div class="footer-menu hidden" id="footer-menu">
+  <a href="#" class="footer-link line">
+    <i class="fa-solid fa-hand-holding-heart"></i> Support Here
+  </a>
+  <a
+    href="https://medium.com/"
+    class="footer-link line"
+    rel="noopener noreferrer"
+    target="_blank"
+  >
+    <i class="fa-brands fa-medium"></i> Read Articles
+  </a>
+  <a href="#" class="footer-link">
+    <i class="fa-solid fa-book-open"></i> About
+  </a>
+  <a href="#" class="footer-link line">
+    <i class="fa-solid fa-clock-rotate-left"></i> Version Notes
+  </a>
+  <a href="#" class="footer-link">
+    <i class="fa-solid fa-pen-clip"></i> Submit Feedback
+  </a>
+  <a href="#" class="footer-link line">
+    <i class="fa-solid fa-pen-clip"></i> Submit Issues
+  </a>
+  <a href="#" class="footer-link">
+    <i class="fa-solid fa-file-shield"></i> License & Terms
+  </a>
+</div>
+
+<script>
+  function initializeMenus() {
+    const menuToggle = document.getElementById("menu-toggle");
+    const footerMenu = document.getElementById("footer-menu");
+
+    // Desktop menu toggle
+    if (menuToggle && footerMenu) {
+      menuToggle.addEventListener("click", (e) => {
+        e.preventDefault();
+        footerMenu.classList.toggle("hidden");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (
+          !e.target.closest(".footer-menu") &&
+          !e.target.closest("#menu-toggle")
+        ) {
+          footerMenu.classList.add("hidden");
+        }
+      });
+
+      window.addEventListener(
+        "scroll",
+        () => {
+          footerMenu.classList.add("hidden");
+        },
+        { passive: true }
+      );
+    }
+  }
+
+  // Initialize when DOM is ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeMenus);
+  } else {
+    initializeMenus();
+  }
+</script>

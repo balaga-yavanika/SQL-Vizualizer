@@ -232,11 +232,11 @@ export function rebuildPairSelect() {
 
   for (let i = 0; i < tables.length; i++) {
     if (isSelfJoin) {
-      // Self-join: only show self-referencing pairs
+      // Self-join: show just the table name — no arrow needed
       const btn = document.createElement("button");
       btn.className = "dropdown-item";
       btn.setAttribute("data-value", `${i}-${i}`);
-      btn.textContent = `${tables[i].name} → ${tables[i].name} (self)`;
+      btn.textContent = tables[i].name;
       if (`${i}-${i}` === old) btn.classList.add("selected");
       menu.appendChild(btn);
     } else {
@@ -255,12 +255,9 @@ export function rebuildPairSelect() {
 
   // Update display text
   const [selectedI, selectedJ] = old.split("-").map(Number);
-  let selectedLabel;
-  if (isSelfJoin && selectedI === selectedJ) {
-    selectedLabel = tables[selectedI].name + " → " + tables[selectedJ].name + " (self)";
-  } else {
-    selectedLabel = tables[selectedI].name + " → " + tables[selectedJ].name;
-  }
+  const selectedLabel = isSelfJoin
+    ? tables[selectedI].name
+    : tables[selectedI].name + " → " + tables[selectedJ].name;
   if (display) display.textContent = selectedLabel;
 }
 
@@ -269,16 +266,27 @@ export function rebuildPairSelect() {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 /**
- * Extract matched row indices from join results
- * @param {Array} rows - Join result rows
- * @returns {{m1: Set, m2: Set}} Sets of matched indices for left and right tables
+ * Extract matched row indices from join/set-op results for table highlighting.
+ * Join rows use i1/i2; set op rows use ti/ri.
+ * @param {Array} rows - Result rows from computeResult
+ * @param {number} [li] - Left table index (required for set ops)
+ * @param {number} [ri] - Right table index (required for set ops)
+ * @returns {{m1: Set, m2: Set}} Sets of matched row indices for left (m1) and right (m2) tables
  */
-export function getMatchedIdx(rows) {
+export function getMatchedIdx(rows, li, ri) {
   const m1 = new Set(),
     m2 = new Set();
   rows.forEach((r) => {
-    if (r.i1 >= 0) m1.add(r.i1);
-    if (r.i2 >= 0) m2.add(r.i2);
+    if (r.isSetOp) {
+      // Set op rows: ti is the source table, ri is the row index within that table
+      if (r.ti === li) m1.add(r.ri);
+      else if (r.ti === ri) m2.add(r.ri);
+      // INTERSECT stores the matching right row index separately
+      if (r.matchedRightIdx !== undefined) m2.add(r.matchedRightIdx);
+    } else {
+      if (r.i1 >= 0) m1.add(r.i1);
+      if (r.i2 >= 0) m2.add(r.i2);
+    }
   });
   return { m1, m2 };
 }
@@ -297,10 +305,11 @@ export function nullBadge() {
  * @returns {string} Empty state message text or HTML icon+message
  */
 export function emptyState(reason) {
+  const note = '<br><small style="opacity:0.6;font-size:0.85em">Note: Rows with empty key values are excluded from joins.</small>';
   if (reason) {
-    return `<i class="fa-solid ${reason.icon}" style="font-size:12px"></i>&nbsp;${reason.message}`;
+    return `<i class="fa-solid ${reason.icon}" style="font-size:12px"></i>&nbsp;${reason.message}${note}`;
   }
-  return "No rows returned for this join type with the current data.";
+  return `No rows returned for this join type with the current data.${note}`;
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -496,7 +505,6 @@ export function addRow(ti) {
  * @param {string} type - Data type (int, string, float, date)
  */
 export function addColumn(ti, name, type) {
-  // Defensive validation - should be validated before calling, but validate here too
   const validation = validateName(name);
   if (!validation.valid) {
     console.error(`Invalid column name: ${validation.error}`);
@@ -504,7 +512,12 @@ export function addColumn(ti, name, type) {
   }
 
   const t = state.tables[ti];
-  const id = "col_" + t.columns.length;
+  // Find the max existing column index to avoid collisions after deletion
+  const maxIdx = t.columns.reduce((max, c) => {
+    const m = c.id.match(/^col_(\d+)$/);
+    return m ? Math.max(max, parseInt(m[1], 10)) : max;
+  }, -1);
+  const id = "col_" + (maxIdx + 1);
   t.columns.push({ id, name: validation.value, type, isKey: false });
   t.rows.forEach((row) => (row[id] = ""));
   return true;
@@ -739,17 +752,20 @@ export function getJoinConditionDisplay() {
 }
 
 /**
- * Reset all tables to default preset
+ * Load a preset dataset into state
  * @param {object} preset - Preset object with tables and joinConditions
+ * @param {boolean} preserveOp - If true, don't reset currentOp (used when auto-switching datasets)
  */
-export function loadPreset(preset) {
+export function loadPreset(preset, preserveOp = false) {
   if (!preset) return;
 
   state.tables = JSON.parse(JSON.stringify(preset.tables));
   state.joinConditions = JSON.parse(
     JSON.stringify(preset.joinConditions || []),
   );
-  state.currentOp = "inner";
+  if (!preserveOp) {
+    state.currentOp = "inner";
+  }
   state.selectedPair = "0-1";
 }
 
@@ -808,11 +824,18 @@ export function removeJoinCondition(index) {
  */
 export function updateJoinCondition(index, updates) {
   if (state.joinConditions[index]) {
-    // Validate operator if provided in updates
-    if (updates && updates.op && !isValidOperator(updates.op)) {
-      console.warn(`Invalid join operator "${updates.op}", defaulting to "="`);
-      updates = { ...updates, op: "=" };
+    if (updates === null) {
+      // Clear condition to empty state (preserves table pair)
+      state.joinConditions[index].leftCol = "";
+      state.joinConditions[index].op = "=";
+      state.joinConditions[index].rightCol = "";
+    } else {
+      // Validate operator if provided in updates
+      if (updates.op && !isValidOperator(updates.op)) {
+        console.warn(`Invalid join operator "${updates.op}", defaulting to "="`);
+        updates = { ...updates, op: "=" };
+      }
+      Object.assign(state.joinConditions[index], updates);
     }
-    Object.assign(state.joinConditions[index], updates);
   }
 }

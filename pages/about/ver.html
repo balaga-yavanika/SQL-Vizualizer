@@ -64,26 +64,29 @@
     </script>
 
     <!-- Content Security Policy -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-vvt4KWwuNr51XfE5m+hzeNEGhiOfZzG97ccfqGsPwvE='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; object-src 'none'" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; object-src 'none'" />
 
     <title>Version Notes: Y-SQLVIZ Updates & Changelog | YSQLVIZ</title>
 
     <!-- ─── Favicon ───────────────────────────────── -->
-    <link rel="icon" href="/Assets/Favicon/favicon_io/favicon.ico" sizes="any" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/Assets/Favicon/favicon_io/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/Assets/Favicon/favicon_io/favicon-16x16.png" />
-    <link rel="manifest" href="/Assets/Favicon/favicon_io/site.webmanifest" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/Assets/Favicon/favicon_io/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" href="/Assets/Favicon/SQL Visualizer Logo.png" />
+    <link rel="apple-touch-icon" href="/Assets/Favicon/SQL Visualizer Logo.png" />
 
-    <!-- Font Awesome -->
-    <link rel="preload" href="/Assets/fonts/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/Assets/fonts/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/Assets/fonts/css/all.min.css" as="style" />
+    <!-- Font Awesome - blocking for icon visibility -->
     <link rel="stylesheet" href="/Assets/fonts/css/all.min.css" />
+    <noscript>
+      <link rel="stylesheet" href="/Assets/fonts/css/all.min.css" />
+    </noscript>
 
-    <!-- Global Navigation & Menu Styles -->
-    <link rel="stylesheet" href="/global/nav.css" />
-    <link rel="stylesheet" href="/Assets/fx/menu-toggle.css" />
+    <!-- Global Navigation & Menu Styles - defer for render blocking -->
+    <link rel="stylesheet" href="/global/nav.css" media="print" />
+    <noscript>
+      <link rel="stylesheet" href="/global/nav.css" />
+    </noscript>
+    <link rel="stylesheet" href="/Assets/fx/menu-toggle.css" media="print" />
+    <noscript>
+      <link rel="stylesheet" href="/Assets/fx/menu-toggle.css" />
+    </noscript>
 
     <!-- ─── Google Fonts ─────────────────────────────── -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -98,8 +101,19 @@
     <link rel="preload" href="/pages/about/ver.css" as="style" />
     <link rel="stylesheet" href="/pages/about/ver.css" />
 
+    <!-- Preconnect to self for faster local asset loading -->
+    <link rel="preconnect" href="." />
+
+    <!-- Preload critical JS modules -->
+    <link rel="modulepreload" href="/js/core/state.js" />
+    <link rel="modulepreload" href="/js/core/utils.js" />
+    <link rel="modulepreload" href="/js/core/limits.js" />
+    <link rel="modulepreload" href="/js/core/url-state.js" />
+    <link rel="modulepreload" href="/js/engines/joinEngine.js" />
+    <link rel="modulepreload" href="/js/core/hash.js" />
+
     <!-- ==== Scripts ==== -->
-    <script src="/Assets/Favicon/icon-ani.js" defer></script>
+    <!-- <script src="/Assets/Favicon/icon-ani.js" defer></script> -->
     <script src="/global/nav-footer-loader.js" defer></script>
     <script src="/Assets/fx/menu-toggle.js" defer></script>
     
@@ -132,6 +146,38 @@
     >
   </blockquote>
   <hr />
+
+  <!-- v1.4 -->
+  <div class="version">
+    <div class="version-header">
+      <div>
+        <h4>v1.4</h4>
+        <h5 class="version-date">April 2026</h5>
+        <h6 class="version-tag latest">Latest</h6>
+      </div>
+      <div><small>Minor Release - Early April</small></div>
+    </div>
+    <p>
+      A polish and expansion release. The interface now supports a light theme
+      alongside dark mode, the homepage was redesigned for clarity, and the
+      joins page gained toast notifications for better feedback. New dataset
+      options enable set operator practice, security hardening improves privacy,
+      and community voting for features is now live.<br />
+      Overall improvements across visual design, security, and user engagement.
+    </p>
+    <ul>
+      <li>Added a light theme with dark mode toggle</li>
+      <li>Redesigned the main homepage for clarity and ease of navigation</li>
+      <li>Improved website security and privacy across all pages</li>
+      <li>
+        Introduced a new dataset optimized for join and set operator practice
+      </li>
+      <li>Added toast messages on the joins page for better UX feedback</li>
+      <li>Enabled community voting for new features via GitHub issues</li>
+    </ul>
+  </div>
+
+  <hr />
   <div class="version-list">
     <!-- v1.3 -->
     <div class="version">
@@ -139,7 +185,7 @@
         <div>
           <h4>v1.3</h4>
           <h5 class="version-date">April 2026</h5>
-          <h6 class="version-tag latest">Latest</h6>
+          <!-- <h6 class="version-tag latest">Latest</h6> -->
         </div>
         <div><small>Major Release - Early April</small></div>
       </div>

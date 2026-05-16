@@ -70,6 +70,23 @@ svg.conn {
 
 }
 
+.cross-join-warning {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background-color: rgba(255, 200, 0, 0.1);
+  border: 1px solid rgba(255, 200, 0, 0.3);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-sm);
+  font-size: var(--text-sm);
+  color: var(--color-warning, #ffc800);
+}
+
+.cross-join-warning .warning-icon {
+  font-size: var(--text-base);
+}
+
 /* ============================================= */
 /* RESPONSIVE — TABLET (≤768px)                 */
 /* ============================================= */

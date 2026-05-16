@@ -162,19 +162,17 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// Non-blocking Google Fonts loader (CSP-safe, replaces onload="this.media='all'")
-function loadFonts() {
-  const fontLinks = document.querySelectorAll(
-    'link[href*="fonts.googleapis.com"][media="print"]',
-  );
-  fontLinks.forEach((link) => {
+// Non-blocking CSS loader (CSP-safe replacement for inline onload)
+function loadStylesheets() {
+  const cssLinks = document.querySelectorAll('link[rel="stylesheet"][media="print"]');
+  cssLinks.forEach((link) => {
     link.addEventListener("load", () => {
       link.media = "all";
     });
   });
 }
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", loadFonts);
+  document.addEventListener("DOMContentLoaded", loadStylesheets);
 } else {
-  loadFonts();
+  loadStylesheets();
 }

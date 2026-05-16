@@ -16,12 +16,19 @@ export const DropdownHandler = {
     const wrapper = document.getElementById(wrapperId);
     if (!wrapper) return;
 
-    const toggle = wrapper.querySelector(".dropdown-toggle");
+    // Use let so we can reassign after cloning (keeps all closures pointing at the live element)
+    let toggle = wrapper.querySelector(".dropdown-toggle");
     const menu = wrapper.querySelector(".dropdown-menu");
-    const displaySpan = toggle.querySelector("span:first-child");
-    const placeholderText = displaySpan.textContent;
 
     if (!toggle || !menu) return;
+
+    // Clean up old document listeners if dropdown was already registered
+    if (this._dropdowns.has(wrapperId)) {
+      this._dropdowns.get(wrapperId).abortController?.abort();
+    }
+
+    // Create AbortController for document-level listeners
+    const abortController = new AbortController();
 
     // Remove old items' event listeners by cloning and replacing
     const oldItems = menu.querySelectorAll(".dropdown-item");
@@ -35,8 +42,18 @@ export const DropdownHandler = {
 
     const items = menu.querySelectorAll(".dropdown-item");
 
+    // Clone and replace the toggle to clear accumulated click listeners, then reassign
+    // so all closures below automatically reference the live DOM element
+    const clonedToggle = toggle.cloneNode(true);
+    toggle.parentNode.replaceChild(clonedToggle, toggle);
+    toggle = wrapper.querySelector(".dropdown-toggle");
+
+    // Capture display span and placeholder from the live toggle
+    const displaySpan = toggle.querySelector("span:first-child");
+    const placeholderText = displaySpan.textContent;
+
     // Store dropdown instance
-    const dropdownInstance = { wrapper, toggle, menu, items, displaySpan, placeholderText, wrapperId };
+    const dropdownInstance = { wrapper, toggle, menu, items, displaySpan, placeholderText, wrapperId, abortController };
     this._dropdowns.set(wrapperId, dropdownInstance);
 
     // Toggle dropdown - closes all others when opening
@@ -50,7 +67,7 @@ export const DropdownHandler = {
         toggle.setAttribute("aria-expanded", "true");
         menu.style.display = "block";
 
-        // Position dropdown relative to toggle button (for modals and overflow containers)
+        // Position dropdown using fixed positioning to escape overflow containers (like modals)
         const rect = toggle.getBoundingClientRect();
         menu.style.position = "fixed";
         menu.style.left = rect.left + "px";
@@ -62,13 +79,18 @@ export const DropdownHandler = {
       }
     };
 
+    // Attach click listener to the fresh toggle
     toggle.addEventListener("click", (e) => {
       e.stopPropagation();
       toggleDropdown();
     });
 
     // Handle item selection
-    items.forEach((item) => {
+    items.forEach((item, index) => {
+      // Add unique ID for ARIA accessibility if not already present
+      if (!item.id) {
+        item.id = `${wrapperId}-item-${index}`;
+      }
       item.addEventListener("click", (e) => {
         e.stopPropagation();
         const value = item.getAttribute("data-value");
@@ -85,19 +107,19 @@ export const DropdownHandler = {
       });
     });
 
-    // Close on outside click
+    // Close on outside click (use AbortSignal to auto-remove on re-setup)
     document.addEventListener("click", (e) => {
       if (!wrapper.contains(e.target)) {
         toggleDropdown(false);
       }
-    });
+    }, { signal: abortController.signal });
 
-    // Close on Escape
+    // Close on Escape (use AbortSignal to auto-remove on re-setup)
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
         toggleDropdown(false);
       }
-    });
+    }, { signal: abortController.signal });
 
     return { toggleDropdown, wrapper };
   },

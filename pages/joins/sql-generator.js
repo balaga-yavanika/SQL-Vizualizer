@@ -32,7 +32,16 @@ export function generateSql() {
   const currentOp = state.currentOp;
   const opConfig = JOIN_OPS[currentOp];
 
-  if (!opConfig) return "-- Select an operation";
+  if (!opConfig) {
+    const [li, ri] = getPair();
+    const leftTable = state.tables[li];
+    const rightTable = state.tables[ri];
+    const hasData = leftTable?.rows?.length > 0 && rightTable?.rows?.length > 0;
+    if (hasData) {
+      return "-- Select an operation to see SQL";
+    }
+    return "-- Add data to your tables first";
+  }
 
   if (opConfig.group === "join") {
     return generateJoinSql();

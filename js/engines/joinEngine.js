@@ -120,6 +120,7 @@ function matchesConditions(li, rowIndexLeft, ri, rowIndexRight) {
 
 export function computeResult(op) {
   let [li, ri] = getPair();
+  if (li < 0 || ri < 0) return [];
   if (op === "self") ri = li;
   const vl = validRows(li),
     vr = validRows(ri);
@@ -201,13 +202,20 @@ export function computeResult(op) {
     const leftTable = state.tables[li];
     const rightTable = state.tables[ri];
     const leftColIds = leftTable.columns.map(c => c.id);
-    const rightColIds = rightTable.columns.map(c => c.id);
-    
-    const rightKeys = new Set(vr.map(b => rowValuesKey(state.tables[ri], b.i)));
+
+    // Build reverse lookup so we can record which specific right row matched
+    const rightKeyToIdx = new Map();
+    vr.forEach(b => rightKeyToIdx.set(rowValuesKey(state.tables[ri], b.i), b.i));
 
     return vl
-      .filter(a => rightKeys.has(rowValuesKey(state.tables[li], a.i)))
-      .map(x => ({ ti: li, ri: x.i, cols: leftColIds, isSetOp: true }));
+      .filter(a => rightKeyToIdx.has(rowValuesKey(state.tables[li], a.i)))
+      .map(x => ({
+        ti: li,
+        ri: x.i,
+        matchedRightIdx: rightKeyToIdx.get(rowValuesKey(state.tables[li], x.i)),
+        cols: leftColIds,
+        isSetOp: true
+      }));
   }
 
   // ── Semi / Anti joins ────────────────────────────────────────────────────────

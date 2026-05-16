@@ -35,8 +35,12 @@
       current === "light" ? "Switch to dark mode" : "Switch to light mode";
   }
 
-  // ── try on DOMContentLoaded ──
-  document.addEventListener("DOMContentLoaded", attachToggle);
+  // ── try on DOMContentLoaded (or immediately if already fired) ──
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", attachToggle);
+  } else {
+    attachToggle();
+  }
 
   // ── also observe DOM for nav injection ──
   const observer = new MutationObserver(() => {

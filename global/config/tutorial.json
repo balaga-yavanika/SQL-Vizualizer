@@ -1,0 +1,72 @@
+{
+  "title": "SQL Joins Tutorial – Learn the Basics | SQL Visualizer",
+  "description": "Understand SQL joins with plain explanations. Learn INNER, LEFT, RIGHT, FULL joins, set operators, and when to use each type. Includes visual examples.",
+  "keywords": "SQL joins tutorial, learn SQL joins, INNER LEFT RIGHT FULL joins, set operators UNION INTERSECT EXCEPT, SQL basics",
+  "author": "Y-SQLVIZ",
+  "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+  "csp": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; object-src 'none'",
+  "canonical": "/pages/tutorial/",
+  "priority": "0.8",
+  "og_title": "SQL Joins Tutorial: INNER, LEFT, RIGHT, FULL Explained | SQL Visualizer",
+  "og_description": "Learn SQL joins step by step with plain explanations and visual examples. INNER, LEFT, RIGHT, FULL joins and set operators explained simply.",
+  "og_type": "website",
+  "og_image": {
+    "url": "{{BASE_URL}}/Assets/preview.jpg",
+    "width": "1200",
+    "height": "630",
+    "alt": "SQL Joins Tutorial"
+  },
+  "twitter_card": "summary_large_image",
+  "twitter_title": "SQL Joins Tutorial: INNER, LEFT, RIGHT, FULL Explained | SQL Visualizer",
+  "twitter_description": "Learn SQL joins step by step with visual examples. Master INNER, LEFT, RIGHT, FULL joins and set operators.",
+  "twitter_image": {
+    "url": "{{BASE_URL}}/Assets/preview.jpg",
+    "alt": "SQL Joins Tutorial"
+  },
+  "profile_link": "https://medium.com/@balaga-yavanika",
+  "jsonld": {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        "name": "SQL Joins Tutorial",
+        "description": "A comprehensive tutorial explaining SQL joins with plain examples and visual diagrams.",
+        "url": "{{BASE_URL}}/pages/tutorial/",
+        "author": {
+          "@type": "Person",
+          "name": "Y-SQLVIZ"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "SQL Visualizer"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "{{BASE_URL}}/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "SQL Joins Tutorial",
+            "item": "{{BASE_URL}}/pages/tutorial/"
+          }
+        ]
+      }
+    ]
+  },
+  "showBreadcrumb": false,
+  "showLoader": false,
+  "showSection": true,
+  "showOuterWrapper": true,
+  "showArticle": true,
+  "cssImports": "pages/tutorial/tutorial-imports.css",
+  "scripts": ["pages/tutorial/tutorial.js", "/Assets/fx/theme.js"],
+  "content": "global/content/tutorial-content.html",
+  "outputPath": "pages/tutorial/tutorial.html"
+}

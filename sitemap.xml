@@ -3,7 +3,7 @@
 
   <url>
     <loc>https://sqlviz.vercel.app/</loc>
-    <lastmod>2026-04-11</lastmod>
+    <lastmod>2026-05-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -17,14 +17,14 @@
 
   <url>
     <loc>https://sqlviz.vercel.app/pages/execorder/eo.html</loc>
-    <lastmod>2026-04-11</lastmod>
+    <lastmod>2026-05-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
     <loc>https://sqlviz.vercel.app/pages/joins/joins.html</loc>
-    <lastmod>2026-04-11</lastmod>
+    <lastmod>2026-05-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -37,8 +37,15 @@
   </url>
 
   <url>
+    <loc>https://sqlviz.vercel.app/pages/tutorial/</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
     <loc>https://sqlviz.vercel.app/pages/about/ver/</loc>
-    <lastmod>2026-04-11</lastmod>
+    <lastmod>2026-05-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

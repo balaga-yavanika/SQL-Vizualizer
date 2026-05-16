@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ─── SEO & Social ─────────────────────────────────────────── -->
+    <meta name="description" content="Understand SQL joins with plain explanations. Learn INNER, LEFT, RIGHT, FULL joins, set operators, and when to use each type. Includes visual examples." />
+    <meta name="keywords" content="SQL joins tutorial, learn SQL joins, INNER LEFT RIGHT FULL joins, set operators UNION INTERSECT EXCEPT, SQL basics" />
+    <meta name="author" content="Y-SQLVIZ" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="theme-color" content="#121212" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://sqlviz.vercel.app/pages/tutorial/" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="SQL Joins Tutorial: INNER, LEFT, RIGHT, FULL Explained | SQL Visualizer" />
+    <meta property="og:description" content="Learn SQL joins step by step with plain explanations and visual examples. INNER, LEFT, RIGHT, FULL joins and set operators explained simply." />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="SQL Visualizer" />
+    <meta property="og:image" content="https://sqlviz.vercel.app/Assets/preview.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="SQL Joins Tutorial" />
+    <meta property="og:url" content="https://sqlviz.vercel.app/pages/tutorial/" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter/X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <!-- Uncomment when Twitter account @Y_SQLVIZ is created and claimed:
+    <meta name="twitter:site" content="@Y_SQLVIZ" />
+    <meta name="twitter:creator" content="@Y_SQLVIZ" />
+    -->
+    <meta name="twitter:title" content="SQL Joins Tutorial: INNER, LEFT, RIGHT, FULL Explained | SQL Visualizer" />
+    <meta name="twitter:description" content="Learn SQL joins step by step with visual examples. Master INNER, LEFT, RIGHT, FULL joins and set operators." />
+    <meta name="twitter:image" content="https://sqlviz.vercel.app/Assets/preview.jpg" />
+    <meta name="twitter:image:alt" content="SQL Joins Tutorial" />
+
+    <!-- Profile -->
+    <link rel="me" href="https://medium.com/@balaga-yavanika" />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Article",
+            "name": "SQL Joins Tutorial",
+            "description": "A comprehensive tutorial explaining SQL joins with plain examples and visual diagrams.",
+            "url": "https://sqlviz.vercel.app/pages/tutorial/",
+            "author": {
+              "@type": "Person",
+              "name": "Y-SQLVIZ"
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "SQL Visualizer"
+            }
+          },
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://sqlviz.vercel.app/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "SQL Joins Tutorial",
+                "item": "https://sqlviz.vercel.app/pages/tutorial/"
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; object-src 'none'" />
+
+    <title>SQL Joins Tutorial – Learn the Basics | SQL Visualizer</title>
+
+    <!-- ─── Favicon ───────────────────────────────── -->
+    <link rel="icon" type="image/png" href="/Assets/Favicon/SQL Visualizer Logo.png" />
+    <link rel="apple-touch-icon" href="/Assets/Favicon/SQL Visualizer Logo.png" />
+
+    <!-- Font Awesome - blocking for icon visibility -->
+    <link rel="stylesheet" href="/Assets/fonts/css/all.min.css" />
+    <noscript>
+      <link rel="stylesheet" href="/Assets/fonts/css/all.min.css" />
+    </noscript>
+
+    <!-- Global Navigation & Menu Styles - defer for render blocking -->
+    <link rel="stylesheet" href="/global/nav.css" media="print" />
+    <noscript>
+      <link rel="stylesheet" href="/global/nav.css" />
+    </noscript>
+    <link rel="stylesheet" href="/Assets/fx/menu-toggle.css" media="print" />
+    <noscript>
+      <link rel="stylesheet" href="/Assets/fx/menu-toggle.css" />
+    </noscript>
+
+    <!-- ─── Google Fonts ─────────────────────────────── -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" as="style" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" media="print" />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" />
+    </noscript>
+
+    <!-- ─── Page-specific CSS ─────────────────────────── -->
+    <link rel="preload" href="/pages/tutorial/tutorial-imports.css" as="style" />
+    <link rel="stylesheet" href="/pages/tutorial/tutorial-imports.css" />
+
+    <!-- Preconnect to self for faster local asset loading -->
+    <link rel="preconnect" href="." />
+
+    <!-- Preload critical JS modules -->
+    <link rel="modulepreload" href="/js/core/state.js" />
+    <link rel="modulepreload" href="/js/core/utils.js" />
+    <link rel="modulepreload" href="/js/core/limits.js" />
+    <link rel="modulepreload" href="/js/core/url-state.js" />
+    <link rel="modulepreload" href="/js/engines/joinEngine.js" />
+    <link rel="modulepreload" href="/js/core/hash.js" />
+
+    <!-- ==== Scripts ==== -->
+    <!-- <script src="/Assets/Favicon/icon-ani.js" defer></script> -->
+    <script src="/global/nav-footer-loader.js" defer></script>
+    <script src="/Assets/fx/menu-toggle.js" defer></script>
+    <script type="module" src="/pages/tutorial/tutorial.js" defer></script>
+    <script type="module" src="/Assets/fx/theme.js" defer></script>
+  </head>
+  <body>
+    
+    <section>
+      <div class="outer-wrapper">
+        <article>
+        <div class="doc tutorial">
+  <div class="tutorial-nav">
+    <a href="/pages/joins/joins.html" class="tutorial-back">
+      <i class="fa-solid fa-arrow-left"></i> Try it live
+    </a>
+  </div>
+
+  <h6 class="doc-eyebrow">Learn SQL</h6>
+
+  <h1>SQL Joins Tutorial</h1>
+
+  <p class="doc-lead">
+    Learn how SQL joins work — with plain explanations and visual examples.
+    By the end, you'll know when to use each join type.
+  </p>
+
+  <hr />
+
+  <!-- Table of Contents -->
+  <nav class="tutorial-toc" aria-label="Table of contents" id="toc">
+    <button class="toc-toggle" aria-expanded="false" aria-controls="toc-list">
+      <span class="toc-toggle-label">Contents</span>
+      <i class="fa-solid fa-chevron-down"></i>
+    </button>
+    <ol id="toc-list">
+      <li><a href="#what-is-join">What is a Join?</a></li>
+      <li><a href="#join-types">Join Types</a>
+        <ul>
+          <li><a href="#inner-join">INNER JOIN</a></li>
+          <li><a href="#left-join">LEFT JOIN</a></li>
+          <li><a href="#right-join">RIGHT JOIN</a></li>
+          <li><a href="#full-outer">FULL OUTER JOIN</a></li>
+          <li><a href="#cross-join">CROSS JOIN</a></li>
+          <li><a href="#self-join">SELF JOIN</a></li>
+          <li><a href="#anti-semi">ANTI &amp; SEMI Joins</a></li>
+        </ul>
+      </li>
+      <li><a href="#set-operators">Set Operators</a>
+        <ul>
+          <li><a href="#union">UNION</a></li>
+          <li><a href="#intersect">INTERSECT</a></li>
+          <li><a href="#except">EXCEPT</a></li>
+        </ul>
+      </li>
+      <li><a href="#quick-reference">Quick Reference</a></li>
+    </ol>
+  </nav>
+
+  <hr />
+
+  <!-- Section 1: What is a Join -->
+  <section id="what-is-join">
+    <h2>What is a Join?</h2>
+
+    <p>
+      A <strong>join</strong> combines rows from two or more tables based on a related column.
+      Think of it like connecting spreadsheets that share a common piece of information —
+      like an ID or a name.
+    </p>
+
+    <div class="tutorial-example">
+      <div class="example-tables">
+        <div class="example-table">
+          <h4>users</h4>
+          <table>
+            <thead>
+              <tr><th>id</th><th>name</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>Alice</td></tr>
+              <tr><td>2</td><td>Bob</td></tr>
+              <tr><td>3</td><td>Carol</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="example-table">
+          <h4>orders</h4>
+          <table>
+            <thead>
+              <tr><th>user_id</th><th>product</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>Book</td></tr>
+              <tr><td>1</td><td>Pen</td></tr>
+              <tr><td>3</td><td>Notebook</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p class="example-note">
+        The <code>orders.user_id</code> column connects to <code>users.id</code>.
+        Note: Bob (id=2) has no orders.
+      </p>
+    </div>
+
+    <p>
+      Without joins, you'd have to manually match records. With joins, the database
+      does the matching for you — and different join types give you different results.
+    </p>
+  </section>
+
+  <hr />
+
+  <!-- Section 2: Join Types -->
+  <section id="join-types">
+    <h2>Join Types</h2>
+
+    <!-- INNER JOIN -->
+    <article id="inner-join">
+      <h3>INNER JOIN</h3>
+      <p>
+        Returns only rows that have matches in <em>both</em> tables. If a row
+        doesn't have a matching partner, it's excluded.
+      </p>
+      <div class="tutorial-diagram">
+        <svg viewBox="0 0 200 120" class="join-venn" role="img" aria-label="Venn diagram showing INNER JOIN returns only the overlapping area where both tables have matching data">
+          <circle cx="75" cy="60" r="45" class="venn-left"/>
+          <circle cx="125" cy="60" r="45" class="venn-right"/>
+          <text x="100" y="60" text-anchor="middle" class="venn-label">Match</text>
+        </svg>
+        <div class="diagram-legend">
+          <span class="legend-item"><span class="legend-color left"></span> Left table only</span>
+          <span class="legend-item"><span class="legend-color right"></span> Right table only</span>
+          <span class="legend-item"><span class="legend-color match"></span> Both tables</span>
+        </div>
+      </div>
+      <div class="tutorial-sql">
+        <code>SELECT * FROM users INNER JOIN orders ON users.id = orders.user_id;</code>
+      </div>
+      <div class="tutorial-result">
+        <h4>Result</h4>
+        <table>
+          <thead>
+            <tr><th>id</th><th>name</th><th>user_id</th><th>product</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Alice</td><td>1</td><td>Book</td></tr>
+            <tr><td>1</td><td>Alice</td><td>1</td><td>Pen</td></tr>
+            <tr><td>3</td><td>Carol</td><td>3</td><td>Notebook</td></tr>
+          </tbody>
+        </table>
+        <p class="result-note">3 rows returned. Bob (no orders) is excluded.</p>
+      </div>
+      <p class="tutorial-tip">
+        <strong>Use when:</strong> You only want rows that exist in both tables.
+        Example: "Show users who have placed orders."
+      </p>
+      <a href="/pages/joins/joins.html?preset=users_orders&op=inner" class="try-it-link">
+        <i class="fa-solid fa-play"></i> Try it in the visualizer
+      </a>
+    </article>
+
+    <!-- LEFT JOIN -->
+    <article id="left-join">
+      <h3>LEFT JOIN</h3>
+      <p>
+        Returns <em>all</em> rows from the left table, plus matching rows from the
+        right table. If there's no match, the right side shows NULL.
+      </p>
+      <div class="tutorial-diagram">
+        <svg viewBox="0 0 200 120" class="join-venn" role="img" aria-label="Venn diagram showing LEFT JOIN returns all of the left circle plus the overlap. Bob is included even without orders">
+          <circle cx="75" cy="60" r="45" class="venn-left"/>
+          <circle cx="125" cy="60" r="45" class="venn-right"/>
+          <ellipse cx="75" cy="60" rx="45" ry="45" class="venn-fill-left"/>
+          <text x="55" y="60" text-anchor="middle" class="venn-label-dark">All</text>
+          <text x="125" y="60" text-anchor="middle" class="venn-label">Match</text>
+        </svg>
+        <div class="diagram-legend">
+          <span class="legend-item"><span class="legend-color left-only"></span> All left</span>
+          <span class="legend-item"><span class="legend-color match"></span> Both tables</span>
+        </div>
+      </div>
+      <div class="tutorial-sql">
+        <code>SELECT * FROM users LEFT JOIN orders ON users.id = orders.user_id;</code>
+      </div>
+      <div class="tutorial-result">
+        <h4>Result</h4>
+        <table>
+          <thead>
+            <tr><th>id</th><th>name</th><th>user_id</th><th>product</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Alice</td><td>1</td><td>Book</td></tr>
+            <tr><td>1</td><td>Alice</td><td>1</td><td>Pen</td></tr>
+            <tr><td>2</td><td>Bob</td><td class="null">NULL</td><td class="null">NULL</td></tr>
+            <tr><td>3</td><td>Carol</td><td>3</td><td>Notebook</td></tr>
+          </tbody>
+        </table>
+        <p class="result-note">4 rows returned. Bob included with NULLs for missing data.</p>
+      </div>
+      <p class="tutorial-tip">
+        <strong>Use when:</strong> You want all items from one table, even if they
+        have no related data. Example: "Show all users, even those who never ordered."
+      </p>
+      <a href="/pages/joins/joins.html?preset=users_orders&op=left" class="try-it-link">
+        <i class="fa-solid fa-play"></i> Try it in the visualizer
+      </a>
+    </article>
+
+    <!-- RIGHT JOIN -->
+    <article id="right-join">
+      <h3>RIGHT JOIN</h3>
+      <p>
+        The opposite of LEFT JOIN. Returns all rows from the right table, plus
+        matching rows from the left. If there's no match, the left side shows NULL.
+      </p>
+      <div class="tutorial-diagram">
+        <svg viewBox="0 0 200 120" class="join-venn" role="img" aria-label="Venn diagram showing RIGHT JOIN returns all of the right circle plus the overlap">
+          <circle cx="75" cy="60" r="45" class="venn-left"/>
+          <circle cx="125" cy="60" r="45" class="venn-right"/>
+          <ellipse cx="125" cy="60" rx="45" ry="45" class="venn-fill-right"/>
+          <text x="75" y="60" text-anchor="middle" class="venn-label">Match</text>
+          <text x="145" y="60" text-anchor="middle" class="venn-label-dark">All</text>
+        </svg>
+        <div class="diagram-legend">
+          <span class="legend-item"><span class="legend-color match"></span> Both tables</span>
+          <span class="legend-item"><span class="legend-color right-only"></span> All right</span>
+        </div>
+      </div>
+      <div class="tutorial-sql">
+        <code>SELECT * FROM users RIGHT JOIN orders ON users.id = orders.user_id;</code>
+      </div>
+      <div class="tutorial-result">
+        <h4>Result</h4>
+        <table>
+          <thead>
+            <tr><th>id</th><th>name</th><th>user_id</th><th>product</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Alice</td><td>1</td><td>Book</td></tr>
+            <tr><td>1</td><td>Alice</td><td>1</td><td>Pen</td></tr>
+            <tr><td>3</td><td>Carol</td><td>3</td><td>Notebook</td></tr>
+          </tbody>
+        </table>
+        <p class="result-note">3 rows returned. Same as INNER in this case (all orders have users).</p>
+      </div>
+      <p class="tutorial-tip">
+        <strong>Use when:</strong> You want all items from the right table, even
+        if they have no match. Example: "Show all orders, even unassigned ones."
+      </p>
+      <a href="/pages/joins/joins.html?preset=users_orders&op=right" class="try-it-link">
+        <i class="fa-solid fa-play"></i> Try it in the visualizer
+      </a>
+    </article>
+
+    <!-- FULL OUTER JOIN -->
+    <article id="full-outer">
+      <h3>FULL OUTER JOIN</h3>
+      <p>
+        Returns everything from both tables. If rows don't have matches, NULLs fill
+        the gaps on both sides.
+      </p>
+      <div class="tutorial-diagram">
+        <svg viewBox="0 0 200 120" class="join-venn" role="img" aria-label="Venn diagram showing FULL OUTER JOIN returns all data from both circles, with NULLs for non-matching rows">
+          <circle cx="75" cy="60" r="45" class="venn-left"/>
+          <circle cx="125" cy="60" r="45" class="venn-right"/>
+          <ellipse cx="75" cy="60" rx="45" ry="45" class="venn-fill-left"/>
+          <ellipse cx="125" cy="60" rx="45" ry="45" class="venn-fill-right"/>
+          <text x="55" y="60" text-anchor="middle" class="venn-label-dark">All</text>
+          <text x="100" y="60" text-anchor="middle" class="venn-label">Match</text>
+          <text x="145" y="60" text-anchor="middle" class="venn-label-dark">All</text>
+        </svg>
+        <div class="diagram-legend">
+          <span class="legend-item"><span class="legend-color left-only"></span> Left only</span>
+          <span class="legend-item"><span class="legend-color match"></span> Both tables</span>
+          <span class="legend-item"><span class="legend-color right-only"></span> Right only</span>
+        </div>
+      </div>
+      <div class="tutorial-sql">
+        <code>SELECT * FROM users FULL OUTER JOIN orders ON users.id = orders.user_id;</code>
+      </div>
+      <div class="tutorial-result">
+        <h4>Result</h4>
+        <table>
+          <thead>
+            <tr><th>id</th><th>name</th><th>user_id</th><th>product</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Alice</td><td>1</td><td>Book</td></tr>
+            <tr><td>1</td><td>Alice</td><td>1</td><td>Pen</td></tr>
+            <tr><td>2</td><td>Bob</td><td class="null">NULL</td><td class="null">NULL</td></tr>
+            <tr><td>3</td><td>Carol</td><td>3</td><td>Notebook</td></tr>
+          </tbody>
+        </table>
+        <p class="result-note">4 rows returned. All users and all orders included.</p>
+      </div>
+      <p class="tutorial-tip">
+        <strong>Use when:</strong> You need a complete picture of both tables.
+        Example: "Show all users and all orders, even unpaired ones."
+      </p>
+      <a href="/pages/joins/joins.html?preset=users_orders&op=full" class="try-it-link">
+        <i class="fa-solid fa-play"></i> Try it in the visualizer
+      </a>
+    </article>
+
+    <!-- CROSS JOIN -->
+    <article id="cross-join">
+      <h3>CROSS JOIN</h3>
+      <p>
+        Returns the <em>Cartesian product</em> — every row from the left table
+        paired with every row from the right table. No ON condition needed.
+      </p>
+      <div class="tutorial-diagram">
+        <svg viewBox="0 0 200 120" class="join-venn" role="img" aria-label="Cross Join visual showing every row from left paired with every row from right">
+          <circle cx="75" cy="60" r="45" class="venn-left"/>
+          <circle cx="125" cy="60" r="45" class="venn-right"/>
+          <text x="100" y="60" text-anchor="middle" class="venn-label" style="font-size: 11px;">All pairs</text>
+        </svg>
+      </div>
+      <div class="tutorial-sql">
+        <code>SELECT * FROM table_a CROSS JOIN table_b;</code>
+      </div>
+      <div class="tutorial-result">
+        <h4>Result (using our example)</h4>
+        <table>
+          <thead>
+            <tr><th>id</th><th>name</th><th>user_id</th><th>product</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Alice</td><td>1</td><td>Book</td></tr>
+            <tr><td>1</td><td>Alice</td><td>1</td><td>Pen</td></tr>
+            <tr><td>1</td><td>Alice</td><td>3</td><td>Notebook</td></tr>
+            <tr><td>2</td><td>Bob</td><td>1</td><td>Book</td></tr>
+            <tr><td>2</td><td>Bob</td><td>1</td><td>Pen</td></tr>
+            <tr><td>2</td><td>Bob</td><td>3</td><td>Notebook</td></tr>
+            <tr><td>3</td><td>Carol</td><td>1</td><td>Book</td></tr>
+            <tr><td>3</td><td>Carol</td><td>1</td><td>Pen</td></tr>
+            <tr><td>3</td><td>Carol</td><td>3</td><td>Notebook</td></tr>
+          </tbody>
+        </table>
+        <p class="result-note">9 rows returned (3 users × 3 orders).</p>
+      </div>
+      <p class="tutorial-warning">
+        <strong>Warning:</strong> Results grow quickly. 10 rows × 10 rows = 100 rows.
+        Use with caution on large tables.
+      </p>
+      <p class="tutorial-tip">
+        <strong>Use when:</strong> Generating combinations (e.g., all shifts × all employees).
+        Rarely used in production queries.
+      </p>
+      <a href="/pages/joins/joins.html?preset=users_orders&op=cross" class="try-it-link">
+        <i class="fa-solid fa-play"></i> Try it in the visualizer
+      </a>
+    </article>
+
+    <!-- SELF JOIN -->
+    <article id="self-join">
+      <h3>SELF JOIN</h3>
+      <p>
+        Joins a table to <em>itself</em>. Useful for finding relationships within
+        the same table (like employees and managers).
+      </p>
+      <div class="tutorial-example">
+        <div class="example-table">
+          <h4>employees</h4>
+          <table>
+            <thead>
+              <tr><th>id</th><th>name</th><th>manager_id</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>Alice (CEO)</td><td class="null">NULL</td></tr>
+              <tr><td>2</td><td>Bob</td><td>1</td></tr>
+              <tr><td>3</td><td>Carol</td><td>1</td></tr>
+              <tr><td>4</td><td>Dave</td><td>2</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="tutorial-sql">
+        <code>SELECT e.name AS employee, m.name AS manager FROM employees e LEFT JOIN employees m ON e.manager_id = m.id;</code>
+      </div>
+      <div class="tutorial-result">
+        <h4>Result</h4>
+        <table>
+          <thead>
+            <tr><th>employee</th><th>manager</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Alice (CEO)</td><td class="null">NULL</td></tr>
+            <tr><td>Bob</td><td>Alice (CEO)</td></tr>
+            <tr><td>Carol</td><td>Alice (CEO)</td></tr>
+            <tr><td>Dave</td><td>Bob</td></tr>
+          </tbody>
+        </table>
+        <p class="result-note">Each employee paired with their manager.</p>
+      </div>
+      <p class="tutorial-tip">
+        <strong>Use when:</strong> Finding hierarchies, pairs within a category,
+        or comparing rows in the same table. Example: "Who reports to whom?"
+      </p>
+    </article>
+
+    <!-- ANTI & SEMI JOINS -->
+    <article id="anti-semi">
+      <h3>ANTI &amp; SEMI Joins</h3>
+      <p>
+        These aren't standard SQL joins but are useful in Spark SQL and some databases.
+      </p>
+      
+      <div class="semi-anti-comparison">
+        <div class="semi-anti-item">
+          <h4>LEFT SEMI JOIN</h4>
+          <p>
+            Returns rows from the <em>left</em> table that have at least one match
+            in the right table. Like IN or EXISTS.
+          </p>
+          <div class="tutorial-sql">
+            <code>-- Equivalent to: WHERE column IN (SELECT ...)</code>
+          </div>
+          <div class="tutorial-result">
+            <h5>Result (from users + orders)</h5>
+            <table>
+              <thead>
+                <tr><th>id</th><th>name</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>1</td><td>Alice</td></tr>
+                <tr><td>3</td><td>Carol</td></tr>
+              </tbody>
+            </table>
+            <p class="result-note">Bob excluded (no orders).</p>
+          </div>
+        </div>
+        <div class="semi-anti-item">
+          <h4>LEFT ANTI JOIN</h4>
+          <p>
+            Returns rows from the <em>left</em> table that have <em>no</em> match
+            in the right table. Like NOT IN or NOT EXISTS.
+          </p>
+          <div class="tutorial-sql">
+            <code>-- Equivalent to: WHERE column NOT IN (SELECT ...)</code>
+          </div>
+          <div class="tutorial-result">
+            <h5>Result (from users + orders)</h5>
+            <table>
+              <thead>
+                <tr><th>id</th><th>name</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>2</td><td>Bob</td></tr>
+              </tbody>
+            </table>
+            <p class="result-note">Only Bob (no orders).</p>
+          </div>
+        </div>
+      </div>
+      <p class="tutorial-warning">
+        <strong>Note:</strong> These use Spark SQL syntax (<code>LEFT SEMI JOIN</code>,
+        <code>LEFT ANTI JOIN</code>). In PostgreSQL or MySQL, use
+        <code>EXISTS</code> or <code>NOT EXISTS</code> subqueries instead.
+      </p>
+    </article>
+  </section>
+
+  <hr />
+
+  <!-- Section 3: Set Operators -->
+  <section id="set-operators">
+    <h2>Set Operators</h2>
+    <p>
+      Set operators combine results from multiple SELECT statements. Unlike joins,
+      they stack rows vertically rather than horizontally.
+    </p>
+
+    <!-- UNION -->
+    <article id="union">
+      <h3>UNION</h3>
+      <p>
+        Combines results and <em>removes duplicates</em>. Each row appears at most once.
+      </p>
+      <div class="set-operator-visual">
+        <div class="set-circle left">
+          <span>A</span>
+        </div>
+        <div class="set-symbol">∪</div>
+        <div class="set-circle right">
+          <span>B</span>
+        </div>
+        <div class="set-equals">=</div>
+        <div class="set-result union">
+          <span>A ∪ B</span>
+        </div>
+      </div>
+      <div class="tutorial-sql">
+        <code>SELECT name FROM users UNION SELECT name FROM admins;</code>
+      </div>
+      <div class="tutorial-result">
+        <h4>Example</h4>
+        <div class="example-tables">
+          <div class="example-table small">
+            <h5>users</h5>
+            <table>
+              <tr><td>Alice</td></tr>
+              <tr><td>Bob</td></tr>
+              <tr><td>Carol</td></tr>
+            </table>
+          </div>
+          <div class="example-table small">
+            <h5>admins</h5>
+            <table>
+              <tr><td>Alice</td></tr>
+              <tr><td>Dave</td></tr>
+            </table>
+          </div>
+          <div class="example-table small">
+            <h5>Result</h5>
+            <table>
+              <tr><td>Alice</td></tr>
+              <tr><td>Bob</td></tr>
+              <tr><td>Carol</td></tr>
+              <tr><td>Dave</td></tr>
+            </table>
+          </div>
+        </div>
+        <p class="result-note">4 rows. Alice appears only once (duplicate removed).</p>
+      </div>
+      <p class="tutorial-tip">
+        <strong>Use when:</strong> Combining similar data from different sources,
+        like users from multiple tables.
+      </p>
+    </article>
+
+    <!-- INTERSECT -->
+    <article id="intersect">
+      <h3>INTERSECT</h3>
+      <p>
+        Returns only rows that appear in <em>both</em> result sets. Removes duplicates.
+      </p>
+      <div class="set-operator-visual">
+        <div class="set-circle left"></div>
+        <div class="set-symbol">∩</div>
+        <div class="set-circle right"></div>
+        <div class="set-equals">=</div>
+        <div class="set-result intersect">
+          <span>A ∩ B</span>
+        </div>
+      </div>
+      <div class="tutorial-sql">
+        <code>SELECT name FROM users INTERSECT SELECT name FROM admins;</code>
+      </div>
+      <div class="tutorial-result">
+        <h4>Example</h4>
+        <div class="example-tables">
+          <div class="example-table small">
+            <h5>users</h5>
+            <table>
+              <tr><td>Alice</td></tr>
+              <tr><td>Bob</td></tr>
+              <tr><td>Carol</td></tr>
+            </table>
+          </div>
+          <div class="example-table small">
+            <h5>admins</h5>
+            <table>
+              <tr><td>Alice</td></tr>
+              <tr><td>Dave</td></tr>
+            </table>
+          </div>
+          <div class="example-table small">
+            <h5>Result</h5>
+            <table>
+              <tr><td>Alice</td></tr>
+            </table>
+          </div>
+        </div>
+        <p class="result-note">1 row. Only Alice appears in both tables.</p>
+      </div>
+      <p class="tutorial-tip">
+        <strong>Use when:</strong> Finding common records across datasets.
+        Example: "Which users are also admins?"
+      </p>
+    </article>
+
+    <!-- EXCEPT -->
+    <article id="except">
+      <h3>EXCEPT</h3>
+      <p>
+        Returns rows from the <em>first</em> result set that are <em>not</em> in
+        the second. Removes duplicates.
+      </p>
+      <div class="set-operator-visual">
+        <div class="set-circle left"></div>
+        <div class="set-symbol">−</div>
+        <div class="set-circle right"></div>
+        <div class="set-equals">=</div>
+        <div class="set-result except">
+          <span>A − B</span>
+        </div>
+      </div>
+      <div class="tutorial-sql">
+        <code>SELECT name FROM users EXCEPT SELECT name FROM admins;</code>
+      </div>
+      <div class="tutorial-result">
+        <h4>Example</h4>
+        <div class="example-tables">
+          <div class="example-table small">
+            <h5>users</h5>
+            <table>
+              <tr><td>Alice</td></tr>
+              <tr><td>Bob</td></tr>
+              <tr><td>Carol</td></tr>
+            </table>
+          </div>
+          <div class="example-table small">
+            <h5>admins</h5>
+            <table>
+              <tr><td>Alice</td></tr>
+              <tr><td>Dave</td></tr>
+            </table>
+          </div>
+          <div class="example-table small">
+            <h5>Result</h5>
+            <table>
+              <tr><td>Bob</td></tr>
+              <tr><td>Carol</td></tr>
+            </table>
+          </div>
+        </div>
+        <p class="result-note">2 rows. Bob and Carol are users but not admins.</p>
+      </div>
+      <p class="tutorial-tip">
+        <strong>Use when:</strong> Finding differences between datasets.
+        Example: "Which users are NOT admins?"
+      </p>
+    </article>
+  </section>
+
+  <hr />
+
+  <!-- Section 4: Quick Reference -->
+  <section id="quick-reference">
+    <h2>Quick Reference</h2>
+    
+    <div class="quick-ref-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Join Type</th>
+            <th>Returns</th>
+            <th>When to Use</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>INNER</strong></td>
+            <td>Matching rows only</td>
+            <td>When you need data from both tables</td>
+          </tr>
+          <tr>
+            <td><strong>LEFT</strong></td>
+            <td>All left + matches</td>
+            <td>When the left table is primary</td>
+          </tr>
+          <tr>
+            <td><strong>RIGHT</strong></td>
+            <td>All right + matches</td>
+            <td>When the right table is primary</td>
+          </tr>
+          <tr>
+            <td><strong>FULL OUTER</strong></td>
+            <td>All rows</td>
+            <td>When you need the complete picture</td>
+          </tr>
+          <tr>
+            <td><strong>CROSS</strong></td>
+            <td>Cartesian product</td>
+            <td>Generating combinations (use sparingly)</td>
+          </tr>
+          <tr>
+            <td><strong>SELF</strong></td>
+            <td>Rows matched to self</td>
+            <td>Hierarchies, comparisons within a table</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="quick-ref-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Set Operator</th>
+            <th>Returns</th>
+            <th>When to Use</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>UNION</strong></td>
+            <td>All rows (no duplicates)</td>
+            <td>Combining similar data</td>
+          </tr>
+          <tr>
+            <td><strong>INTERSECT</strong></td>
+            <td>Common rows only</td>
+            <td>Finding overlaps</td>
+          </tr>
+          <tr>
+            <td><strong>EXCEPT</strong></td>
+            <td>Rows in A, not in B</td>
+            <td>Finding differences</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr />
+
+  <div class="tutorial-cta">
+    <h3>Ready to try it?</h3>
+    <p>
+      Head to the <a href="/pages/joins/joins.html">SQL Joins Visualizer</a> and
+      experiment with real data.
+    </p>
+  </div>
+
+  <p class="related-link">Next: <a href="/pages/execorder/eo.html">Explore SQL Execution Order →</a></p>
+
+  <a href="#" class="back-to-top" aria-label="Back to top">
+    <i class="fa-solid fa-arrow-up"></i>
+  </a>
+</div>
+
+      </article>
+      </div>
+    </section>
+  </body>
+</html>

@@ -1,5 +1,7 @@
 <!--  -->
 <!--  -->
+<!-- <a href="#main-content" class="skip-link">Skip to main content</a>
+<main id="main-content"> -->
 <div class="heading-wrapper">
   <div class="heading-part-top">
     <div>
@@ -33,48 +35,33 @@
         <i class="fa-solid fa-times"></i>
       </button>
       <h2>Before you start</h2>
-      <p>
-        <strong>Start with preset sample data</strong> or add tables dynamically
-        using the <strong>+ add table</strong> button. Create columns and sample
-        data in each table. <strong><br />Choose a join type:</strong> INNER
-        (matching rows only), LEFT (all left + matches), RIGHT (all right +
-        matches), FULL (all rows) + 6 more.<br />
-        <strong>Try set operators:</strong> UNION (combine), INTERSECT (common
-        rows), EXCEPT (difference).<br />
-        <strong>Set join conditions</strong> to connect tables using keys. Watch
-        the <strong>SVG diagram</strong> update. See results in the result
-        table.<br />
-        <strong>View the generated SQL.</strong><br />
-        Click <strong>Reset All</strong> to start over.
+      <ul>
+        <li><strong>Start fast:</strong> Choose a preset dataset or add tables with <strong>+ add table</strong>.</li>
+        <li><strong>Build tables:</strong> Add columns and sample data to each table.</li>
+        <li><strong>Pick an operation:</strong> Select a join type or set operator, then set the join condition.</li>
+        <li><strong>See results:</strong> Watch the diagram update and the result table populate instantly.</li>
+      </ul>
+      <p class="before-start-note">
+        <strong>Note:</strong> Anti &amp; Semi joins use <strong>Spark SQL</strong> syntax — not standard SQL. 
+        In PostgreSQL/MySQL, use <code>NOT EXISTS</code> / <code>EXISTS</code> instead.
       </p>
-      <p
-        style="
-          margin-top: var(--space-sm);
-          font-size: var(--text-fine);
-          color: var(--color-text-muted);
-        "
-      >
-        <!-- <i
-          class="fa-solid fa-triangle-exclamation"
-          style="color: var(--color-tertiary)"
-        ></i> -->
-        <strong> ⚠️ Anti &amp; Semi join SQL</strong> uses
-        <strong>Spark SQL</strong> syntax (<code>LEFT ANTI JOIN</code>,
-        <code>LEFT SEMI JOIN</code>) — not standard SQL. In PostgreSQL / MySQL,
-        use <code>NOT EXISTS</code> / <code>EXISTS</code> subqueries instead.
+      <p class="before-start-link">
+        New to joins? <a href="/pages/tutorial/">Learn the basics →</a>
       </p>
-      <blockquote>
-        <i class="fa-solid fa-wand-magic-sparkles"></i>
-        See results instantly!
-        <i class="fa-solid fa-wand-magic-sparkles"></i>
-      </blockquote>
+    </div>
+    <!-- Mini persistent banner shown after closing main banner -->
+    <div class="mini-banner" id="mini-banner" style="display: none;">
+      <a href="/pages/tutorial/" class="mini-banner-link">
+        <i class="fa-solid fa-book-open"></i>
+        <span>New to joins? Learn the basics →</span>
+      </a>
     </div>
   </div>
 </div>
 <!--  -->
 <!-- ── Preset Datasets ── -->
 <div class="preset-section">
-  <div>
+  <div class="preset-header">
     <h2 class="section-label-large"
       >Quick Start
       <span
@@ -84,6 +71,9 @@
         <!-- <i class="fa-solid fa-circle-info"></i> -->
       </span>
     </h2>
+    <a href="/pages/tutorial/" class="tutorial-promo-link">
+      <i class="fa-solid fa-book-open"></i> Learn joins basics first
+    </a>
   </div>
   <div class="preset-controls">
     <div class="custom-dropdown" id="preset-dropdown-wrapper">
@@ -159,9 +149,9 @@
   </div>
 </div>
 
-<!-- ── Pair selector (3+ tables only) ── -->
+<!-- ── Pair selector (3+ tables, or self join with 2+ tables) ── -->
 <div class="join-pair-selector" id="pair-row" style="display: none">
-  <label class="pair-selector-label">Which tables to join:</label>
+  <label class="pair-selector-label" id="pair-selector-label">Which tables to join:</label>
   <div class="custom-dropdown" id="join-pair-select-wrapper">
     <button
       class="dropdown-toggle"
@@ -177,6 +167,7 @@
     </div>
   </div>
   <small
+    id="pair-selector-hint"
     style="
       display: block;
       margin-top: 4px;
@@ -200,6 +191,16 @@
     <span id="join-condition-summary" aria-live="polite"
       >Current condition: No join condition set</span
     >
+  </div>
+
+  <!-- ── SELF JOIN Guidance ── -->
+  <div id="self-join-tip" style="display: none; margin-top: var(--space-md); padding: var(--space-sm); background-color: var(--color-bg-secondary); border-left: 4px solid var(--color-primary); border-radius: 2px; font-size: var(--text-sm);">
+    <strong>Self Join</strong> pairs rows within the <em>same</em> table by matching a shared column value.
+    <ul style="margin: var(--space-xs) 0 0; padding-left: var(--space-md);">
+      <li><strong>Good columns:</strong> ones where <em>multiple rows share the same value</em> — like <code>city</code>, <code>department</code>, or <code>grade</code>.</li>
+      <li><strong>Avoid:</strong> unique columns like <code>id</code> — they never match another row and will return no results.</li>
+      <li><strong>Example:</strong> <code>employees.city = employees.city</code> finds every pair of employees in the same city.</li>
+    </ul>
   </div>
 </div>
 
@@ -229,6 +230,10 @@
 
 <!-- ── SVG wrapper ── -->
 <div class="diagram-scroll-wrapper">
+  <div id="cross-join-warning" class="cross-join-warning" style="display: none;">
+    <span class="warning-icon">⚠️</span>
+    <span class="warning-text">Large result set: <span id="cross-join-count"></span> rows (Cartesian product)</span>
+  </div>
   <div id="conn-wrapper" class="conn-wrapper">
     <svg class="conn" id="conn-svg" viewBox="0 0 480 10" role="img" aria-label="Visual diagram showing join connections between tables"></svg>
     <noscript>
@@ -279,11 +284,11 @@
   <div class="modal-box">
     <div class="modal-header">
       <h3 class="modal-title">Add Column</h3>
-      <button class="modal-close" id="col-modal-close">×</button>
+      <button class="modal-close" id="col-modal-close" aria-label="Close modal">×</button>
     </div>
     <div class="modal-body">
       <div class="modal-field">
-        <label class="modal-label">Column Name</label>
+        <label class="modal-label" for="col-modal-name">Column Name</label>
         <input
           type="text"
           id="col-modal-name"
@@ -303,7 +308,7 @@
       </div>
 
       <div class="modal-field">
-        <label class="modal-label">Data Type</label>
+        <label class="modal-label" for="col-modal-type-toggle">Data Type</label>
         <div class="custom-dropdown" id="col-modal-type-dropdown">
           <button
             class="dropdown-toggle"
@@ -334,3 +339,8 @@
     </div>
   </div>
 </div>
+
+<a href="#" class="back-to-top" aria-label="Back to top">
+  <i class="fa-solid fa-arrow-up"></i>
+</a>
+</main>

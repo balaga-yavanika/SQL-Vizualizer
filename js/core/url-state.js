@@ -17,7 +17,7 @@
 // IMPORTS
 // ═══════════════════════════════════════════════════════════════════════════════
 import { state, PRESET_DATASETS, INITIAL_STATE } from "./state.js";
-import { setJoinCondition, loadPreset, isValidIndex } from "./utils.js";
+import { setJoinCondition, loadPreset, isValidIndex, escapeHtml } from "./utils.js";
 import { LIMITS } from "./limits.js";
 import { PresetHashCache } from "./hash.js";
 
@@ -59,7 +59,7 @@ export function serializeState() {
       const compact = state.tables.map(t => {
         const cols = t.columns.map(c => `${c.id}:${c.name}:${c.type}`).join(",");
         const rows = t.rows.map(r =>
-          t.columns.map(c => r[c.id] === null || r[c.id] === undefined ? "" : String(r[c.id]).replace(/[|:]/g, "")).join(":")
+          t.columns.map(c => r[c.id] === null || r[c.id] === undefined ? "" : String(r[c.id]).replace(/[|:;]/g, "")).join(":")
         ).join("|");
         const svgCol = t.svgColId || (t.columns.length > 0 ? t.columns[0].id : "");
         return `${t.name};${cols};${rows};${svgCol}`;
@@ -126,8 +126,10 @@ export function parseUrlParams() {
     return false;
   }
 
-  // Mark as shared view (read-only)
-  state.isSharedView = true;
+  // Only mark as shared view if custom table data is present
+  // Preset + operation combos are NOT shared view (tutorial links, etc.)
+  const hasCustomTables = params.has("tables");
+  state.isSharedView = hasCustomTables;
 
   // Operation
   const op = params.get("op");
@@ -496,8 +498,8 @@ function showShareLinkFallback(url) {
       background: var(--color-bg-vdb-shade-1);
       color: var(--color-text);
       resize: none;
-    ">${url}</textarea>
-    <button onclick="this.closest('.share-link-modal').remove()" style="
+    ">${escapeHtml(url)}</textarea>
+    <button id="share-link-done-btn" style="
       width: 100%;
       margin-top: 12px;
       padding: 8px 12px;
@@ -515,8 +517,12 @@ function showShareLinkFallback(url) {
   const textarea = modal.querySelector("textarea");
   textarea.select();
 
-  // Remove modal on outside click
+  // Remove modal on outside click or Done button
   modal.addEventListener("click", (e) => {
     if (e.target === modal) modal.remove();
   });
+  const doneBtn = modal.querySelector("#share-link-done-btn");
+  if (doneBtn) {
+    doneBtn.addEventListener("click", () => modal.remove());
+  }
 }

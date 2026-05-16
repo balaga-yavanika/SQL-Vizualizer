@@ -1,0 +1,545 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════════════════
+ * Joins V2 — Additional Styles
+ * ═══════════════════════════════════════════════════════════════════════════════
+ * This file ONLY contains styles for features NEW in V2.
+ * All original joins.css rules still apply (loaded first in joins.html).
+ *
+ * Sections:
+ *   V2 Badge               — heading badge
+ *   Feature H              — Duplicate key warning
+ *   Feature P              — Pencil icon column rename
+ *   Feature G              — NULL toggle button
+ *   Feature L              — OR/AND condition logic toggle
+ *   Feature F              — Explain panel
+ *   Feature A–D            — Refine Results panel
+ */
+
+/* ============================================= */
+/* V2 BADGE                                      */
+/* ============================================= */
+.v2-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: oklch(from var(--color-secondary) l c h / 0.15);
+  color: var(--color-secondary);
+  border: 1px solid oklch(from var(--color-secondary) l c h / 0.3);
+  vertical-align: middle;
+  margin-left: 6px;
+}
+
+/* ============================================= */
+/* FEATURE H — DUPLICATE KEY WARNING             */
+/* ============================================= */
+.dup-key-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 6px 10px;
+  margin-bottom: 4px;
+  font-size: 11px;
+  color: #f0997b;
+  background: rgba(216, 90, 48, 0.08);
+  border: 1px solid rgba(216, 90, 48, 0.25);
+  border-radius: var(--radius-sm);
+  line-height: 1.4;
+}
+
+.dup-key-warning i {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: #f0997b;
+}
+
+/* ============================================= */
+/* FEATURE P — PENCIL ICON COLUMN RENAME         */
+/* ============================================= */
+.col-header-name-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  position: relative;
+}
+
+.col-rename-pencil {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: none;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 9px;
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity 0.15s ease, color 0.15s ease;
+  flex-shrink: 0;
+}
+
+.col-header-cell:hover .col-rename-pencil,
+.col-header-name:focus ~ .col-rename-pencil {
+  opacity: 1;
+}
+
+.col-rename-pencil:hover {
+  color: var(--color-primary);
+  background: oklch(from var(--color-primary) l c h / 0.1);
+}
+
+.col-rename-pencil:focus {
+  opacity: 1;
+  outline: 1px solid var(--color-primary);
+}
+
+/* ============================================= */
+/* FEATURE G — NULL TOGGLE BUTTON                */
+/* ============================================= */
+.null-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 5px;
+  margin-left: 3px;
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 9px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  opacity: 0;
+  flex-shrink: 0;
+}
+
+.col-header-cell:hover .null-toggle-btn {
+  opacity: 0.6;
+}
+
+.null-toggle-btn:hover {
+  opacity: 1 !important;
+  border-color: var(--color-secondary);
+  color: var(--color-secondary);
+  background: oklch(from var(--color-secondary) l c h / 0.08);
+}
+
+.null-toggle-btn.active {
+  opacity: 1 !important;
+  border-color: var(--color-secondary);
+  color: var(--color-secondary);
+  background: oklch(from var(--color-secondary) l c h / 0.12);
+}
+
+/* ============================================= */
+/* FEATURE L — CONDITION LOGIC TOGGLE (AND/OR)  */
+/* ============================================= */
+.condition-logic-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 6px 0 4px;
+  padding: 4px 0;
+}
+
+.logic-btn {
+  padding: 2px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.logic-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.logic-btn.active {
+  background: oklch(from var(--color-primary) l c h / 0.15);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.logic-hint {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  margin-left: 4px;
+}
+
+/* ============================================= */
+/* FEATURE F — EXPLAIN PANEL                     */
+/* ============================================= */
+.explain-panel {
+  margin-top: var(--space-sm);
+  border-radius: var(--radius-md);
+  border: 1px solid oklch(from var(--color-primary) l c h / 0.2);
+  background: oklch(from var(--color-primary) l c h / 0.04);
+  overflow: hidden;
+}
+
+.explain-panel-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+}
+
+.explain-icon {
+  flex-shrink: 0;
+  font-size: 14px;
+  color: var(--color-primary);
+  margin-top: 2px;
+}
+
+.explain-text {
+  flex: 1;
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--color-text);
+}
+
+.explain-text p {
+  margin: 0 0 4px;
+}
+
+.explain-text p:last-child {
+  margin-bottom: 0;
+}
+
+.explain-text strong {
+  color: var(--color-primary);
+}
+
+.explain-text em {
+  font-style: normal;
+  color: var(--color-secondary);
+}
+
+/* ============================================= */
+/* FEATURE A–D — REFINE RESULTS PANEL           */
+/* ============================================= */
+.refine-results-wrapper {
+  margin-block: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-vdb);
+  overflow: hidden;
+}
+
+.refine-results-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+  background: oklch(from var(--color-bg) l c h / 0.6);
+}
+
+.refine-results-toggle-row h2 {
+  margin: 0;
+}
+
+.refine-collapse-btn {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.refine-collapse-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.refine-sql-hint {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.refine-results-panel {
+  padding: 0;
+}
+
+/* Individual refine section */
+.refine-section {
+  margin-bottom: 0;
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid oklch(from var(--color-border) l c h / 0.4);
+  border-left: 3px solid transparent;
+}
+
+.refine-section:last-child {
+  border-bottom: none;
+}
+
+.refine-section--disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* Per-section accent colors */
+.refine-section--where  { border-left-color: #5b9cf6; background: rgba(91,  156, 246, 0.05); }
+.refine-section--order  { border-left-color: #f0a04b; background: rgba(240, 160, 75,  0.05); }
+.refine-section--group  { border-left-color: #5bbf7a; background: rgba(91,  191, 122, 0.05); }
+.refine-section--having { border-left-color: #b57bf0; background: rgba(181, 123, 240, 0.05); }
+
+.refine-section-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-xs);
+}
+
+.refine-section-title {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+/* Title badge color per section */
+.refine-section--where  .refine-section-title { color: #5b9cf6; background: rgba(91,  156, 246, 0.15); }
+.refine-section--order  .refine-section-title { color: #f0a04b; background: rgba(240, 160, 75,  0.15); }
+.refine-section--group  .refine-section-title { color: #5bbf7a; background: rgba(91,  191, 122, 0.15); }
+.refine-section--having .refine-section-title { color: #b57bf0; background: rgba(181, 123, 240, 0.15); }
+
+.refine-section-hint {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+/* Add buttons — look like real buttons, colored per section */
+.refine-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 11px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.refine-section-header .refine-add-btn:first-of-type { margin-left: auto; }
+.refine-section-header .refine-add-btn + .refine-add-btn { margin-left: 6px; }
+
+/* Per-section button colors (resting + hover) */
+.refine-section--where .refine-add-btn {
+  background: rgba(91, 156, 246, 0.12);
+  color: #5b9cf6;
+  border: 1px solid rgba(91, 156, 246, 0.35);
+}
+.refine-section--where .refine-add-btn:hover {
+  background: rgba(91, 156, 246, 0.22);
+  border-color: #5b9cf6;
+}
+
+.refine-section--order .refine-add-btn {
+  background: rgba(240, 160, 75, 0.12);
+  color: #f0a04b;
+  border: 1px solid rgba(240, 160, 75, 0.35);
+}
+.refine-section--order .refine-add-btn:hover {
+  background: rgba(240, 160, 75, 0.22);
+  border-color: #f0a04b;
+}
+
+.refine-section--group .refine-add-btn {
+  background: rgba(91, 191, 122, 0.12);
+  color: #5bbf7a;
+  border: 1px solid rgba(91, 191, 122, 0.35);
+}
+.refine-section--group .refine-add-btn:hover {
+  background: rgba(91, 191, 122, 0.22);
+  border-color: #5bbf7a;
+}
+
+.refine-section--having .refine-add-btn {
+  background: rgba(181, 123, 240, 0.12);
+  color: #b57bf0;
+  border: 1px solid rgba(181, 123, 240, 0.35);
+}
+.refine-section--having .refine-add-btn:hover {
+  background: rgba(181, 123, 240, 0.22);
+  border-color: #b57bf0;
+}
+
+/* Rows container */
+.refine-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+/* Each filter/sort/group row — card style */
+.refine-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+}
+
+/* Labeled field wrapper */
+.refine-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.refine-field--flex {
+  flex: 1;
+  min-width: 120px;
+}
+
+/* Small label above each control */
+.refine-field-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  user-select: none;
+}
+
+.refine-select {
+  padding: 5px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+  min-width: 130px;
+}
+
+.refine-select:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+  border-color: var(--color-primary);
+}
+
+.refine-input {
+  padding: 5px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  min-width: 100px;
+  width: 100%;
+}
+
+.refine-input:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+  border-color: var(--color-primary);
+}
+
+/* Remove button — clearly a delete action */
+.refine-remove-btn {
+  flex-shrink: 0;
+  align-self: flex-end;
+  padding: 5px 9px;
+  border: 1px solid rgba(255, 96, 96, 0.3);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 96, 96, 0.06);
+  color: #ff7070;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.refine-remove-btn:hover {
+  border-color: #ff6060;
+  background: rgba(255, 96, 96, 0.15);
+  color: #ff6060;
+}
+
+/* Aggregate divider label inside GROUP BY */
+.refine-agg-divider {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  margin-top: 10px;
+  margin-bottom: 2px;
+  padding-left: 2px;
+}
+
+.refine-hint {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin: 4px 0 0;
+  padding: 0;
+}
+
+.refine-hint strong {
+  color: var(--color-text);
+}
+
+/* ============================================= */
+/* RESPONSIVE                                    */
+/* ============================================= */
+@media (max-width: 600px) {
+  .refine-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .refine-field,
+  .refine-field--flex {
+    width: 100%;
+  }
+
+  .refine-select,
+  .refine-input {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .refine-remove-btn {
+    align-self: flex-end;
+  }
+
+  .condition-logic-toggle {
+    flex-wrap: wrap;
+  }
+}

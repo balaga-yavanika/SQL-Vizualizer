@@ -60,6 +60,7 @@ input[type="number"].col-input::-webkit-inner-spin-button {
 .share-btn-subtle.disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  pointer-events: none;
   color: var(--color-secondary);
 }
 
@@ -152,6 +153,10 @@ input[type="number"].col-input::-webkit-inner-spin-button {
 .diagram-scroll-wrapper,
 .result-scroll-wrapper {
   overflow-x: visible;
+}
+
+.diagram-scroll-wrapper {
+  padding-top: var(--space-md);
 }
 
 /* ============================================= */

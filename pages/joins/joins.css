@@ -2,6 +2,35 @@
 @import url("joins-imports.css");
 
 /* ============================================= */
+/* SKIP LINK — Accessibility                    */
+/* ============================================= */
+.skip-link {
+  position: absolute !important;
+  top: -100% !important;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-primary);
+  color: var(--color-bg-vdb);
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  z-index: 9999;
+  transition: top 0.2s, opacity 0.2s;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
+.skip-link:focus {
+  top: var(--space-sm) !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ============================================= */
 /* COMING SOON BANNER                            */
 /* ============================================= */
 .coming-soon-banner {
@@ -21,6 +50,48 @@
 h2 {
   font-size: var(--text-ui);
   letter-spacing: var(--tracking-wide);
+}
+
+/* ============================================= */
+/* BACK TO TOP BUTTON                            */
+/* ============================================= */
+.back-to-top {
+  position: fixed;
+  bottom: calc(var(--space-3xl) + 60px);
+  right: var(--space-lg);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+  color: var(--color-text);
+  border-radius: 50%;
+  border: none;
+  text-decoration: none;
+  box-shadow: 0 4px 12px oklch(from var(--color-primary) l c h / 0.3);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s, transform 0.15s;
+  z-index: 99;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  &.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  & i {
+    font-size: 14px;
+  }
 }
 
 /* ============================================= */

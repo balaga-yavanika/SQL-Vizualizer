@@ -110,7 +110,11 @@ export function renderTables(m1, m2, li, ri) {
 
   state.tables.forEach((t, ti) => {
     const pal = PALETTE[ti % PALETTE.length];
-    const matchSet = ti === li ? m1 : ti === ri ? m2 : new Set();
+    // For self-join li===ri===ti, so union both sets to highlight all matched rows
+    const isSelfJoin = state.currentOp === "self";
+    const matchSet = (isSelfJoin && ti === li)
+      ? new Set([...m1, ...m2])
+      : ti === li ? m1 : ti === ri ? m2 : new Set();
     const colCount = t.columns.length;
     const gridCols = `18px ${Array(colCount).fill("1fr").join(" ")} 22px`;
     const div = document.createElement("div");
@@ -122,7 +126,7 @@ export function renderTables(m1, m2, li, ri) {
       <div class="tbl-head" style="background:${pal.fill};color:${pal.text};border-bottom:1px solid ${pal.stroke}" aria-label="Table: ${escapedTableName}">
         <span class="table-name" contenteditable="true" data-ti="${ti}"
           tabindex="0"
-          role="button"
+          role="textbox"
           aria-label="Edit table name: ${escapedTableName}"
           aria-describedby="kb-help-edit-name">${escapedTableName}</span>
         ${
@@ -144,7 +148,7 @@ export function renderTables(m1, m2, li, ri) {
         ${typeIcon}
         <span class="col-header-name" contenteditable="true" data-ti="${ti}" data-col-id="${col.id}"
           tabindex="0"
-          role="button"
+          role="textbox"
           aria-label="Edit column name: ${escapedColName}"
           aria-describedby="kb-help-edit-name">${escapedColName}</span>
         ${
@@ -246,22 +250,43 @@ export function renderConn() {
   const opType = state.currentOp === "self" ? "self-join" : (state.currentOp || "join");
   svg.setAttribute("aria-label", `Diagram showing ${opType} between ${escapeHtml(lTable)} and ${escapeHtml(rTable)}`);
 
-  // Set operators don't show diagrams - they combine/compare tables at row level
-  const isSetOperator = state.currentOp && ["union", "union_all", "except", "intersect"].includes(state.currentOp);
+  // Set operators and FULL OUTER JOIN don't benefit from the diagram visualization
+  const noDiagramOps = ["union", "union_all", "except", "intersect", "full"];
+  const isSetOperator = state.currentOp && noDiagramOps.includes(state.currentOp);
   if (isSetOperator) {
+    const W = 480, H = 130;
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+    svg.style.display = "block";
+    const isFullOuter = state.currentOp === "full";
+    svg.innerHTML = `
+      <rect x="1" y="1" width="${W - 2}" height="${H - 2}" rx="10"
+        fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1" stroke-dasharray="6 4"/>
+      <text x="${W / 2}" y="${H / 2 - 8}" text-anchor="middle" font-size="9"
+        font-family="var(--font-main, sans-serif)" fill="rgba(202,202,202,0.5)" dominant-baseline="middle">
+        ${isFullOuter ? "Diagram not applicable for FULL OUTER JOIN" : "Diagram not applicable for SET operators"}
+      </text>
+      <text x="${W / 2}" y="${H / 2 + 10}" text-anchor="middle" font-size="8"
+        font-family="var(--font-main, sans-serif)" fill="rgba(202,202,202,0.35)" dominant-baseline="middle">
+        ${isFullOuter ? "(All rows appear in result - no connection to visualize)" : "(UNION, EXCEPT, INTERSECT combine/compare entire tables)"}
+      </text>`;
+    return;
+  }
+
+  // Show placeholder when no join type selected yet
+  if (!state.currentOp) {
     const W = 480, H = 130;
     svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
     svg.style.display = "block";
     svg.innerHTML = `
       <rect x="1" y="1" width="${W - 2}" height="${H - 2}" rx="10"
         fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1" stroke-dasharray="6 4"/>
-      <text x="${W / 2}" y="${H / 2}" text-anchor="middle" font-size="9"
+      <text x="${W / 2}" y="${H / 2 - 12}" text-anchor="middle" font-size="10"
         font-family="var(--font-main, sans-serif)" fill="rgba(202,202,202,0.5)" dominant-baseline="middle">
-        Diagram not applicable for SET operators
+        Select a join type to see the diagram
       </text>
-      <text x="${W / 2}" y="${H / 2 + 18}" text-anchor="middle" font-size="8"
-        font-family="var(--font-main, sans-serif)" fill="rgba(202,202,202,0.35)" dominant-baseline="middle">
-        (UNION, EXCEPT, INTERSECT combine/compare entire tables)
+      <text x="${W / 2}" y="${H / 2 + 10}" text-anchor="middle" font-size="8"
+        font-family="var(--font-main, sans-serif)" fill="rgba(202,202,202,0.3)" dominant-baseline="middle">
+        Visual diagram of how your tables connect
       </text>`;
     return;
   }
@@ -298,7 +323,19 @@ export function renderConn() {
 
   // Full diagram with connections
   const rows = computeResult(state.currentOp);
+
+  // Determine if this is a special join type that needs different visualization
+  const isAntiJoin = state.currentOp && (state.currentOp === "left_anti" || state.currentOp === "right_anti");
+  const isSemiOrExists = state.currentOp && (state.currentOp === "left_semi" || state.currentOp === "right_semi" || state.currentOp === "exists" || state.currentOp === "not_exists");
+  const isRightSideOnly = state.currentOp === "right_semi";
+
+  // Connector pairs: only rows where both sides are valid (standard joins only)
+  // Anti/semi joins return i1=-1 or i2=-1, so no connector lines are drawn for them
   const pairs = rows.filter((r) => r.i1 >= 0 && r.i2 >= 0);
+
+  // Which row indices actually appear in the result (used for highlighting)
+  const resultLeftIndices = new Set(rows.filter(r => r.i1 >= 0).map(r => r.i1));
+  const resultRightIndices = new Set(rows.filter(r => r.i2 >= 0).map(r => r.i2));
 
   // Calculate dimensions
   const lCount = Math.max(state.tables[li].rows.length, 1);
@@ -308,7 +345,8 @@ export function renderConn() {
     W = 480,
     LX = 118,
     RX = 362;
-  const H = Math.max(lCount, rCount) * rowH + padY * 2 + 32;
+  const extraH = (isAntiJoin || isSemiOrExists) ? 45 : 0; // Extra space for legend
+  const H = Math.max(lCount, rCount) * rowH + padY * 2 + 32 + extraH;
   svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
   svg.style.display = "block";
 
@@ -329,18 +367,50 @@ export function renderConn() {
     const displayVal = getSvgValue(li, i);
     const keyVal = getKeyValue(li, i);
     const empty = keyVal === "" || keyVal === undefined || keyVal === null;
-    const isMatch = pairs.some((r) => r.i1 === i) ||
-      ((state.currentOp === "exists" || state.currentOp === "not_exists") && rows.some((r) => r.i1 === i));
+
+    let isHighlighted = false;
+    let rowOpacity = "";
+    let strokeWidth = 0.8;
+
+    if (isAntiJoin) {
+      if (state.currentOp === "right_anti") {
+        // RIGHT ANTI: left table is not returned — dim all
+        rowOpacity = 'opacity="0.3"';
+        strokeWidth = 0.5;
+      } else {
+        // LEFT ANTI: highlight rows that ARE in the result (rows with no match)
+        isHighlighted = resultLeftIndices.has(i) && !empty;
+        rowOpacity = isHighlighted ? "" : 'opacity="0.35"';
+        strokeWidth = isHighlighted ? 2 : 0.5;
+      }
+    } else if (isSemiOrExists) {
+      if (isRightSideOnly) {
+        // RIGHT SEMI: left table is not returned — dim all
+        rowOpacity = 'opacity="0.3"';
+        strokeWidth = 0.5;
+      } else {
+        // LEFT SEMI / EXISTS / NOT EXISTS: highlight rows that ARE in the result
+        isHighlighted = resultLeftIndices.has(i);
+        rowOpacity = isHighlighted ? "" : 'opacity="0.3"';
+        strokeWidth = isHighlighted ? 1.8 : 0.5;
+      }
+    } else {
+      const isMatch = pairs.some((r) => r.i1 === i);
+      rowOpacity = empty ? 'opacity="0.4"' : "";
+      strokeWidth = isMatch ? 1.8 : 0.8;
+    }
+    
     const label = empty
       ? "—"
       : displayVal === "" || displayVal === null || displayVal === undefined
         ? "·"
         : escapeHtml(String(displayVal));
+    const rowLabel = empty ? "empty" : isHighlighted || (!isAntiJoin && !isSemiOrExists && pairs.some(r => r.i1 === i)) ? "matched" : "unmatched";
     s += `<rect x="18" y="${lYs[i] - 13}" width="100" height="26" rx="6"
-      fill="${palL.fill}" stroke="${palL.stroke}" stroke-width="${isMatch ? 1.8 : 0.8}"
-      ${empty ? 'opacity="0.4"' : ""}/>
+      fill="${palL.fill}" stroke="${palL.stroke}" stroke-width="${strokeWidth}"
+      ${rowOpacity} aria-label="${rowLabel} row"/>
     <text x="68" y="${lYs[i]}" text-anchor="middle" font-size="8"
-      font-family="var(--font-mono,monospace)" fill="${palL.text}" dominant-baseline="middle" ${empty ? 'opacity="0.35"' : ""}>${label}</text>`;
+      font-family="var(--font-mono,monospace)" fill="${palL.text}" dominant-baseline="middle" ${rowOpacity}>${label}</text>`;
   });
 
   // Right table boxes
@@ -348,30 +418,72 @@ export function renderConn() {
     const displayVal = getSvgValue(ri, i);
     const keyVal = getKeyValue(ri, i);
     const empty = keyVal === "" || keyVal === undefined || keyVal === null;
-    const isMatch = pairs.some((r) => r.i2 === i);
+    
+    let isMatch = pairs.some((r) => r.i2 === i);
+    let isHighlighted = false;
+    let rowOpacity = "";
+    let strokeWidth = 0.8;
+    
+    if (isAntiJoin) {
+      if (state.currentOp === "left_anti") {
+        // LEFT ANTI: right table is not returned — dim all
+        rowOpacity = 'opacity="0.3"';
+        strokeWidth = 0.5;
+      } else {
+        // RIGHT ANTI: highlight rows that ARE in the result (rows with no match)
+        isHighlighted = resultRightIndices.has(i) && !empty;
+        rowOpacity = isHighlighted ? "" : 'opacity="0.35"';
+        strokeWidth = isHighlighted ? 2 : 0.8;
+      }
+    } else if (isSemiOrExists) {
+      if (isRightSideOnly) {
+        // RIGHT SEMI: highlight rows that ARE in the result
+        isHighlighted = resultRightIndices.has(i);
+        rowOpacity = isHighlighted ? "" : 'opacity="0.25"';
+        strokeWidth = isHighlighted ? 1.8 : 0.5;
+      } else {
+        // LEFT SEMI / EXISTS / NOT EXISTS: right table is not returned — dim all
+        rowOpacity = 'opacity="0.25"';
+        strokeWidth = 0.5;
+      }
+    } else {
+      rowOpacity = empty ? 'opacity="0.4"' : "";
+      strokeWidth = isMatch ? 1.8 : 0.8;
+    }
+    
     const label = empty
       ? "—"
       : displayVal === "" || displayVal === null || displayVal === undefined
         ? "·"
         : escapeHtml(String(displayVal));
+    // Self-join alias side gets a dotted stroke to visually distinguish it from the source table
+    const aliasDash = isSelfJoin ? ' stroke-dasharray="5 3"' : '';
     s += `<rect x="${W - 118}" y="${rYs[i] - 13}" width="100" height="26" rx="6"
-      fill="${palR.fill}" stroke="${palR.stroke}" stroke-width="${isMatch ? 1.8 : 0.8}"
-      ${empty ? 'opacity="0.4"' : ""}/>
+      fill="${palR.fill}" stroke="${palR.stroke}" stroke-width="${strokeWidth}"
+      ${rowOpacity}${aliasDash}/>
     <text x="${W - 68}" y="${rYs[i]}" text-anchor="middle" font-size="8"
-      font-family="var(--font-mono,monospace)" fill="${palR.text}" dominant-baseline="middle" ${empty ? 'opacity="0.35"' : ""}>${label}</text>`;
+      font-family="var(--font-mono,monospace)" fill="${palR.text}" dominant-baseline="middle" ${rowOpacity}>${label}</text>`;
   });
 
   // Connector lines between matched rows
   const seen = new Set();
   pairs.forEach((r) => {
+    // Skip rows where one side is -1 (happens in anti/semi joins with one-sided results)
+    if (r.i1 < 0 || r.i2 < 0) return;
+
     const key = `${r.i1}-${r.i2}`;
     if (seen.has(key)) return;
     seen.add(key);
     const y1 = lYs[r.i1],
       y2 = rYs[r.i2],
       mx = (LX + RX) / 2;
+
+    // Use dashed lines for semi/exists joins
+    const isDashed = isSemiOrExists;
+    const dashAttr = isDashed ? 'stroke-dasharray="4 3"' : '';
+
     s += `<path d="M${LX} ${y1} C${mx} ${y1} ${mx} ${y2} ${RX} ${y2}"
-      fill="none" stroke="${palL.line}" stroke-width="1.8" opacity="0.72"/>`;
+      fill="none" stroke="${palL.line}" stroke-width="1.8" opacity="0.72" ${dashAttr}/>`;
   });
 
   // Table labels
@@ -381,14 +493,27 @@ export function renderConn() {
   const rTableName = escapeHtml(state.tables[ri].name);
   const lColName = escapeHtml(lSvgCol.name);
   const rColName = escapeHtml(rSvgCol.name);
-  s += `<text x="68" y="${H - 14}" text-anchor="middle" font-size="8"
+  s += `<text x="68" y="${H - 14 - extraH}" text-anchor="middle" font-size="8"
     font-family="var(--font-main,sans-serif)" fill="${palL.text}">${lTableName}</text>
-  <text x="68" y="${H - 4}" text-anchor="middle" font-size="9"
+  <text x="68" y="${H - 4 - extraH}" text-anchor="middle" font-size="9"
     font-family="var(--font-main,sans-serif)" fill="${palL.text}" opacity="0.45">.${lColName}</text>
-  <text x="${W - 68}" y="${H - 14}" text-anchor="middle" font-size="8"
+  <text x="${W - 68}" y="${H - 14 - extraH}" text-anchor="middle" font-size="8"
     font-family="var(--font-main,sans-serif)" fill="${palR.text}">${state.currentOp === "self" ? lTableName + " (alias)" : rTableName}</text>
-  <text x="${W - 68}" y="${H - 4}" text-anchor="middle" font-size="9"
+  <text x="${W - 68}" y="${H - 4 - extraH}" text-anchor="middle" font-size="9"
     font-family="var(--font-main,sans-serif)" fill="${palR.text}" opacity="0.45">.${rColName}</text>`;
+
+  // Add legend for special join types
+  if (isAntiJoin || isSemiOrExists) {
+    // For right_anti and right_semi, the returned side is the right table
+    const returnedColor = (state.currentOp === "right_anti" || state.currentOp === "right_semi")
+      ? palR.stroke
+      : palL.stroke;
+    const legendY = H - 12;
+    s += `<line x1="10" y1="${legendY}" x2="40" y2="${legendY}" stroke="${returnedColor}" stroke-width="2"/>
+      <text x="48" y="${legendY + 4}" font-size="8" fill="rgba(202,202,202,0.7)" font-family="var(--font-main,sans-serif)">Returned</text>
+      <line x1="100" y1="${legendY}" x2="130" y2="${legendY}" stroke="${returnedColor}" stroke-width="0.5" opacity="0.4"/>
+      <text x="138" y="${legendY + 4}" font-size="8" fill="rgba(202,202,202,0.5)" font-family="var(--font-main,sans-serif)">Not returned</text>`;
+  }
 
   svg.innerHTML = s;
 }
@@ -399,7 +524,8 @@ export function renderConn() {
 
 /**
  * Renders the result table showing join output.
- * Handles different result formats: single column (set ops), standard joins, anti joins
+ * Handles different result formats: standard joins, self joins, set operators,
+ * and special joins (ANTI, SEMI, EXISTS).
  */
 export function renderResult() {
   const rows = computeResult(state.currentOp);
@@ -412,6 +538,14 @@ export function renderResult() {
   const isSingleCol = rows.length > 0 && rows[0].single;
   const isStdJoin =
     rows.length > 0 && !rows[0].single && rows[0].li !== undefined && rows[0].c1 === undefined;
+
+  // Detect special join types
+  const isLeftAnti = state.currentOp === "left_anti";
+  const isRightAnti = state.currentOp === "right_anti";
+  const isLeftSemi = state.currentOp === "left_semi" || state.currentOp === "exists";
+  const isRightSemi = state.currentOp === "right_semi";
+  const isNotExists = state.currentOp === "not_exists";
+  const isAntiOrSemi = isLeftAnti || isRightAnti || isLeftSemi || isRightSemi || isNotExists;
 
   // Get empty state reason only when there are no rows
   const emptyReason = rows.length === 0 ? getEmptyStateReason() : null;
@@ -434,7 +568,6 @@ export function renderResult() {
   if (isSelfJoin) {
     // Self join — all columns from the single table (both sides of join)
     const t = state.tables[li];
-    // Show columns twice: once for left side, once for right side (with alias)
     const allCols = [
       ...t.columns.map((c) => ({ ...c, side: "l", ti: li })),
       ...t.columns.map((c) => ({ ...c, side: "r", ti: li })),
@@ -466,12 +599,52 @@ export function renderResult() {
           })
           .join("")
       : `<p class="empty-state">${emptyState(emptyReason)}</p>`;
-  } else if (isSingleCol || (rows.length > 0 && rows[0].isSetOp)) {
+  } else if (isAntiOrSemi) {
+    // ANTI and SEMI joins — show columns from the side being returned
+    const tL = state.tables[li];
+    const tR = state.tables[ri];
+    
+    let resultCols, resultTable, resultSide, pal;
+    if (isLeftAnti || isLeftSemi || isNotExists) {
+      resultCols = tL.columns.map((c) => ({ ...c, side: "l", ti: li }));
+      resultTable = tL;
+      resultSide = "l";
+      pal = palL;
+    } else {
+      resultCols = tR.columns.map((c) => ({ ...c, side: "r", ti: ri }));
+      resultTable = tR;
+      resultSide = "r";
+      pal = palR;
+    }
+    
+    const tpl = resultCols.map(() => "1fr").join(" ");
+    heads.style.gridTemplateColumns = tpl;
+    heads.innerHTML = resultCols
+      .map((c) =>
+        `<div class="rg-head" role="columnheader" style="border-bottom:2px solid ${pal.line}33">
+        ${escapeHtml(resultTable.name)}.${escapeHtml(c.name)}</div>`,
+      )
+      .join("");
+    
+    body.innerHTML = rows.length
+      ? rows
+          .map((r) => {
+            const rowIdx = resultSide === "l" ? r.i1 : r.i2;
+            const rowData = rowIdx >= 0 ? resultTable.rows[rowIdx] : null;
+            const cells = resultCols.map((c) => {
+              const val = rowData ? rowData[c.id] : null;
+              const cellContent = val === null || val === undefined || val === "" ? `<span class="null-val">${nullBadge()}</span>` : `${escapeHtml(String(val))}`;
+              return `<div class="rg-cell" role="cell" style="background:${pal.bg}">${cellContent}</div>`;
+            });
+            return `<div class="rg-data-row" role="row" style="grid-template-columns:${tpl}">${cells.join("")}</div>`;
+          })
+          .join("")
+      : `<p class="empty-state">${emptyState(emptyReason)}</p>`;
+  } else if (rows.length > 0 && rows[0].isSetOp) {
     // Set operators (UNION, EXCEPT, INTERSECT) — show all columns from both tables
     const tL = state.tables[li];
     const tR = state.tables[ri];
     
-    // Get all unique columns from both tables
     const leftColIds = tL.columns.map(c => c.id);
     const rightColIds = tR.columns.map(c => c.id);
     const allColIds = [...new Set([...leftColIds, ...rightColIds])];
@@ -499,13 +672,10 @@ export function renderResult() {
           const rowRi = r.ri;
           const table = state.tables[rowTi];
           const rowData = table ? table.rows[rowRi] : {};
-          // Determine row's source palette for "both" columns
           const rowPal = rowTi === ri ? palR : palL;
 
           const cells = allCols.map(c => {
             const val = rowData[c.id];
-            // Column color based on which table the column comes from, not the row's source
-            // Left-only columns: always palL, Right-only: always palR, Both: use row's source
             const cellPal = c.side === 'r' ? palR : (c.side === 'l' ? palL : rowPal);
             const sideLabel = c.side === 'r' ? ' (right)' : (c.side === 'l' ? ' (left)' : '');
             const cellContent = val === null || val === undefined || val === '' ? `<span class="null-val">${nullBadge()}</span>` : `${escapeHtml(String(val))}<span style="font-size:0.7em;opacity:0.5">${sideLabel}</span>`;
@@ -550,21 +720,11 @@ export function renderResult() {
           .join("")
       : `<p class="empty-state">${emptyState(emptyReason)}</p>`;
   } else {
-    // Anti joins — show IDs from both tables
-    heads.style.gridTemplateColumns = "1fr 1fr";
-    heads.innerHTML = `<div class="rg-head" role="columnheader">${escapeHtml(state.tables[li].name)}.id</div>
-      <div class="rg-head" role="columnheader">${escapeHtml(state.tables[ri].name)}.id</div>`;
+    // Fallback for unknown result formats
+    heads.style.gridTemplateColumns = "1fr";
+    heads.innerHTML = `<div class="rg-head" role="columnheader">Result</div>`;
     body.innerHTML = rows.length
-      ? rows
-          .map(
-            (
-              r,
-            ) => `<div class="rg-data-row" role="row" style="grid-template-columns:1fr 1fr">
-          <div class="rg-cell" role="cell" style="background:${palL.bg}">${r.c1 === null ? `<span class="null-val">${nullBadge()}</span>` : r.c1 === undefined ? "—" : `${escapeHtml(String(r.c1))}<span style="font-size:0.7em;opacity:0.5"> (left)</span>`}</div>
-          <div class="rg-cell" role="cell" style="background:${palR.bg}">${r.c2 === null ? `<span class="null-val">${nullBadge()}</span>` : r.c2 === undefined ? "—" : `${escapeHtml(String(r.c2))}<span style="font-size:0.7em;opacity:0.5"> (right)</span>`}</div>
-        </div>`,
-          )
-          .join("")
+      ? rows.map((r) => `<div class="rg-data-row" role="row" style="grid-template-columns:1fr"><div class="rg-cell" role="cell">${escapeHtml(JSON.stringify(r))}</div></div>`).join("")
       : `<p class="empty-state">${emptyState(emptyReason)}</p>`;
   }
 }

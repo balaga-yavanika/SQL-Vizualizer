@@ -117,6 +117,21 @@ const STEPS = [
 let active = null;
 const pipeline = document.getElementById("pipeline");
 const panel = document.getElementById("panel");
+const resetBtn = document.getElementById("eo-reset-btn");
+
+function showPanelEmpty() {
+  panel.innerHTML = `<div class="panel-empty">
+      <svg class="panel-empty-border" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><rect rx="10"/></svg>
+      <span class="panel-hint">click any step →</span>
+    </div>`;
+  resetBtn.style.display = "none";
+}
+
+resetBtn.addEventListener("click", () => {
+  document.querySelectorAll(".step").forEach((el) => el.classList.remove("active"));
+  active = null;
+  showPanelEmpty();
+});
 
 STEPS.forEach((s, i) => {
   if (i > 0) {
@@ -135,12 +150,11 @@ STEPS.forEach((s, i) => {
   row.innerHTML = `<span class="step-num">${s.num}</span>
     <span class="step-pill c-${s.cat}">${s.label}</span>
     <span class="step-arrow c-${s.cat}">▶</span>`;
-  row.onclick = () => {
+  row.addEventListener("click", () => {
     if (active === i) {
       row.classList.remove("active");
       active = null;
-      panel.innerHTML =
-        '<div class="panel-empty"><svg class="panel-empty-border" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><rect rx="10"/></svg><span class="panel-hint">← click any step</span></div>';
+      showPanelEmpty();
       return;
     }
     document
@@ -149,19 +163,20 @@ STEPS.forEach((s, i) => {
     row.classList.add("active");
     active = i;
     panel.innerHTML = `<div class="panel panel-${s.cat}">
-      <div class="panel-header">
-        <div class="panel-meta">
-          <span class="panel-step-num c-${s.cat}">STEP ${s.num}</span>
-          <span class="panel-badge c-${s.cat}">${s.catLabel}</span>
+        <div class="panel-header">
+          <div class="panel-meta">
+            <span class="panel-step-num c-${s.cat}">STEP ${s.num}</span>
+            <span class="panel-badge c-${s.cat}">${s.catLabel}</span>
+          </div>
+          <div class="panel-title">${s.title}</div>
         </div>
-        <div class="panel-title">${s.title}</div>
-      </div>
-      <div class="panel-body">${s.body}</div>
-      <div class="panel-footer c-${s.cat}">
-        <div class="panel-tip-label">why it matters</div>
-        <div class="panel-tip" style="color:#aaa">${s.tip}</div>
-      </div>
-    </div>`;
-  };
+        <div class="panel-body">${s.body}</div>
+        <div class="panel-footer c-${s.cat}">
+          <div class="panel-tip-label">why it matters</div>
+          <div class="panel-tip" style="color:#aaa">${s.tip}</div>
+        </div>
+      </div>`;
+    resetBtn.style.display = "flex";
+  });
   pipeline.appendChild(row);
 });

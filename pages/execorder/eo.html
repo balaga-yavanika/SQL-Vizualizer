@@ -87,26 +87,29 @@
     </script>
 
     <!-- Content Security Policy -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-vvt4KWwuNr51XfE5m+hzeNEGhiOfZzG97ccfqGsPwvE='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; object-src 'none'" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; object-src 'none'" />
 
     <title>SQL Execution Order Visualizer – Learn How Queries Run</title>
 
     <!-- ─── Favicon ───────────────────────────────── -->
-    <link rel="icon" href="/Assets/Favicon/favicon_io/favicon.ico" sizes="any" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/Assets/Favicon/favicon_io/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/Assets/Favicon/favicon_io/favicon-16x16.png" />
-    <link rel="manifest" href="/Assets/Favicon/favicon_io/site.webmanifest" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/Assets/Favicon/favicon_io/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" href="/Assets/Favicon/SQL Visualizer Logo.png" />
+    <link rel="apple-touch-icon" href="/Assets/Favicon/SQL Visualizer Logo.png" />
 
-    <!-- Font Awesome -->
-    <link rel="preload" href="/Assets/fonts/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/Assets/fonts/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/Assets/fonts/css/all.min.css" as="style" />
+    <!-- Font Awesome - blocking for icon visibility -->
     <link rel="stylesheet" href="/Assets/fonts/css/all.min.css" />
+    <noscript>
+      <link rel="stylesheet" href="/Assets/fonts/css/all.min.css" />
+    </noscript>
 
-    <!-- Global Navigation & Menu Styles -->
-    <link rel="stylesheet" href="/global/nav.css" />
-    <link rel="stylesheet" href="/Assets/fx/menu-toggle.css" />
+    <!-- Global Navigation & Menu Styles - defer for render blocking -->
+    <link rel="stylesheet" href="/global/nav.css" media="print" />
+    <noscript>
+      <link rel="stylesheet" href="/global/nav.css" />
+    </noscript>
+    <link rel="stylesheet" href="/Assets/fx/menu-toggle.css" media="print" />
+    <noscript>
+      <link rel="stylesheet" href="/Assets/fx/menu-toggle.css" />
+    </noscript>
 
     <!-- ─── Google Fonts ─────────────────────────────── -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -121,8 +124,19 @@
     <link rel="preload" href="/pages/execorder/eo.css" as="style" />
     <link rel="stylesheet" href="/pages/execorder/eo.css" />
 
+    <!-- Preconnect to self for faster local asset loading -->
+    <link rel="preconnect" href="." />
+
+    <!-- Preload critical JS modules -->
+    <link rel="modulepreload" href="/js/core/state.js" />
+    <link rel="modulepreload" href="/js/core/utils.js" />
+    <link rel="modulepreload" href="/js/core/limits.js" />
+    <link rel="modulepreload" href="/js/core/url-state.js" />
+    <link rel="modulepreload" href="/js/engines/joinEngine.js" />
+    <link rel="modulepreload" href="/js/core/hash.js" />
+
     <!-- ==== Scripts ==== -->
-    <script src="/Assets/Favicon/icon-ani.js" defer></script>
+    <!-- <script src="/Assets/Favicon/icon-ani.js" defer></script> -->
     <script src="/global/nav-footer-loader.js" defer></script>
     <script src="/Assets/fx/menu-toggle.js" defer></script>
     <script type="module" src="/pages/execorder/eo.js" defer></script>
@@ -142,13 +156,16 @@
   <div class="heading-wrapper">
     <div>
       <div class="button-label for-page" aria-hidden="true">[02]</div>
-      <h1 class="heading-text">SQL Execution Order Visualizer</h1>
+      <h1 class="heading-text">
+        <strong>SQL Execution Order</strong><br />
+        Visualizer
+      </h1>
     </div>
   </div>
   <p class="heading-body">
     SQL doesn't run in the order you write it. You write
-    <code>SELECT</code> first, but it executes almost last. Understanding
-    this order explains why you can't use a <code>WHERE</code> alias, why
+    <code>SELECT</code> first, but it executes almost last. Understanding this
+    order explains why you can't use a <code>WHERE</code> alias, why
     <code>HAVING</code> exists, and how the database stays fast.
   </p>
   <div class="legend">
@@ -176,28 +193,78 @@
       <div class="leg-dot dot-dedup"></div>
       dedup
     </div>
+    <button id="eo-reset-btn" class="eo-reset-btn" type="button">
+      <i class="fa-solid fa-rotate-left"></i> Reset
+    </button>
   </div>
 </div>
 
 <ol class="visually-hidden" aria-label="SQL execution order steps">
-  <li><strong>Query planner</strong> — Before a single row is touched, the database reads your entire query and builds an execution plan. It picks which indexes to use and the cheapest join order.</li>
-  <li><strong>FROM &amp; JOIN</strong> — The database fetches your tables and combines them. CTEs and subqueries run at this point too. The result is a big, unfiltered working dataset.</li>
-  <li><strong>ON condition</strong> — The ON clause filters which row pairs from the join survive. Only matching pairs move forward.</li>
-  <li><strong>OUTER JOIN</strong> — If you used LEFT, RIGHT, or FULL OUTER JOIN, unmatched rows are added back into the result here, with NULLs filling the columns from the missing side.</li>
-  <li><strong>WHERE clause</strong> — Rows that don't match the condition are removed. Because this runs before SELECT, you cannot reference column aliases defined in SELECT.</li>
-  <li><strong>GROUP BY</strong> — Rows sharing the same GROUP BY value(s) are collapsed into one group each. After this step, individual row values are gone.</li>
-  <li><strong>Aggregate functions</strong> — SUM, COUNT, AVG, MIN, MAX are calculated across each group. One output row is produced per group.</li>
-  <li><strong>HAVING clause</strong> — HAVING filters groups, just like WHERE filters rows. It runs after aggregation, so you can write conditions like HAVING COUNT(*) &gt; 5.</li>
-  <li><strong>SELECT</strong> — Now the columns you asked for are selected and aliases are assigned. This is step 9, not step 1, which is why aliases can't be used earlier.</li>
-  <li><strong>DISTINCT</strong> — Duplicate rows are removed from the result. It runs after SELECT so it compares the final column values you've selected.</li>
-  <li><strong>ORDER BY</strong> — The result is sorted. Because ORDER BY runs after SELECT, it can reference aliases you created in the SELECT step.</li>
-  <li><strong>LIMIT / OFFSET</strong> — The final result is trimmed to the requested slice. All prior steps still ran over every qualifying row — LIMIT only cuts at the very end.</li>
+  <li>
+    <strong>Query planner</strong> — Before a single row is touched, the
+    database reads your entire query and builds an execution plan. It picks
+    which indexes to use and the cheapest join order.
+  </li>
+  <li>
+    <strong>FROM &amp; JOIN</strong> — The database fetches your tables and
+    combines them. CTEs and subqueries run at this point too. The result is a
+    big, unfiltered working dataset.
+  </li>
+  <li>
+    <strong>ON condition</strong> — The ON clause filters which row pairs from
+    the join survive. Only matching pairs move forward.
+  </li>
+  <li>
+    <strong>OUTER JOIN</strong> — If you used LEFT, RIGHT, or FULL OUTER JOIN,
+    unmatched rows are added back into the result here, with NULLs filling the
+    columns from the missing side.
+  </li>
+  <li>
+    <strong>WHERE clause</strong> — Rows that don't match the condition are
+    removed. Because this runs before SELECT, you cannot reference column
+    aliases defined in SELECT.
+  </li>
+  <li>
+    <strong>GROUP BY</strong> — Rows sharing the same GROUP BY value(s) are
+    collapsed into one group each. After this step, individual row values are
+    gone.
+  </li>
+  <li>
+    <strong>Aggregate functions</strong> — SUM, COUNT, AVG, MIN, MAX are
+    calculated across each group. One output row is produced per group.
+  </li>
+  <li>
+    <strong>HAVING clause</strong> — HAVING filters groups, just like WHERE
+    filters rows. It runs after aggregation, so you can write conditions like
+    HAVING COUNT(*) &gt; 5.
+  </li>
+  <li>
+    <strong>SELECT</strong> — Now the columns you asked for are selected and
+    aliases are assigned. This is step 9, not step 1, which is why aliases can't
+    be used earlier.
+  </li>
+  <li>
+    <strong>DISTINCT</strong> — Duplicate rows are removed from the result. It
+    runs after SELECT so it compares the final column values you've selected.
+  </li>
+  <li>
+    <strong>ORDER BY</strong> — The result is sorted. Because ORDER BY runs
+    after SELECT, it can reference aliases you created in the SELECT step.
+  </li>
+  <li>
+    <strong>LIMIT / OFFSET</strong> — The final result is trimmed to the
+    requested slice. All prior steps still ran over every qualifying row — LIMIT
+    only cuts at the very end.
+  </li>
 </ol>
 
 <h2 class="visually-hidden">SQL Query Execution Pipeline</h2>
 
 <noscript>
-  <p class="noscript-notice">This visualizer requires JavaScript. Please enable it in your browser settings to explore the SQL execution order diagram.</p>
+  <p class="noscript-notice">
+    This visualizer requires JavaScript. Please enable it in your browser
+    settings to explore the SQL execution order diagram.
+  </p>
 </noscript>
 
 <div class="layout">
@@ -216,7 +283,10 @@
   </div>
 </div>
 
-<p class="related-link"><a href="/">← Back to Home</a> &nbsp;|&nbsp; Next: <a href="/pages/joins/joins.html">Explore SQL Joins →</a></p>
+<p class="related-link">
+  <a href="/">← Back to Home</a> &nbsp;|&nbsp; Next:
+  <a href="/pages/joins/joins.html">Explore SQL Joins →</a>
+</p>
 
       </article>
       </div>

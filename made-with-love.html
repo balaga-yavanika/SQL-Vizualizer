@@ -1,0 +1,212 @@
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+/>
+
+<style>
+  :root {
+    /* ── COLORS ── */
+    --color-bg-vdb: #1a171b;
+    --color-bg-vdb-shade-2: oklch(27% 0.009 317);
+    --color-bg-vdb-shade-3: oklch(32% 0.009 322);
+    --color-purple: oklch(68.601% 0.18154 292.175);
+    --color-yellow: oklch(89.392% 0.13858 90.472);
+    --color-primary: var(--color-purple);
+    --color-secondary: var(--color-yellow);
+    --color-pr-para: oklch(
+      from var(--color-primary) calc(l + 0.1) calc(c - 0.16) h
+    );
+
+    /* ── TYPOGRAPHY ── */
+    --font-main: "Space Grotesk", sans-serif;
+    --font-mono: "Space Mono", monospace;
+    --text-ui: clamp(0.7rem, 1vw, 1rem);
+    --text-fine: clamp(0.6rem, 0.7vw, 0.7rem);
+
+    /* ── Z-INDEX ── */
+    --z-tooltip: 1100;
+    --z-notification: 1200;
+  }
+
+  /* Light mode */
+  [data-theme="light"] {
+    --color-bg-vdb: #faf9f7;
+    --color-bg-vdb-shade-2: #eceae6;
+    --color-bg-vdb-shade-3: #d4d0c8;
+    --color-purple: hsl(248, 51%, 53%);
+    --color-yellow: #b36a08;
+    --color-primary: var(--color-purple);
+    --color-secondary: var(--color-yellow);
+    --color-pr-para: hsl(244, 47%, 49%);
+  }
+
+  * {
+    transition: background-color 0.5s ease, color 0.5s ease,
+      border-color 0.5s ease, box-shadow 0.5s ease;
+  }
+
+  /* Link Styles */
+  a {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: var(--color-secondary);
+  }
+
+  /* Tooltip */
+  a[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 25px;
+    background: var(--color-bg-vdb-shade-2);
+    border: 1px solid var(--color-bg-vdb-shade-3);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: var(--text-fine);
+    white-space: nowrap;
+    z-index: var(--z-tooltip);
+    color: var(--color-secondary);
+  }
+
+  /* Made with Love Specific */
+  nav span a {
+    position: relative;
+    font-family: var(--font-mono);
+    font-size: var(--text-ui);
+    color: var(--color-secondary);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  nav span a:hover {
+    color: oklch(from var(--color-primary) calc(l + 0.1) c h);
+  }
+
+  a.tt-bottom-left[data-tooltip]:hover::after {
+    top: auto;
+    bottom: calc(100% + 10px);
+    left: 50px;
+  }
+
+  /* Toast Notification */
+  .share-love-toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-success, hsl(90, 59%, 66%));
+    color: #121212;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-family: var(--font-main);
+    font-size: 0.875rem;
+    font-weight: 700;
+    z-index: var(--z-notification);
+    white-space: nowrap;
+    animation: shareFadeInUp 0.2s ease forwards;
+  }
+
+  .share-love-toast.error {
+    background: var(--color-error, hsl(345, 100%, 69%));
+  }
+
+  @keyframes shareFadeInUp {
+    from {
+      opacity: 0;
+      transform: translateX(-50%) translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+
+  @keyframes shareFadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+</style>
+
+<nav>
+  <span>
+    <a
+      id="share-love-btn"
+      class="tt-bottom-left"
+      data-tooltip="Share with 💛"
+      role="button"
+      aria-label="Copy page link to share"
+      >[made with 🩶]</a
+    >
+  </span>
+</nav>
+
+<script>
+  function showShareToast(message, type) {
+    const existing = document.querySelector(".share-love-toast");
+    if (existing) existing.remove();
+
+    if (!document.getElementById("share-love-animations")) {
+      const style = document.createElement("style");
+      style.id = "share-love-animations";
+      style.textContent = `
+        @keyframes shareFadeInUp { from { opacity:0; transform:translateX(-50%) translateY(10px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }
+        @keyframes shareFadeOut  { from { opacity:1; } to { opacity:0; } }
+      `;
+      document.head.appendChild(style);
+    }
+
+    const toast = document.createElement("div");
+    toast.className = "share-love-toast";
+    if (type === "error") toast.classList.add("error");
+    toast.textContent = message;
+    Object.assign(toast.style, {
+      position: "fixed",
+      bottom: "24px",
+      left: "50%",
+      transform: "translateX(-50%)",
+      background:
+        type === "error"
+          ? "var(--color-error, hsl(345,100%,69%))"
+          : "var(--color-success, hsl(90,59%,66%))",
+      color: "#121212",
+      padding: "10px 20px",
+      borderRadius: "6px",
+      fontFamily: "var(--font-main)",
+      fontSize: "var(--text-body-sm)",
+      fontWeight: "var(--weight-bold)",
+      zIndex: "var(--z-notification, 1200)",
+      animation: "shareFadeInUp 0.2s ease forwards",
+      whiteSpace: "nowrap",
+    });
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+      toast.style.animation = "shareFadeOut 0.2s ease forwards";
+      setTimeout(() => toast.remove(), 200);
+    }, 5000);
+  }
+
+  const shareBtn = document.getElementById("share-love-btn");
+  if (shareBtn) {
+    shareBtn.addEventListener("click", async () => {
+      const canonicalLink = document.querySelector('link[rel="canonical"]');
+      const pageUrl = canonicalLink ? canonicalLink.href : window.location.href;
+      const text = "Check out this SQL visualizer: " + pageUrl;
+      try {
+        await navigator.clipboard.writeText(text);
+        showShareToast("Link copied. Now share it with love 🩶", "success");
+      } catch {
+        showShareToast("Could not copy link. Try manually.", "error");
+      }
+    });
+  }
+</script>

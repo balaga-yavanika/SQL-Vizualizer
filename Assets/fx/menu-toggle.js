@@ -13,40 +13,40 @@
 
     menuSetup = true;
 
-    hamburger.onclick = function (e) {
+    hamburger.addEventListener("click", function (e) {
       e.preventDefault();
       drawer.classList.toggle("active");
       overlay.classList.toggle("active");
-    };
+    });
 
-    overlay.onclick = function (e) {
+    overlay.addEventListener("click", function (e) {
       e.preventDefault();
       drawer.classList.remove("active");
       overlay.classList.remove("active");
-    };
+    });
 
     const closeBtn = drawer.querySelector(".drawer-close");
     if (closeBtn) {
-      closeBtn.onclick = function (e) {
+      closeBtn.addEventListener("click", function (e) {
         e.preventDefault();
         drawer.classList.remove("active");
         overlay.classList.remove("active");
-      };
+      });
     }
 
     drawer.querySelectorAll("a").forEach(link => {
-      link.onclick = function () {
+      link.addEventListener("click", function () {
         drawer.classList.remove("active");
         overlay.classList.remove("active");
-      };
+      });
     });
 
-    document.onkeydown = function (e) {
+    document.addEventListener("keydown", function (e) {
       if (e.key === "Escape") {
         drawer.classList.remove("active");
         overlay.classList.remove("active");
       }
-    };
+    });
   }
 
   if (document.readyState === "loading") {
